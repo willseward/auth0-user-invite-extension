@@ -4,37 +4,67 @@ import invitations from '../../../server/lib/invitations';
 
 describe('invitations', () => {
   describe('#inviteUser', () => {
-    it.skip('should error if payload is an object', (done) => {
+    it('should not error if payload is an object with key "email"', (done) => {
+      const payload = { email: 'janedoe@enterpriseco.com' };
+      invitations.inviteUser(payload, (err, result) => {
+        expect(err).to.be.null;
+        return done();
+      });
+    });
+
+    it('should error if payload is an empty object', (done) => {
       invitations.inviteUser({}, (err, result) => {
         expect(err).not.to.be.null;
         return done();
       });
     });
 
-    it.skip('should error if payload is an array', (done) => {
+    it('should error if payload is an object without an "email" key', (done) => {
+      invitations.inviteUser({ such: 'wow' }, (err, result) => {
+        expect(err).not.to.be.null;
+        return done();
+      });
+    });
+
+    it('should error if payload is an array', (done) => {
       invitations.inviteUser([], (err, result) => {
         expect(err).not.to.be.null;
         return done();
       });
     });
 
-    it.skip('should error if payload is a number', (done) => {
+    it('should error if payload is a number', (done) => {
       invitations.inviteUser(1, (err, result) => {
         expect(err).not.to.be.null;
         return done();
       });
     });
 
-    it.skip('should not error if payload is a string', (done) => {
+    it('should error if payload is a string', (done) => {
       invitations.inviteUser('wow', (err, result) => {
-        expect(err).to.be.null;
+        expect(err).not.to.be.null;
         return done();
       });
     });
   });
 
   describe('#inviteUsers', () => {
-    it.skip('should error if payload isn\'t a string', (done) => {
+    it('should not error if payload is a string of CSV', (done) => {
+      const csv = [
+        '"janedoe","janedoe@enterpriseco.com"',
+        '"joebloggs","joebloggs@enterpriseco.com"'
+      ].join('\n');
+      invitations.inviteUsers({ csv: csv }, (err, result) => {
+        expect(err).to.be.null;
+        return done();
+      });
+    });
+
+    it('should error if payload is an object without a "csv" key', (done) => {
+      invitations.inviteUser({ such: 'wow' }, (err, result) => {
+        expect(err).not.to.be.null;
+        return done();
+      });
     });
   });
 

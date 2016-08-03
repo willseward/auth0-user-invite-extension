@@ -1,11 +1,33 @@
-const joi = require('joi');
+const Joi = require('joi');
+
+const inviteUserSchema = Joi.object().keys({
+  email: Joi.string().email().required()
+});
+
+const inviteUsersSchema = Joi.object().keys({
+  csv: Joi.string().required()
+});
+
+const getInvitationsSchema = Joi.any().allow('invited', 'accepted');
 
 const inviteUser = (payload, callback) => {
-  return callback(null, {});
+  Joi.validate(payload, inviteUserSchema, (err, value) => {
+    if (err) {
+      return callback(err);
+    }
+    // XXX
+    return callback(null, {});
+  });
 };
 
 const inviteUsers = (payload, callback) => {
-  return callback(null, {});
+  Joi.validate(payload, inviteUsersSchema, (err, value) => {
+    if (err) {
+      return callback(err);
+    }
+    // XXX
+    return callback(null, {});
+  });
 };
 
 const getInvitations = (payload, callback) => {
