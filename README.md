@@ -1,4 +1,4 @@
-# Auth0 User Invitations Extensino
+# Auth0 User Invitations Extension
 
 This extension makes it possible to invite users to your Auth0 account, either individually or in bulk.
 
