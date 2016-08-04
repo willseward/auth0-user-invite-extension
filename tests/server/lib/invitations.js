@@ -7,14 +7,14 @@ describe('invitations', () => {
     it('should not error if payload is an object with key "email"', (done) => {
       const payload = { email: 'janedoe@enterpriseco.com' };
       invitations.inviteUser(payload, (err, result) => {
-        expect(err).to.be.null;
+        expect(err).to.not.be.ok;
         return done();
       });
     });
 
     it('should error if payload is an empty object', (done) => {
       invitations.inviteUser({}, (err, result) => {
-        expect(err).not.to.be.null;
+        expect(err).to.be.ok;
         return done();
       });
     });
@@ -55,7 +55,7 @@ describe('invitations', () => {
         '"joebloggs","joebloggs@enterpriseco.com"'
       ].join('\n');
       invitations.inviteUsers({ csv: csv }, (err, result) => {
-        expect(err).to.be.null;
+        expect(err).to.not.be.ok;
         return done();
       });
     });

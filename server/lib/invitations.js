@@ -1,7 +1,10 @@
+const csv = require('csv');
+const each = require('each-async');
 const Joi = require('joi');
 
 const inviteUserSchema = Joi.object().keys({
-  email: Joi.string().email().required()
+  email: Joi.string().email().required(),
+  username: Joi.string()
 });
 
 const inviteUsersSchema = Joi.object().keys({
@@ -10,34 +13,40 @@ const inviteUsersSchema = Joi.object().keys({
 
 const getInvitationsSchema = Joi.any().allow('invited', 'accepted');
 
-const inviteUser = (payload, callback) => {
+function inviteUser(payload, callback) {
   Joi.validate(payload, inviteUserSchema, (err, value) => {
     if (err) {
       return callback(err);
     }
-    // XXX
     return callback(null, {});
   });
-};
+}
 
-const inviteUsers = (payload, callback) => {
+function inviteUsers(payload, callback) {
   Joi.validate(payload, inviteUsersSchema, (err, value) => {
     if (err) {
       return callback(err);
     }
-    // XXX
-    return callback(null, {});
+    csv.parse(payload.csv, function onParsed(err, records) {
+      if (err) {
+        return callback(err);
+      }
+      return each(records, (fields, index, done) => {
+        inviteUser({ username: fields[0], email: fields[1] }, done);
+      }, callback);
+    })
   });
-};
+}
 
-const getInvitations = (payload, callback) => {
+function getInvitations(payload, callback) {
   const filter = payload.filter;
   if (!filter || ['invited', 'accepted'].indexOf(filter) != -1) {
+    // XXX
     return callback(null, []);
   } else {
     return callback(new Error('Invalid filter'));
   }
-};
+}
 
 module.exports = {
   inviteUser: inviteUser,
