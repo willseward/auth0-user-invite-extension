@@ -3,7 +3,6 @@ import { Router as router } from 'express';
 import html from './html';
 import meta from './meta';
 import hooks from './hooks';
-import webhooks from './webhooks';
 
 import config from '../lib/config';
 import invitations from '../lib/invitations';
@@ -28,7 +27,6 @@ export default (storageContext) => {
   routes.use('/', dashboardAdmins());
   routes.get('/', html());
   routes.use('/meta', meta());
-  routes.use('/webhooks', webhooks(storageContext));
 
   routes.get('/api/config', requireUser, (req, res) => {
     res.json({
@@ -39,7 +37,7 @@ export default (storageContext) => {
   });
 
   routes.post('/api/invitations', /*requireUser, */(req, res, next) => {
-    if (req.is(['application/csv', 'text/csv']) {
+    if (req.is(['application/csv', 'text/csv'])) {
       invitations.inviteUsers(req.body, (err, result) => {
       });
     } else if (req.is('application/json')) {
@@ -50,7 +48,7 @@ export default (storageContext) => {
     }
   });
 
-  routes.get('/api/invitations'), /*requireUser, */(req, res, next) => {
+  routes.get('/api/invitations', /*requireUser, */(req, res, next) => {
     invitations.getInvitations(req.query('filter'), (err, result) => {
       res.sendStatus(200);
     });

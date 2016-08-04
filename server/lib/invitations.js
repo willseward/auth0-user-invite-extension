@@ -11,7 +11,7 @@ const inviteUsers = (payload, callback) => {
 const getInvitations = (payload, callback) => {
   const filter = payload.filter;
   if (!filter || ['invited', 'accepted'].indexOf(filter) != -1) {
-    return callback(null, []);
+    return callback(null, {});
   } else {
     return callback(new Error('Invalid filter'));
   }
