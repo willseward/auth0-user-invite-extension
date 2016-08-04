@@ -71,6 +71,7 @@ describe('invitations', () => {
   describe('#getInvitations', () => {
     it('should return an array if no filter is set', (done) => {
       invitations.getInvitations({}, (err, result) => {
+        expect(err).not.to.be.ok;
         expect(result).to.be.an('array');
         return done();
       });
@@ -78,6 +79,7 @@ describe('invitations', () => {
 
     it('should return an array if filter=invited', (done) => {
       invitations.getInvitations({ filter: 'invited' }, (err, result) => {
+        expect(err).not.to.be.ok;
         expect(result).to.be.an('array');
         return done();
       });
@@ -85,6 +87,7 @@ describe('invitations', () => {
 
     it('should return an array if filter=accepted', (done) => {
       invitations.getInvitations({ filter: 'accepted' }, (err, result) => {
+        expect(err).not.to.be.ok;
         expect(result).to.be.an('array');
         return done();
       });

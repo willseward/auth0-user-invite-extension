@@ -11,7 +11,9 @@ const inviteUsersSchema = Joi.object().keys({
   csv: Joi.string().required()
 });
 
-const getInvitationsSchema = Joi.any().allow('invited', 'accepted');
+const getInvitationsSchema = Joi.object().keys({
+  filter: Joi.string().valid('invited', 'accepted')
+});
 
 function inviteUser(payload, callback) {
   Joi.validate(payload, inviteUserSchema, (err, value) => {
@@ -39,13 +41,13 @@ function inviteUsers(payload, callback) {
 }
 
 function getInvitations(payload, callback) {
-  const filter = payload.filter;
-  console.log('FILTER:', filter)
-  if (!filter || ['invited', 'accepted'].indexOf(filter) != -1) {
+  Joi.validate(payload, getInvitationsSchema, (err, value) => {
+    if (err) {
+      return callback(err);
+    }
+    const filter = payload.filter;
     return callback(null, [{ username: 'test1', email: 'test1@test.com', status: 'INVITED' }, { username: 'test2', email: 'test2@test.com', status: 'ACCEPTED' }]);
-  } else {
-    return callback(new Error('Invalid filter'));
-  }
+  });
 }
 
 module.exports = {
