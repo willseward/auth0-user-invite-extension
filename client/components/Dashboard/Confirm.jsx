@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 
 class Confirm extends Component {
   renderCancel() {

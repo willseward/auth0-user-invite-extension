@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { ButtonToolbar } from 'react-bootstrap';
-import { Table, TableAction, TableCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from './Dashboard';
+import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from './Dashboard';
 
 export default class InvitationsTable extends Component {
   static propTypes = {

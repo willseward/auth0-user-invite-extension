@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
-import { invitationsActions, connectionActions } from '../actions';
+import { invitationsActions } from '../actions';
 
 import { Error, LoadingPanel } from '../components/Dashboard';
 import InvitationsTable from '../components/InvitationsTable';
@@ -16,8 +16,7 @@ export default connectContainer(class extends Component {
   }
 
   static actionsToProps = {
-    ...invitationsActions,
-    ...connectionActions
+    ...invitationsActions
   }
 
   static propTypes = {
@@ -28,7 +27,6 @@ export default connectContainer(class extends Component {
 
   componentWillMount() {
     this.props.fetchInvitations(this.props.filter);
-    this.props.fetchConnections();
   }
 
   render() {

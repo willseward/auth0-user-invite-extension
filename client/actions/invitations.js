@@ -7,7 +7,7 @@ import * as constants from '../constants';
 export function fetchInvitations(filter) {
   return (dispatch) => {
     dispatch({
-      type: constants.FETCH_INVITATIONS_INIT, // create constant
+      type: constants.FETCH_INVITATIONS_INIT,
       payload: {
         data: {
           filter

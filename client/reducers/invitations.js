@@ -25,7 +25,6 @@ export const invitations = createReducer(fromJS(initialState), {
   },
   [constants.FETCH_INVITATIONS_REJECTED]: (state, action) => {
     const { data } = action.payload;
-
     return state.mergeDeep({
       loading: {
         [data.filter]: true
