@@ -49,8 +49,11 @@ export default (storageContext) => {
   });
 
   routes.get('/api/invitations', /*requireUser, */(req, res, next) => {
-    invitations.getInvitations({ filter: req.query.filter }, (err, result) => {
-      res.sendStatus(200);
+    invitations.getInvitations({ filter: 'invited'/*req.query.filter*/ }, (err, result) => {
+      if (err || !result) {
+        res.status(500).send({ error: err });
+      }
+      res.send(result);
     });
   });
 

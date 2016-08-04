@@ -5,6 +5,7 @@ import connectContainer from 'redux-static';
 import { invitationsActions } from '../actions';
 
 import { Error, LoadingPanel } from '../components/Dashboard';
+import InvitationsTable from '../components/InvitationsTable';
 
 export default connectContainer(class extends Component {
   static stateToProps = (state) => ({
@@ -26,8 +27,6 @@ export default connectContainer(class extends Component {
 
   render() {
     const { error, invitations, loading } = this.props.invitations.toJS();
-    console.log(">> INVITATIONS:", this.props.invitations.toJS());
-    // debugger;
 
     return (
       <div>
@@ -45,7 +44,7 @@ export default connectContainer(class extends Component {
             </div>
             <div className="col-xs-12">
               <Error message={error} />
-              Table...
+              <InvitationsTable error={error} invitations={invitations} />
             </div>
           </div>
         </LoadingPanel>

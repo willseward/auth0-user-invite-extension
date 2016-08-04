@@ -40,8 +40,9 @@ function inviteUsers(payload, callback) {
 
 function getInvitations(payload, callback) {
   const filter = payload.filter;
+  console.log('FILTER:', filter)
   if (!filter || ['invited', 'accepted'].indexOf(filter) != -1) {
-    return callback(null, {});
+    return callback(null, [{ username: 'test1', email: 'test1@test.com', status: 'INVITED' }, { username: 'test2', email: 'test2@test.com', status: 'ACCEPTED' }]);
   } else {
     return callback(new Error('Invalid filter'));
   }
