@@ -12,7 +12,7 @@ const inviteUsersSchema = Joi.object().keys({
 });
 
 const getInvitationsSchema = Joi.object().keys({
-  filter: Joi.string().valid('invited', 'accepted')
+  filter: Joi.string().valid('pending', 'accepted')
 });
 
 function inviteUser(payload, callback) {
@@ -46,7 +46,14 @@ function getInvitations(payload, callback) {
       return callback(err);
     }
     const filter = payload.filter;
-    return callback(null, [{ username: 'test1', email: 'test1@test.com', status: 'INVITED' }, { username: 'test2', email: 'test2@test.com', status: 'ACCEPTED' }]);
+    console.log('FILTER::: ', filter)
+
+    var fakeData = [
+      { username: 'test1', email: 'test1@test.com', status: 'pending' },
+      { username: 'test2', email: 'test2@test.com', status: 'accepted' }
+    ];
+
+    return callback(null, fakeData.filter((item) => filter === item.status));
   });
 }
 

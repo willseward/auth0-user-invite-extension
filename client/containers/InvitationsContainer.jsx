@@ -2,27 +2,33 @@ import React, { PropTypes, Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
-import { invitationsActions } from '../actions';
+import { invitationsActions, connectionActions } from '../actions';
 
 import { Error, LoadingPanel } from '../components/Dashboard';
 import InvitationsTable from '../components/InvitationsTable';
 
 export default connectContainer(class extends Component {
-  static stateToProps = (state) => ({
-    invitations: state.invitations
-  });
+
+  static stateToProps = (state) => {
+    return {
+      invitations: state.invitations
+    }
+  }
 
   static actionsToProps = {
-    ...invitationsActions
+    ...invitationsActions,
+    ...connectionActions
   }
 
   static propTypes = {
+    filter: PropTypes.string.isRequired,
     invitations: PropTypes.object.isRequired,
     fetchInvitations: PropTypes.func.isRequired
   }
 
   componentWillMount() {
-    this.props.fetchInvitations();
+    this.props.fetchInvitations(this.props.filter);
+    this.props.fetchConnections();
   }
 
   render() {
@@ -30,7 +36,7 @@ export default connectContainer(class extends Component {
 
     return (
       <div>
-        <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+        <LoadingPanel show={loading[this.props.filter]} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           <div className="row">
             <div className="col-xs-12">
               <ButtonToolbar className="pull-right">
@@ -43,8 +49,8 @@ export default connectContainer(class extends Component {
               </ButtonToolbar>
             </div>
             <div className="col-xs-12">
-              <Error message={error} />
-              <InvitationsTable error={error} invitations={invitations} />
+              <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : '' } />
+              <InvitationsTable invitations={invitations[this.props.filter]} />
             </div>
           </div>
         </LoadingPanel>

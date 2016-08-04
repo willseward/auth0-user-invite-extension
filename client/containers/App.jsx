@@ -26,14 +26,14 @@ class App extends Component {
                         <a href="https://manage.auth0.com/#/extensions">Extensions</a>
                       </li>
                     </ol>
-                    <h1 className="pull-left" style={{ paddingTop: '10px' }}>User Invite Extension</h1></div>
+                    <h1 className="pull-left" style={{ paddingTop: '10px' }}>User Invitations</h1></div>
                 </div>
                 <div className="widget-title title-with-nav-bars">
                   <ul className="nav nav-tabs">
                     <li className="active">
-                      <a data-toggle="tab" href="#invited" aria-expanded="true">
+                      <a data-toggle="tab" href="#pending" aria-expanded="true">
                         <span className="tab-title">
-                          Invited users
+                          Pending users
                         </span>
                       </a>
                     </li>
@@ -47,11 +47,11 @@ class App extends Component {
                   </ul>
                 </div>
                 <div id="content-area" className="tab-content">
-                  <div id="invited" className="tab-pane active">
-                    <InvitationsContainer />
+                  <div id="pending" className="tab-pane active">
+                    <InvitationsContainer filter="pending"/>
                   </div>
                   <div id="accepted" className="tab-pane">
-                    <InvitationsContainer />
+                    <InvitationsContainer filter="accepted"/>
                   </div>
                 </div>
               </div>

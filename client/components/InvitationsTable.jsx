@@ -4,13 +4,12 @@ import { Table, TableAction, TableCell, TableBody, TableIconCell, TableTextCell,
 
 export default class InvitationsTable extends Component {
   static propTypes = {
-    error: React.PropTypes.string,
-    invitations: React.PropTypes.array.isRequired
+    invitations: React.PropTypes.array
   };
 
   render() {
-    const { error, invitations } = this.props;
-    if (!error && invitations.size === 0) {
+    const { invitations } = this.props;
+    if (!invitations || !invitations.length) {
       return <div>There are no invitations available. Please add a new user or summit a CSV file.</div>;
     }
 
