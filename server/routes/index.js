@@ -51,7 +51,7 @@ export default (storageContext) => {
   });
 
   routes.get('/api/invitations'), /*requireUser, */(req, res, next) => {
-    invitations.getInvitations(req.query.filter), (err, result) => {
+    invitations.getInvitations( { filter: req.query.filter }), (err, result) => {
       res.sendStatus(200);
     });
   });
