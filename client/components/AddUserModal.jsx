@@ -78,7 +78,7 @@ export default connectContainer(class extends Component {
     const { error, connection, loading } = this.props.connection.toJS();
 
     if (!connection || !connection.length) {
-      return (<div>Loading connections...</div>);
+      return (<div>{this.renderAddUserBtn()}</div>);
     }
 
     let connectionOptions = connection.map((item) => {
@@ -126,7 +126,12 @@ export default connectContainer(class extends Component {
                 </div>
               </div>
               <div className="modal-footer">
-                <Button type="submit" className="btn btn-primary" onClick={this.onClick}>Invite User</Button>
+                <Button type="submit"
+                  className="btn btn-primary"
+                  data-dismiss="modal"
+                  onClick={this.onClick}>
+                    Invite User
+                </Button>
               </div>
             </div>
           </div>

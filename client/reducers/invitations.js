@@ -11,7 +11,7 @@ const initialState = {
 
 export const invitations = createReducer(fromJS(initialState), {
   [constants.FETCH_INVITATIONS_INIT]: (state, action) => {
-    var { data } = action.payload;
+    const { data } = action.payload;
 
     return state.mergeDeep({
       loading: {
@@ -41,7 +41,7 @@ export const invitations = createReducer(fromJS(initialState), {
         [data.filter]: false
       },
       invitations: {
-        [data.filter]: fromJS(data.result)
+        [data.filter]: fromJS(data.result.users)
       }
     });
   },

@@ -16,17 +16,15 @@ export default class InvitationsTable extends Component {
       <div>
         <Table>
           <TableHeader>
-            <TableColumn width="33%">Username</TableColumn>
-            <TableColumn width="33%">Email</TableColumn>
-            <TableColumn width="33%">Status</TableColumn>
+            <TableColumn width="50%">Email</TableColumn>
+            <TableColumn width="50%">Status</TableColumn>
           </TableHeader>
           <TableBody>
             {invitations.map((invitation, index) => {
               return (
                 <TableRow key={index}>
-                  <TableTextCell>{invitation.username}</TableTextCell>
                   <TableTextCell>{invitation.email}</TableTextCell>
-                  <TableTextCell>{invitation.status}</TableTextCell>
+                  <TableTextCell>{invitation.app_metadata.invite.status}</TableTextCell>
                 </TableRow>
               );
             })}

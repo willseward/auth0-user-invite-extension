@@ -32,7 +32,6 @@ export default connectContainer(class extends Component {
 
   render() {
     const { error, invitations, loading } = this.props.invitations.toJS();
-
     return (
       <div>
         <LoadingPanel show={loading[this.props.filter]} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>

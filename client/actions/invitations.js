@@ -36,7 +36,7 @@ export function inviteUser(user) {
     payload: {
       promise: axios({
         method: 'post',
-        url: '/api/invitations',
+        url: '/api/invitations/user',
         data: { user },
         responseType: 'json'
       })

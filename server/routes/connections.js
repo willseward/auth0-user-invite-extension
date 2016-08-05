@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { Router as router } from 'express';
-import { managementClient } from '../lib/middlewares';
 
 export default () => {
   const api = router();
@@ -8,7 +7,7 @@ export default () => {
   /*
    * List all connections.
    */
-  api.get('/', managementClient, (req, res, next) => {
+  api.get('/', (req, res, next) => {
     req.auth0.connections
       .getAll({ fields: 'name', 'strategy': 'auth0' })
       .then(connections => _.chain(connections)

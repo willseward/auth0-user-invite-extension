@@ -6,10 +6,11 @@ import hooks from './hooks';
 
 import config from '../lib/config';
 import { readStorage } from '../lib/storage';
-import { dashboardAdmins, requireUser } from '../lib/middlewares';
+import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
+import invitations from '../lib/invitations';
 
 import connections from './connections';
-import invitations from './invitations';
+import users from './users';
 
 const getRepository = () => {
   const repo = config('GITHUB_REPOSITORY');
@@ -30,7 +31,7 @@ export default (storageContext) => {
   routes.get('/', html());
   routes.use('/meta', meta());
 
-  routes.use('/api/connections', connections());
+  routes.use(managementClient);
 
   routes.get('/api/config', requireUser, (req, res) => {
     res.json({
@@ -40,33 +41,19 @@ export default (storageContext) => {
     });
   });
 
+  routes.use('/api/connections', connections());
 
-  routes.post('/api/invitations', /*requireUser, */(req, res, next) => {
-    console.log(">>> inviteUsers // BODY ", req.body)
+  routes.post('/api/invitations/user',
+    invitations.validateInviteUser,
+    users.createUser());
 
-    if (req.is(['application/csv', 'text/csv'])) {
-      invitations.inviteUsers(req.body, (err, result) => {
-      });
-    } else if (req.is('application/json')) {
-      invitations.inviteUser(req.body, (err, result) => {
-      });
-    } else {
-      res.sendStatus(400);
-    }
-  });
+  routes.post('/api/invitations/users',
+    invitations.validateInviteUsers,
+    users.createUsers());
 
-  routes.get('/api/invitations', /*requireUser, */(req, res, next) => {
-    invitations.getInvitations({ filter: req.query.filter }, (err, result) => {
-      if (err || !result) {
-        res.status(500).send({ error: err, filter: req.query.filter });
-      }
-
-      res.send({
-        result,
-        filter: req.query.filter
-      });
-    });
-  });
+  routes.get('/api/invitations',
+    invitations.validateInvitations,
+    users.getUsers());
 
   return routes;
 };
