@@ -26,3 +26,20 @@ export function fetchInvitations(filter) {
     })
   };
 }
+
+/*
+ * Send an invitation to a user.
+ */
+export function inviteUser(user) {
+  return {
+    type: constants.INVITE_USER,
+    payload: {
+      promise: axios({
+        method: 'post',
+        url: '/api/invitations',
+        data: { user },
+        responseType: 'json'
+      })
+    }
+  };
+}

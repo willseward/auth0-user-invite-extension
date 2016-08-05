@@ -1,7 +1,5 @@
 import { Router as router } from 'express';
 
-import auth0 from 'auth0-oauth2-express';
-
 import html from './html';
 import meta from './meta';
 import hooks from './hooks';
@@ -30,11 +28,6 @@ export default (storageContext) => {
   routes.get('/', html());
   routes.use('/meta', meta());
 
-  routes.use(auth0({
-    scopes: 'create:users read:users read:connections',
-    clientName: 'User Invite Extension'
-  }));
-
   routes.get('/api/config', requireUser, (req, res) => {
     res.json({
       secret: config('EXTENSION_SECRET'),
@@ -44,6 +37,8 @@ export default (storageContext) => {
   });
 
   routes.post('/api/invitations', /*requireUser, */(req, res, next) => {
+    console.log(">>> inviteUsers // BODY ", req.body)
+
     if (req.is(['application/csv', 'text/csv'])) {
       invitations.inviteUsers(req.body, (err, result) => {
       });
