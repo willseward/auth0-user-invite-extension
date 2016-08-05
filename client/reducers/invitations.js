@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { fromJS } from 'immutable';
 
 import * as constants from '../constants';

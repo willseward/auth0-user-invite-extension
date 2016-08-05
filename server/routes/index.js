@@ -5,9 +5,11 @@ import meta from './meta';
 import hooks from './hooks';
 
 import config from '../lib/config';
-import invitations from '../lib/invitations';
 import { readStorage } from '../lib/storage';
 import { dashboardAdmins, requireUser } from '../lib/middlewares';
+
+import connections from './connections';
+import invitations from './invitations';
 
 const getRepository = () => {
   const repo = config('GITHUB_REPOSITORY');
@@ -28,6 +30,8 @@ export default (storageContext) => {
   routes.get('/', html());
   routes.use('/meta', meta());
 
+  routes.use('/api/connections', connections());
+
   routes.get('/api/config', requireUser, (req, res) => {
     res.json({
       secret: config('EXTENSION_SECRET'),
@@ -35,6 +39,7 @@ export default (storageContext) => {
       repository: getRepository()
     });
   });
+
 
   routes.post('/api/invitations', /*requireUser, */(req, res, next) => {
     console.log(">>> inviteUsers // BODY ", req.body)

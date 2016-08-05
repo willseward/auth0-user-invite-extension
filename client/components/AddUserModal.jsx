@@ -11,13 +11,18 @@ export default connectContainer(class extends Component {
 
     this.state = {
       email: '',
-      selectedConnection: '',
-      connection: [ 'op1', 'op2' ]
+      selectedConnection: ''
     };
 
     this.changeEmail = this.changeEmail.bind(this);
     this.changeConnection = this.changeConnection.bind(this);
     this.onClick = this.onClick.bind(this);
+  }
+
+  static stateToProps = (state) => {
+    return {
+      connection: state.connection
+    }
   }
 
   static actionsToProps = {
@@ -59,18 +64,30 @@ export default connectContainer(class extends Component {
     });
   }
 
+  renderAddUserBtn() {
+    return (
+      <Button bsSize="small" data-toggle="modal" data-target="#modal-sample" className="btn-success">
+        <i className="icon icon-budicon-473"></i> Add Single User
+        <Modal></Modal>
+      </Button>
+    )
+  }
+
   render() {
 
-    var connectionOptions = this.state.connection.map((item) => {
-      return <option>{item}</option>
+    const { error, connection, loading } = this.props.connection.toJS();
+
+    if (!connection || !connection.length) {
+      return (<div>Loading connections...</div>);
+    }
+
+    let connectionOptions = connection.map((item) => {
+      return <option key={item}>{item}</option>
     });
 
     return (
       <div className="modal-container">
-        <Button bsSize="small" data-toggle="modal" data-target="#modal-sample" className="btn-success">
-          <i className="icon icon-budicon-473"></i> Add Single User
-          <Modal></Modal>
-        </Button>
+        {this.renderAddUserBtn()}
         <div id="modal-sample" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" className="modal">
           <div className="modal-backdrop"></div>
           <div className="modal-dialog">
@@ -98,7 +115,6 @@ export default connectContainer(class extends Component {
                     <div className="col-xs-9">
 
                       <select className="form-control"
-                        defaultValue={this.state.connection[0]}
                         value={this.state.selectedConnection}
                         onChange={this.changeConnection}>
                         { connectionOptions }

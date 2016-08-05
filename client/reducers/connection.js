@@ -6,10 +6,10 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  connection: []
 };
 
-export const connectionReducer = createReducer(fromJS(initialState), {
+export const connection = createReducer(fromJS(initialState), {
   [constants.FETCH_CONNECTIONS_PENDING]: (state) =>
     state.merge({
       loading: true,
@@ -20,10 +20,11 @@ export const connectionReducer = createReducer(fromJS(initialState), {
       loading: false,
       error: `An error occured while loading the connections: ${action.errorMessage}`
     }),
-  [constants.FETCH_CONNECTIONS_FULFILLED]: (state, action) =>
-    state.merge({
+  [constants.FETCH_CONNECTIONS_FULFILLED]: (state, action) => {
+    return state.merge({
       loading: false,
       error: null,
-      records: fromJS(action.payload.data)
+      connection: fromJS(action.payload.data)
     })
+  }
 });
