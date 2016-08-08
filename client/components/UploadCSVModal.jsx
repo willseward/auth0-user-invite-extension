@@ -1,8 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import ImportDropFiles from './ImportDropFiles';
 
 import connectContainer from 'redux-static';
-import { invitationsActions } from '../actions';
+import { invitationsActions, importActions } from '../actions';
 
 export default connectContainer(class extends Component {
 
@@ -10,33 +11,30 @@ export default connectContainer(class extends Component {
     super();
 
     this.state = {
-      email: '',
+      csv: '',
       selectedConnection: ''
     };
 
-    this.changeEmail = this.changeEmail.bind(this);
+    this.onDrop = this.onDrop.bind(this);
     this.changeConnection = this.changeConnection.bind(this);
     this.onClick = this.onClick.bind(this);
   }
 
   static stateToProps = (state) => {
     return {
-      connection: state.connection
+      connection: state.connection,
+      file: state.importReducer.get('file')
     }
   }
 
   static actionsToProps = {
-    ...invitationsActions
+    ...invitationsActions,
+    ...importActions
   }
 
   static propTypes = {
-    inviteUser: PropTypes.func.isRequired
-  }
-
-  changeEmail(ev) {
-    this.setState({
-      email: ev.target.value
-    });
+    inviteUsers: PropTypes.func.isRequired,
+    handleFileDrop: PropTypes.func.isRequired
   }
 
   changeConnection(ev) {
@@ -47,27 +45,31 @@ export default connectContainer(class extends Component {
 
   onClick() {
 
-    if (!this.state.email.length || !this.state.selectedConnection.length) {
+    if (!this.state.csv.length || !this.state.selectedConnection.length) {
       // TODO show error
       return;
     }
 
-    this.props.inviteUser({
-      email: this.state.email,
+    this.props.inviteUsers({
+      csv: this.state.csv,
       connection: this.state.selectedConnection
     });
 
     // reset values
     this.setState({
-      email: '',
-      selectedConnection: []
+      csv: '',
+      selectedConnection: [ ]
     });
   }
 
-  renderAddUserBtn() {
+  onDrop(newFile) {
+    this.props.handleFileDrop(newFile);
+  }
+
+  renderUploadCSVModal() {
     return (
-      <Button bsSize="small" data-toggle="modal" data-target="#modal-add-user" className="btn-success">
-        <i className="icon icon-budicon-473"></i> Add Single User
+      <Button bsSize="small" data-toggle="modal" data-target="#modal-upload-csv" className="btn-primary">
+        <i className="icon icon-budicon-356"></i> Upload CSV
         <Modal></Modal>
       </Button>
     )
@@ -78,7 +80,7 @@ export default connectContainer(class extends Component {
     const { error, connection, loading } = this.props.connection.toJS();
 
     if (!connection || !connection.length) {
-      return (<div>{this.renderAddUserBtn()}</div>);
+      return (<div>{this.renderUploadCSVModal()}</div>);
     }
 
     let connectionOptions = connection.map((item) => {
@@ -87,8 +89,8 @@ export default connectContainer(class extends Component {
 
     return (
       <div className="modal-container">
-        {this.renderAddUserBtn()}
-        <div id="modal-add-user" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" className="modal">
+        {this.renderUploadCSVModal()}
+        <div id="modal-upload-csv" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" className="modal">
           <div className="modal-backdrop"></div>
           <div className="modal-dialog">
             <div className="modal-content">
@@ -96,45 +98,40 @@ export default connectContainer(class extends Component {
                 <Button type="button" data-dismiss="modal" className="close">
                   <span aria-hidden="true">×</span><span className="sr-only">Close</span>
                 </Button>
-                <h4 id="myModalLabel" className="modal-title">Invite User</h4>
+                <h4 id="myModalLabel" className="modal-title">Upload CSV</h4>
               </div>
-              <form id="add-user-form">
+              <form id="upload-csv-form">
                 <div className="modal-body">
                   <div className="row">
                     <div className="col-xs-12 form-group">
-                      <label htmlFor="email" className="control-label col-xs-3">Email</label>
-                      <div className="col-xs-9">
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={this.state.email}
-                          onChange={this.changeEmail}
-                          className="input-block-level form-control"/>
-                      </div>
+                    {
+                      (!this.props.file) ?
+                      <ImportDropFiles onDrop={this.onDrop} /> :
+                      `File '${this.props.file.name}' added. Click 'Upload' to invite users.`
+                    }
                     </div>
                     <div className="col-xs-12 form-group">
                       <label htmlFor="connection" className="control-label col-xs-3">Connection</label>
                       <div className="col-xs-9">
+
                         <select className="form-control"
                           name="connection"
                           value={this.state.selectedConnection}
                           onChange={this.changeConnection}>
                           { connectionOptions }
                         </select>
+
                         <p className="help-block">This is a logical identifier of the connection.</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="modal-footer">
-                {/*  data-dismiss="modal" */}
                   <Button type="submit"
                     className="btn btn-primary"
-
-                    value="validate"
+                    data-dismiss="modal"
                     onClick={this.onClick}>
-                      Invite User
+                      Upload
                   </Button>
                 </div>
               </form>
@@ -142,7 +139,6 @@ export default connectContainer(class extends Component {
           </div>
         </div>
       </div>
-
     );
   }
 });

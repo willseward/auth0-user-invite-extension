@@ -43,3 +43,17 @@ export function inviteUser(user) {
     }
   };
 }
+
+export function inviteUsers(file) {
+  return {
+    type: constants.INVITE_USERS,
+    payload: {
+      promise: axios({
+        method: 'post',
+        url: '/api/invitations/users',
+        data: { file },
+        responseType: 'json'
+      })
+    }
+  };
+}

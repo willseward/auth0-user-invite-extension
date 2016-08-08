@@ -7,6 +7,7 @@ import { invitationsActions } from '../actions';
 import { Error, LoadingPanel } from '../components/Dashboard';
 import InvitationsTable from '../components/InvitationsTable';
 import AddUserModal from '../components/AddUserModal';
+import UploadCSVModal from '../components/UploadCSVModal';
 
 export default connectContainer(class extends Component {
 
@@ -39,9 +40,7 @@ export default connectContainer(class extends Component {
             <div className="col-xs-12">
               <ButtonToolbar className="pull-right">
                 <AddUserModal />
-                <Button bsSize="small" className="btn-primary">
-                  <i className="icon icon-budicon-356"></i> Upload CSV
-                </Button>
+                <UploadCSVModal />
               </ButtonToolbar>
             </div>
             <div className="col-xs-12">
