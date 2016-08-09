@@ -6,14 +6,14 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   validationErrors: '',
-  invitations: [ ],
+  invitations: [ ]
 };
 
 /*
  * Auxiliary function to update invitations state.
  */
 function updateInvitations(state, user) {
-  return state.get('invitations').map((v, k) => {
+  return state.get('invitations').map((v) => {
     const vEmail = v.get('email');
 
     if (vEmail !== user.email) {
@@ -40,7 +40,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
     const { data } = action.payload;
     const configData = JSON.parse(action.payload.config.data);
 
-    let user = {
+    const user = {
       email: configData.user.email,
       status: data.error.message
     };
@@ -51,12 +51,11 @@ export const csvInvitations = createReducer(fromJS(initialState), {
     });
   },
   [constants.INVITE_USERS_FULFILLED]: (state, action) => {
-    const { data } = action.payload;
     const configData = JSON.parse(action.payload.config.data);
 
-    let user = {
+    const user = {
       email: configData.user.email,
-      status: "Invite sent."
+      status: 'Invite sent.'
     };
 
     return state.merge({
@@ -70,7 +69,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
       validationErrors: action.payload.error,
       error: 'Validation error'
     }),
-  [constants.CLEAR_CSV_USERS]: (state, action) =>
+  [constants.CLEAR_CSV_USERS]: (state) =>
     state.merge({
       ...initialState
     })

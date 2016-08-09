@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from './Dashboard';
 
 export default class CSVInvitationsTable extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   static propTypes = {
     invitations: React.PropTypes.array,

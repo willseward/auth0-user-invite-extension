@@ -20,14 +20,14 @@ export default class InvitationsTable extends Component {
             <TableColumn width="50%">Status</TableColumn>
           </TableHeader>
           <TableBody>
-            {invitations.map((invitation, index) => {
+            { invitations.map((invitation, index) => {
               return (
                 <TableRow key={index}>
                   <TableTextCell>{invitation.email}</TableTextCell>
                   <TableTextCell>{invitation.app_metadata.invite.status}</TableTextCell>
                 </TableRow>
               );
-            })}
+            }) }
           </TableBody>
         </Table>
       </div>

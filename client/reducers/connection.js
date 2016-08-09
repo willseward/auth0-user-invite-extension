@@ -25,6 +25,6 @@ export const connection = createReducer(fromJS(initialState), {
       loading: false,
       error: null,
       connection: fromJS(action.payload.data)
-    })
+    });
   }
 });

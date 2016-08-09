@@ -26,5 +26,5 @@ export const importReducer = createReducer(fromJS(initialState), {
   [constants.CLEAR_IMPORT]: (state) =>
     state.merge({
       ...initialState
-    }),
+    })
 });

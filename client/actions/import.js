@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as constants from '../constants';
 
 /*
@@ -6,14 +5,14 @@ import * as constants from '../constants';
  */
 export function handleFileDrop(newFile) {
   const errors = [];
-  let file = newFile[0];
+  const file = newFile[0];
 
   file.status = 'queued';
   if (file.type &&
     file.type.indexOf('application/csv') !== 0 &&
     file.type.indexOf('text/csv') !== 0) {
-      file.status = 'validation_failed';
-      errors.push(`${file.name}: This must be a valid CSV file.`);
+    file.status = 'validation_failed';
+    errors.push(`${file.name}: This must be a valid CSV file.`);
   }
 
   if (file.size >= (10 * 1000 * 1000)) {

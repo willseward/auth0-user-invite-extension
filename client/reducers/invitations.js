@@ -20,7 +20,7 @@ export const invitations = createReducer(fromJS(initialState), {
       invitations: {
         [data.filter]: [ ]
       }
-    })
+    });
   },
   [constants.FETCH_INVITATIONS_REJECTED]: (state, action) => {
     const { data } = action.payload;
@@ -31,7 +31,7 @@ export const invitations = createReducer(fromJS(initialState), {
       error: {
         [data.filter]: `An error occured while loading the user list: ${action.payload.data && action.payload.data.message || action.payload.statusText}`
       }
-    })
+    });
   },
   [constants.FETCH_INVITATIONS_FULFILLED]: (state, action) => {
     const { data } = action.payload;
@@ -55,7 +55,7 @@ export const invitations = createReducer(fromJS(initialState), {
       loading: false,
       error: `An error occured while inviting an user: ${action.payload.data && action.payload.data.message || action.payload.statusText}`
     }),
-  [constants.INVITE_USER_FULFILLED]: (state, action) =>
+  [constants.INVITE_USER_FULFILLED]: (state) =>
     state.merge({
       loading: false
     })

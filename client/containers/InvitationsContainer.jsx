@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { ButtonToolbar } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
 import { invitationsActions } from '../actions';
@@ -14,7 +14,7 @@ export default connectContainer(class extends Component {
   static stateToProps = (state) => {
     return {
       invitations: state.invitations
-    }
+    };
   }
 
   static actionsToProps = {
@@ -44,8 +44,8 @@ export default connectContainer(class extends Component {
               </ButtonToolbar>
             </div>
             <div className="col-xs-12">
-              <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : '' } />
-              <InvitationsTable invitations={invitations[this.props.filter]}/>
+              <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : ''} />
+              <InvitationsTable invitations={invitations[this.props.filter]} />
             </div>
           </div>
         </LoadingPanel>

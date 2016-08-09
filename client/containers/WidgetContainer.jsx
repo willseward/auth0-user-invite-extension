@@ -9,7 +9,6 @@ export default connectContainer(class extends Component {
 
   static stateToProps = (state) => {
     return {
-
     }
   }
 
@@ -48,10 +47,10 @@ export default connectContainer(class extends Component {
         </div>
         <div id="content-area" className="tab-content">
           <div id="pending" className="tab-pane active">
-            <InvitationsContainer filter="pending"/>
+            <InvitationsContainer filter="pending" />
           </div>
           <div id="accepted" className="tab-pane">
-            <InvitationsContainer filter="accepted"/>
+            <InvitationsContainer filter="accepted" />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import * as constants from '../constants';
 import Papa from 'papaparse';
+import * as constants from '../constants';
 
 /*
  * Load the invitations.
@@ -24,7 +24,7 @@ export function fetchInvitations(filter) {
           responseType: 'json'
         })
       }
-    })
+    });
   };
 }
 
@@ -65,7 +65,7 @@ export function inviteUsersPreview(file) {
   }
 
   if (!formData.userFile) {
-    if (files.size) {
+    if (file.size) {
       return { type: 'NOOP' };
     }
 
@@ -81,33 +81,31 @@ export function inviteUsersPreview(file) {
     if (formData.userFile) {
       const fileReader = new FileReader();
       fileReader.addEventListener('load', (event) => {
-        var usersData = processCSVData(event.currentTarget.result);
+        const usersData = processCSVData(event.currentTarget.result);
 
         if (usersData.errors.length) {
           return dispatch({
             type: constants.FORM_VALIDATION_FAILED,
             payload: {
-              error: 'There was an error with the submited file. Please check if you have some errors.' //usersData.errors
+              error: 'There was an error with the submited file. Please check if you have some errors.'
             }
           });
-        };
+        }
 
         usersData.data.map((user) => {
-
           if (user.email && user.email.length) {
-            var user = {
+            const userData = {
               email: user.email
-            }
+            };
 
             dispatch({
               type: constants.INVITE_USERS_PREVIEW,
               payload: {
-                data: { user }
+                data: { userData }
               }
             });
           }
         });
-
       });
       fileReader.readAsText(formData.userFile);
     }
@@ -119,7 +117,6 @@ export function inviteUsersPreview(file) {
  * Import a list of users to a specific connection.
  */
 export function inviteUsers(csvInvitations, connection) {
-
   if (!connection) {
     return {
       type: constants.FORM_VALIDATION_FAILED,
@@ -131,14 +128,12 @@ export function inviteUsers(csvInvitations, connection) {
 
   return (dispatch) => {
     if (csvInvitations) {
-
       csvInvitations.invitations.map((user) => {
-
         if (user.email && user.email.length) {
-          var user = {
+          const userData = {
             email: user.email,
-            connection: connection
-          }
+            connection
+          };
 
           dispatch({
             type: constants.INVITE_USERS,
@@ -146,15 +141,15 @@ export function inviteUsers(csvInvitations, connection) {
               promise: axios({
                 method: 'post',
                 url: '/api/invitations/user',
-                data: { user },
+                data: { userData },
                 responseType: 'json'
               })
             }
           });
         }
       });
-    };
-  }
+    }
+  };
 }
 
 export function clearCSVUsers() {

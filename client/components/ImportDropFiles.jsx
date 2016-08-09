@@ -16,11 +16,15 @@ class ImportDropFiles extends Component {
 
   render() {
     return (
-      <Dropzone onDrop={this.props.onDrop} multiple={false}
-        disablePreview style={this.dropzoneStyle}>
+      <Dropzone
+        onDrop={this.props.onDrop}
+        multiple={false}
+        disablePreview
+        style={this.dropzoneStyle}
+      >
         <div>Drop your file here, or click to select.</div>
       </Dropzone>
-    )
+    );
   }
 }
 
