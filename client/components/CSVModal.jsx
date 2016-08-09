@@ -9,7 +9,7 @@ import ImportCSVModal from './ImportCSV/ImportCSVModal';
 import PreviewCSVModal from './ImportCSV/PreviewCSVModal';
 import ImportedCSVModal from './ImportCSV/ImportedCSVModal';
 
-export default connectContainer(class ImportCSVModalContainer extends Component {
+export default connectContainer(class CSVModal extends Component {
 
   constructor() {
     super();
