@@ -10,7 +10,7 @@ export default class CSVInvitationsTable extends Component {
     invitations: React.PropTypes.array,
     validationErrors: React.PropTypes.string
   };
-  
+
   render() {
     const { validationErrors, invitations } = this.props;
 

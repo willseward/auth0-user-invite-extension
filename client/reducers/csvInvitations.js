@@ -9,7 +9,33 @@ const initialState = {
   invitations: [ ],
 };
 
+/*
+ * Auxiliary function to update invitations state.
+ */
+function updateInvitations(state, user) {
+  return state.get('invitations').map((v, k) => {
+    const vEmail = v.get('email');
+
+    if (vEmail !== user.email) {
+      return v;
+    }
+
+    return v.set('status', user.status);
+  });
+}
+
 export const csvInvitations = createReducer(fromJS(initialState), {
+  [constants.INVITE_USERS_PREVIEW]: (state, action) => {
+    const { user } = action.payload.data;
+
+    return state.merge({
+      loading: false,
+      invitations: [
+        ...state.get('invitations'),
+        user
+      ]
+    });
+  },
   [constants.INVITE_USERS_REJECTED]: (state, action) => {
     const { data } = action.payload;
     const configData = JSON.parse(action.payload.config.data);
@@ -21,10 +47,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
 
     return state.merge({
       loading: false,
-      invitations: [
-        ...state.get('invitations'),
-        user
-      ]
+      invitations: updateInvitations(state, user)
     });
   },
   [constants.INVITE_USERS_FULFILLED]: (state, action) => {
@@ -38,10 +61,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
 
     return state.merge({
       loading: false,
-      invitations: [
-        ...state.get('invitations'),
-        user
-      ]
+      invitations: updateInvitations(state, user)
     });
   },
   [constants.FORM_VALIDATION_FAILED]: (state, action) =>

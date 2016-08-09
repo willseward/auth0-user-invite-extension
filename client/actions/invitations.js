@@ -56,26 +56,12 @@ function processCSVData(csvContent) {
   });
 }
 
-/*
- * Import a list of users to a specific connection.
- */
-export function inviteUsers(file, connectionId) { //connection or connectionId?!
-  // let jobIndex = -1;
 
+export function inviteUsersPreview(file) {
   const formData = new FormData();
-  formData.connection_id = connectionId;
 
   if (file.status === 'queued') {
     formData.userFile = file;
-  }
-
-  if (!formData.connection_id) {
-    return {
-      type: constants.FORM_VALIDATION_FAILED,
-      payload: {
-        error: 'Please choose a connection.'
-      }
-    };
   }
 
   if (!formData.userFile) {
@@ -110,19 +96,13 @@ export function inviteUsers(file, connectionId) { //connection or connectionId?!
 
           if (user.email && user.email.length) {
             var user = {
-              email: user.email,
-              connection: connectionId
+              email: user.email
             }
 
             dispatch({
-              type: constants.INVITE_USERS,
+              type: constants.INVITE_USERS_PREVIEW,
               payload: {
-                promise: axios({
-                  method: 'post',
-                  url: '/api/invitations/user',
-                  data: { user },
-                  responseType: 'json'
-                })
+                data: { user }
               }
             });
           }
@@ -132,6 +112,49 @@ export function inviteUsers(file, connectionId) { //connection or connectionId?!
       fileReader.readAsText(formData.userFile);
     }
   };
+}
+
+
+/*
+ * Import a list of users to a specific connection.
+ */
+export function inviteUsers(csvInvitations, connection) {
+
+  if (!connection) {
+    return {
+      type: constants.FORM_VALIDATION_FAILED,
+      payload: {
+        error: 'Please choose a connection.'
+      }
+    };
+  }
+
+  return (dispatch) => {
+    if (csvInvitations) {
+
+      csvInvitations.invitations.map((user) => {
+
+        if (user.email && user.email.length) {
+          var user = {
+            email: user.email,
+            connection: connection
+          }
+
+          dispatch({
+            type: constants.INVITE_USERS,
+            payload: {
+              promise: axios({
+                method: 'post',
+                url: '/api/invitations/user',
+                data: { user },
+                responseType: 'json'
+              })
+            }
+          });
+        }
+      });
+    };
+  }
 }
 
 export function clearCSVUsers() {
