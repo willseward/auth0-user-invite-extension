@@ -41,13 +41,15 @@ export default (storageContext) => {
     });
   });
 
-  routes.use('/api/connections', connections());
+  routes.use('/api/connections', requireUser, connections());
 
   routes.post('/api/invitations/user',
+    requireUser,
     invitations.validateInviteUser,
     users.createUser());
 
   routes.get('/api/invitations',
+    requireUser,
     invitations.validateInvitations,
     users.getUsers());
 

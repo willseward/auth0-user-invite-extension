@@ -131,7 +131,6 @@ export default connectContainer(class extends Component {
                 {/*  data-dismiss="modal" */}
                   <Button type="submit"
                     className="btn btn-primary"
-
                     value="validate"
                     onClick={this.onClick}>
                       Invite User
