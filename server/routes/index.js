@@ -8,9 +8,9 @@ import config from '../lib/config';
 import { readStorage } from '../lib/storage';
 import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
 import invitations from '../lib/invitations';
+import users from '../lib/users';
 
 import connections from './connections';
-import users from './users';
 
 const getRepository = () => {
   const repo = config('GITHUB_REPOSITORY');

@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-import users from '../routes/users';
+import users from './users';
 
 const inviteUserSchema = Joi.object().keys({
   email: Joi.string().email().required(),
