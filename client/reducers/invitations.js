@@ -55,9 +55,8 @@ export const invitations = createReducer(fromJS(initialState), {
       loading: false,
       error: `An error occured while inviting an user: ${action.payload.data && action.payload.data.message || action.payload.statusText}`
     }),
-  [constants.INVITE_USER_FULFILLED]: (state, action) => {
-    return state.merge({
+  [constants.INVITE_USER_FULFILLED]: (state, action) =>
+    state.merge({
       loading: false
-    });
-  }
+    })
 });

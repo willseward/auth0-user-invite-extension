@@ -35,25 +35,6 @@ function validateInviteUser(req, res, next) {
   });
 }
 
-function validateInviteUsers(req, res, next) {
-
-  if (!req.is(['application/csv', 'text/csv'])) {
-    res.status(500).send({ error: 'Please send a CSV file.' });
-  }
-
-  var payload = {
-    csv: req.body
-  }
-
-  Joi.validate(payload, inviteUsersSchema, (err, value) => {
-    if (err) {
-      res.status(500).send({ error: err });
-    }
-
-    next();
-  });
-}
-
 function validateInvitations(req, res, next) {
 
   Joi.validate({ filter: req.query.filter }, getInvitationsSchema, (err, value) => {
@@ -67,6 +48,5 @@ function validateInvitations(req, res, next) {
 
 module.exports = {
   validateInviteUser: validateInviteUser,
-  validateInviteUsers: validateInviteUsers,
   validateInvitations: validateInvitations
 };

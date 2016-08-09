@@ -7,23 +7,24 @@ const initialState = {
   loading: false,
   file: null,
   error: null,
-  validationErrors: [ ],
-  // connectionId: null,
-  // currentJob: null,
-  // currentJobIndex: -1
+  validationErrors: [ ]
 };
 
 export const importReducer = createReducer(fromJS(initialState), {
   [constants.DROPPED_FILE]: (state, action) =>
-  state.merge({
-    loading: false,
-    file: action.payload.file
-  }),
+    state.merge({
+      loading: false,
+      file: action.payload.file
+    }),
   [constants.IMPORT_USERS_VALIDATION_FAILED]: (state, action) =>
     state.merge({
       loading: false,
       validationErrors: action.payload.validationErrors,
       file: action.payload.file,
       error: 'Validation error'
-    })
+    }),
+  [constants.CLEAR_IMPORT]: (state) =>
+    state.merge({
+      ...initialState
+    }),
 });

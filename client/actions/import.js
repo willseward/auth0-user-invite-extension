@@ -6,10 +6,9 @@ import * as constants from '../constants';
  */
 export function handleFileDrop(newFile) {
   const errors = [];
-  let file = newFile[0]; // TOCHANGE:: HACK
+  let file = newFile[0];
 
   file.status = 'queued';
-debugger;
   if (file.type &&
     file.type.indexOf('application/csv') !== 0 &&
     file.type.indexOf('text/csv') !== 0) {
@@ -38,5 +37,11 @@ debugger;
     payload: {
       file
     }
+  };
+}
+
+export function clearImport() {
+  return {
+    type: constants.CLEAR_IMPORT
   };
 }
