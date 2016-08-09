@@ -60,7 +60,7 @@ export default connectContainer(class extends Component {
     // reset values
     this.setState({
       email: '',
-      selectedConnection: []
+      selectedConnection: ''
     });
   }
 

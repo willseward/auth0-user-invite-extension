@@ -47,10 +47,6 @@ export default (storageContext) => {
     invitations.validateInviteUser,
     users.createUser());
 
-  routes.post('/api/invitations/users',
-    invitations.validateInviteUsers,
-    users.createUsers());
-
   routes.get('/api/invitations',
     invitations.validateInvitations,
     users.getUsers());

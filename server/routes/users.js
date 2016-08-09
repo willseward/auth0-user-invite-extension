@@ -52,25 +52,7 @@ const createUser = () => {
   }
 };
 
-/*
- * Adds multiple users from CSV.
- */
-const createUsers = () => {
-  return (req, res, next) => {
-
-    csv.parse(req.body.csv, function onParsed(err, records) {
-      if (err) {
-        res.status(500).send({ error: err });
-      }
-      return each(records, (fields, index, done) => {
-        createUser({ email: fields[1] }, done);
-      }, next);
-    });
-  }
-};
-
 module.exports = {
   getUsers: getUsers,
-  createUser: createUser,
-  createUsers: createUsers
+  createUser: createUser
 }

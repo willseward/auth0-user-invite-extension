@@ -45,7 +45,7 @@ export default connectContainer(class extends Component {
             </div>
             <div className="col-xs-12">
               <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : '' } />
-              <InvitationsTable invitations={invitations[this.props.filter]} />
+              <InvitationsTable invitations={invitations[this.props.filter]}/>
             </div>
           </div>
         </LoadingPanel>
