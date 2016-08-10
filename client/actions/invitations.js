@@ -94,14 +94,11 @@ export function inviteUsersPreview(file) {
 
         usersData.data.map((user) => {
           if (user.email && user.email.length) {
-            const userData = {
-              email: user.email
-            };
 
             dispatch({
               type: constants.INVITE_USERS_PREVIEW,
               payload: {
-                data: { userData }
+                data: { user }
               }
             });
           }
@@ -130,10 +127,7 @@ export function inviteUsers(csvInvitations, connection) {
     if (csvInvitations) {
       csvInvitations.invitations.map((user) => {
         if (user.email && user.email.length) {
-          const userData = {
-            email: user.email,
-            connection
-          };
+          user.connection = connection;
 
           dispatch({
             type: constants.INVITE_USERS,
@@ -141,7 +135,7 @@ export function inviteUsers(csvInvitations, connection) {
               promise: axios({
                 method: 'post',
                 url: '/api/invitations/user',
-                data: { userData },
+                data: { user },
                 responseType: 'json'
               })
             }

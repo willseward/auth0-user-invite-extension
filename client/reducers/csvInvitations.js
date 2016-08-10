@@ -37,7 +37,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
     });
   },
   [constants.INVITE_USERS_REJECTED]: (state, action) => {
-    const { data } = action.payload;
+    const { data } = action.payload.response;
     const configData = JSON.parse(action.payload.config.data);
 
     const user = {
