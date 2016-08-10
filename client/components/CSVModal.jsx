@@ -99,7 +99,7 @@ export default connectContainer(class CSVModal extends Component {
 
   renderImportCSVModalOpenBtn() {
     return (
-      <Button bsSize="small" data-toggle="modal" data-target="#modal-import-csv" className="btn-primary">
+      <Button type="button" bsSize="small" data-toggle="modal" data-target="#modal-import-csv" className="btn btn-primary">
         <i className="icon icon-budicon-356"></i> Import CSV
         <Modal></Modal>
       </Button>

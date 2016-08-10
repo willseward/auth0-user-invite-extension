@@ -66,7 +66,7 @@ export default connectContainer(class extends Component {
 
   renderAddUserBtn() {
     return (
-      <Button bsSize="small" data-toggle="modal" data-target="#modal-add-user" className="btn-success">
+      <Button type="button" bsSize="small" data-toggle="modal" data-target="#modal-add-user" className="btn btn-success">
         <i className="icon icon-budicon-473"></i> Add Single User
         <Modal></Modal>
       </Button>
