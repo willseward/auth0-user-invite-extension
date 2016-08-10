@@ -4,7 +4,7 @@ import connectContainer from 'redux-static';
 import { invitationsActions } from '../actions';
 
 import { Error, LoadingPanel } from '../components/Dashboard';
-import InvitationsTable from '../components/InvitationsTable';
+import { InvitationsTable } from '../components/Users';
 
 export default connectContainer(class extends Component {
 

@@ -3,21 +3,30 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import { App } from './containers';
+import { useRouterHistory } from 'react-router';
+import { createHistory } from 'history';
+
 import { loadCredentials } from './actions/auth';
+import routes from './routes';
 import configureStore from './store/configureStore';
 
 // Make axios aware of the base path.
 axios.defaults.baseURL = window.config.BASE_URL;
 
-// Initialize the store.
+// Make history aware of the base path.
+const history = useRouterHistory(createHistory)({
+  basename: window.config.BASE_PATH || ''
+});
+
 const store = configureStore();
+
+// Fire first events.
 store.dispatch(loadCredentials());
 
 // Render application.
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    {routes(history)}
   </Provider>,
   document.getElementById('app')
 );

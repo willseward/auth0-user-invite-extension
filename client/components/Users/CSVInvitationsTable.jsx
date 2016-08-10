@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from './Dashboard';
+import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
-export default class InvitationsTable extends Component {
+export default class CSVInvitationsTable extends Component {
+
   static propTypes = {
-    invitations: React.PropTypes.array
+    invitations: React.PropTypes.array,
+    validationErrors: React.PropTypes.string
   };
 
   render() {
-    const { invitations } = this.props;
+    const { validationErrors, invitations } = this.props;
+
     if (!invitations || !invitations.length) {
-      return <div>There are no invitations available. Please add a new user or summit a CSV file.</div>;
+      return (<div>Please summit a CSV file with the list of users.</div>);
+    }
+
+    if (validationErrors) {
+      return <div>{validationErrors}</div>;
     }
 
     return (
@@ -20,14 +27,14 @@ export default class InvitationsTable extends Component {
             <TableColumn width="50%">Status</TableColumn>
           </TableHeader>
           <TableBody>
-            { invitations.map((invitation, index) => {
+            {invitations.map((invitation, index) => {
               return (
                 <TableRow key={index}>
                   <TableTextCell>{invitation.email}</TableTextCell>
-                  <TableTextCell>{invitation.app_metadata.invite.status}</TableTextCell>
+                  <TableTextCell>{invitation.status}</TableTextCell>
                 </TableRow>
               );
-            }) }
+            })}
           </TableBody>
         </Table>
       </div>
