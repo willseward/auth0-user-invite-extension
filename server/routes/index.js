@@ -34,11 +34,11 @@ export default (storageContext) => {
   routes.use(managementClient);
 
   routes.get('/api/config', requireUser, (req, res) => {
-    res.json({
-      secret: config('EXTENSION_SECRET'),
-      branch: config('GITHUB_BRANCH'),
-      repository: getRepository()
-    });
+    readStorage(storageContext).then(res.send(data));
+  });
+
+  routes.patch('/api/config', requireUser, (req, res) => {
+    writeStorage(storageContext, req.body).then(res.sendStatus(200));
   });
 
   routes.use('/api/connections', requireUser, connections());

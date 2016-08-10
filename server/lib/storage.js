@@ -45,17 +45,3 @@ export const writeStorage = (storageContext, data) => {
     });
   });
 };
-
-/*
- * Append progress to deployments.
- */
-export const appendProgress = (storageContext, progress) =>
-  readStorage(storageContext).then(data => {
-    data.deployments = data.deployments || [ ];
-    data.deployments.push(progress);
-    if (data.deployments.length > 10) {
-      data.deployments = _.drop(data.deployments, data.deployments.length - 10);
-    }
-    return data;
-  })
-  .then(data => writeStorage(storageContext, data));
