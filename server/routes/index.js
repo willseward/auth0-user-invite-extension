@@ -29,6 +29,7 @@ export default (storageContext) => {
   routes.use('/.extensions', hooks());
   routes.use('/', dashboardAdmins());
   routes.get('/', html());
+  routes.get('/configuration', html());
   routes.use('/meta', meta());
 
   routes.use(managementClient);

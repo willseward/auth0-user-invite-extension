@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import ImportDropFiles from '../ImportDropFiles';
-import Error from '../Error';
+import Error from '../../Error';
 
 import connectContainer from 'redux-static';
-import { invitationsActions, importActions } from '../../actions';
+import { invitationsActions, importActions } from '../../../actions';
 
 
 export default connectContainer(class extends Component {

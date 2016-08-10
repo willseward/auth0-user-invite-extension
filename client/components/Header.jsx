@@ -1,5 +1,6 @@
 import './Header.css';
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 export default class Header extends Component {
   static propTypes = {
@@ -40,6 +41,13 @@ export default class Header extends Component {
                     <i className="icon-budicon-460"></i>
                   </span>
                   <ul role="menu" aria-labelledby="dLabel" className="dropdown-menu animated">
+                    <li role="presentation">
+                      <Link to='/configuration'>Configuration</Link>
+                    </li>
+                    <li role="presentation">
+                      <Link to='/'>Users</Link>
+                    </li>
+                    <li role="presentation" className="divider"></li>
                     <li role="presentation">
                       <a role="menuitem" tabIndex="-1" onClick={onLogout}>Logout</a>
                     </li>

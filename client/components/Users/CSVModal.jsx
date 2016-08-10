@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
 
-import { invitationsActions, importActions } from '../actions';
+import { invitationsActions, importActions } from '../../actions';
 
 import ImportCSVModal from './ImportCSV/ImportCSVModal';
 import PreviewCSVModal from './ImportCSV/PreviewCSVModal';
