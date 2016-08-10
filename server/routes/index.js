@@ -35,7 +35,7 @@ export default (storageContext) => {
   routes.use(managementClient);
 
   routes.get('/api/config', requireUser, (req, res) => {
-    readStorage(storageContext).then(res.send(data));
+    readStorage(storageContext).then(data => { res.json(data) });
   });
 
   routes.patch('/api/config', requireUser, (req, res) => {

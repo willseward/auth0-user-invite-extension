@@ -3,7 +3,10 @@ import Promise from 'bluebird';
 
 import logger from '../lib/logger';
 
-const defaultStorage = { };
+const defaultStorage = {
+  subject: 'Definetely not spam!',
+  html: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+};
 
 /*
  * Read from Webtask storage.
