@@ -4,8 +4,11 @@ import Promise from 'bluebird';
 import logger from '../lib/logger';
 
 const defaultStorage = {
-  subject: 'Definetely not spam!',
-  html: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+  templateConfig: {
+    subject: 'Definetely not spam!',
+    html: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+  },
+  smtpConfig: {}
 };
 
 /*
@@ -48,3 +51,25 @@ export const writeStorage = (storageContext, data) => {
     });
   });
 };
+
+/*
+ * Write template config to Webtask storage.
+ */
+export const writeTemplateConfig = (storageContext, templateConfig) =>
+  readStorage(storageContext).then(data => {
+    data.smtpConfig = data.smtpConfig || {};
+    data.templateConfig = templateConfig || {};
+    return data;
+  })
+  .then(data => writeStorage(storageContext, data));
+
+/*
+ * Write smtp config to Webtask storage.
+ */
+export const writeSMTPConfig = (storageContext, smtpConfig) =>
+  readStorage(storageContext).then(data => {
+    data.templateConfig = data.templateConfig || {};
+    data.smtpConfig = smtpConfig || {};
+    return data;
+  })
+  .then(data => writeStorage(storageContext, data));
