@@ -2,16 +2,32 @@ import axios from 'axios';
 import * as constants from '../constants';
 
 /*
- * Load all connections available in the Auth0 account.
+ * Load configuration data.
  */
-// export function fetchConnections() {
-//   return {
-//     type: constants.FETCH_CONNECTIONS,
-//     payload: {
-//       promise: axios.get('/api/connections', {
-//         timeout: 10000,
-//         responseType: 'json'
-//       })
-//     }
-//   };
-// }
+export function fetchTemplateConfiguration() {
+  return {
+    type: constants.FETCH_TEMPLATE_CONFIGURATION,
+    payload: {
+      promise: axios.get('/api/config/template', {
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+/*
+ * Save the configuration.
+ */
+export function saveTemplateConfiguration(config) {
+  return {
+    type: constants.SAVE_TEMPLATE_CONFIGURATION,
+    payload: {
+      promise: axios({
+        method: 'patch',
+        url: '/api/config/template',
+        data: config,
+        responseType: 'json'
+      })
+    }
+  };
+}
