@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { ChangePassword } from '../components/ChangePassword';
 
-class ConfigurationContainer extends Component {
+class ChangePasswordContainer extends Component {
 
   render() {
     return (
@@ -20,10 +20,10 @@ class ConfigurationContainer extends Component {
             <h1 className="pull-left" style={{ paddingTop: '10px' }}>Change Password</h1>
           </div>
         </div>
-        <ChangePassword />
+        <ChangePassword {...this.props} />
       </div>
     );
   }
 };
 
-export default ConfigurationContainer;
+export default ChangePasswordContainer;

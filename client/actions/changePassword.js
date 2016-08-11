@@ -4,11 +4,11 @@ import * as constants from '../constants';
 /*
  * Load email settings configuration data.
  */
-export function validateUserToken() {
+export function validateUserToken(token) {
   return {
     type: constants.VALIDATE_USER_TOKEN,
     payload: {
-      promise: axios.get('/api/changepassword', {
+      promise: axios.get(`/api/changepassword?token=${token}`, {
         responseType: 'json'
       })
     }
@@ -18,7 +18,7 @@ export function validateUserToken() {
 /*
  * Save the email settings configuration.
  */
-export function savePassword(config) {
+export function savePassword(user, config, token) {
 
   if (!config.password || !config.retypePassword) {
     return {
@@ -38,6 +38,12 @@ export function savePassword(config) {
     };
   }
 
+  let userData = {
+    password: config.password,
+    id: user.user_id,
+    token: token // token from params and not token from user
+  };
+
   return {
     type: constants.SAVE_PASSWORD,
     payload: {
@@ -45,7 +51,7 @@ export function savePassword(config) {
         method: 'post',
         url: '/api/changepassword',
         data: {
-          password: config.password
+          user: userData
         },
         responseType: 'json'
       })

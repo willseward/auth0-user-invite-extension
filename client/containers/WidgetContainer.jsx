@@ -28,7 +28,7 @@ export default connectContainer(class extends Component {
     fetchConnections: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchConnections();
   }
 

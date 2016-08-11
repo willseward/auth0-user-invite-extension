@@ -30,7 +30,7 @@ export default connectContainer(class InvitationEmail extends Component {
     saveTemplateConfiguration: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchTemplateConfiguration();
   }
 

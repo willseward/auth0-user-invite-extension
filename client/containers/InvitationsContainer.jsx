@@ -31,7 +31,7 @@ export default connectContainer(class extends Component {
     fetchInvitations: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.currentTab === this.props.filter) {
       this.props.fetchInvitations(this.props.filter);
       this.setState({

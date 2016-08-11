@@ -11,7 +11,8 @@ export default connectContainer(class ChangePassword extends Component {
     super(props);
 
     this.state = {
-      formSubmitted: false
+      formSubmitted: false,
+      tokenNotFoundError: ''
     }
   }
 
@@ -30,12 +31,20 @@ export default connectContainer(class ChangePassword extends Component {
     savePassword: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
-    this.props.validateUserToken();
+  componentDidMount() {
+    if (!this.props.params || !this.props.params.token) {
+      return this.setState({
+        tokenNotFoundError: 'The URL is incorrect or not valid. Please check your email.'
+      });
+    }
+
+    var token = this.props.params.token;
+    this.props.validateUserToken(token);
   }
 
   handleSubmit(data) {
-    this.props.savePassword(data);
+    var { user } = this.props.changePassword.toJS();
+    this.props.savePassword(user, data, this.props.params.token);
 
     this.setState({
       formSubmitted: true
@@ -44,7 +53,11 @@ export default connectContainer(class ChangePassword extends Component {
 
   render() {
 
-    const { error, validationErrors, template, loading } = this.props.changePassword.toJS();
+    const { error, saveValidationErrors, validatetokenNotFoundErrors, template, loading } = this.props.changePassword.toJS();
+
+    if (this.state.tokenNotFoundError || validatetokenNotFoundErrors) {
+      return (<Error message={(this.state.tokenNotFoundError || validatetokenNotFoundErrors)} />);
+    }
 
     return (
       <div>
@@ -53,8 +66,8 @@ export default connectContainer(class ChangePassword extends Component {
           onSubmit={this.handleSubmit.bind(this)}
           submitting={true}
         />
-        {(this.state.formSubmitted && !loading && !error && !validationErrors) ? 'Submited!' :
-        <Error message={(error || validationErrors) ? (error || validationErrors) : '' } />}
+        {(this.state.formSubmitted && !loading && !error && !saveValidationErrors) ? 'Submited!' :
+        <Error message={(error || saveValidationErrors) ? (error || saveValidationErrors) : '' } />}
       </div>
     )
   }

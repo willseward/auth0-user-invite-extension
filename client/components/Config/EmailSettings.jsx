@@ -30,7 +30,7 @@ export default connectContainer(class EmailSettings extends Component {
     saveEmailSettingsConfiguration: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchEmailSettingsConfiguration();
   }
 

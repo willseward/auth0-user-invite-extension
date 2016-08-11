@@ -6,7 +6,6 @@ import { InvitationEmail, EmailSettings} from './';
 export default class Configuration extends Component {
 
   render() {
-
     return (
       <div>
         <div className="widget-title title-with-nav-bars">

@@ -32,7 +32,7 @@ export default (storageContext) => {
 
   // specific client routes
   routes.get('/configuration', html());
-  routes.get('/changepassword', html());
+  routes.get('/changepassword/*', html());
 
   routes.use('/meta', meta());
 
@@ -66,14 +66,13 @@ export default (storageContext) => {
     invitations.validateInvitations,
     users.getUsers());
 
-  routes.get('/api/changepassword', (req, res) => {
-    res.send('Change password GET!')
-  });
+  routes.get('/api/changepassword',
+  /* validate, */
+    users.validateUserToken());
 
-  routes.post('/api/changepassword', (req, res) => {
-    console.log(req.body)
-    res.send('Change password POST!')
-  });
+  routes.post('/api/changepassword',
+  /* validate, */
+    users.savePassword());
 
   return routes;
 };
