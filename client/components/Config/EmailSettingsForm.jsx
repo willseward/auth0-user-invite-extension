@@ -26,21 +26,24 @@ class EmailSettingsForm extends Component {
         <div className="form-group">
           <label className="control-label col-xs-2">Port</label>
           <div className="col-xs-10">
-            <input className="form-control" type="number" placeholder="465" {...port}/>
+            <input className="form-control" type="number" placeholder="465" {...port}
+            value={port.value || (this.props.emailSettings ? this.props.emailSettings.port : '')}/>
           </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Auth User</label>
           <div className="col-xs-10">
-            <input className="form-control" type="email" placeholder="user@gmail.com" {...user}/>
+            <input className="form-control" type="email" placeholder="user@gmail.com" {...user}
+            value={user.value || (this.props.emailSettings ? this.props.emailSettings.user : '')}/>
           </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Auth Password</label>
           <div className="col-xs-10">
-            <input className="form-control" type="password" placeholder="your password" {...password}/>
+            <input className="form-control" type="password" placeholder="your password" {...password}
+            value={password.value || (this.props.emailSettings ? this.props.emailSettings.password : '')}/>
           </div>
         </div>
 
@@ -49,9 +52,9 @@ class EmailSettingsForm extends Component {
             <Button className="btn btn-primary" type="submit" disabled={submitting}>
               {submitting ? <i/> : <i/>} Save
             </Button>
-            <Button className="btn btn-default" type="button" disabled={submitting} onClick={resetForm}>
+            {/*<Button className="btn btn-default" type="button" disabled={submitting} onClick={resetForm}>
               Reset
-            </Button>
+            </Button>*/}
           </ButtonToolbar>
         </div>
       </form>

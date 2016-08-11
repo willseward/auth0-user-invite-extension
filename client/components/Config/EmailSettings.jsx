@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 
-import { configurationActions } from '../../actions';
+import { emailConfigurationActions } from '../../actions';
 import { EmailSettingsForm } from './';
 import Error from '../Error';
 
@@ -17,12 +17,12 @@ export default connectContainer(class EmailSettings extends Component {
 
   static stateToProps = (state) => {
     return {
-      configuration: state.configuration
+      emailConfiguration: state.emailConfiguration
     }
   }
 
   static actionsToProps = {
-    ...configurationActions
+    ...emailConfigurationActions
   }
 
   static propTypes = {
@@ -35,7 +35,7 @@ export default connectContainer(class EmailSettings extends Component {
   }
 
   handleSubmit(data) {
-    let defaultValues = this.props.configuration.toJS().emailSettings;
+    let defaultValues = this.props.emailConfiguration.toJS().emailSettings;
     let emailSettings = {
       host: data.host || defaultValues.host,
       port: data.port || defaultValues.port,
@@ -52,7 +52,7 @@ export default connectContainer(class EmailSettings extends Component {
   }
 
   render() {
-    const { error, emailSettings, loading } = this.props.configuration.toJS();
+    const { error, emailSettings, loading } = this.props.emailConfiguration.toJS();
 
     return (
       <div>

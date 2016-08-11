@@ -7,11 +7,13 @@ import { invitations } from './invitations';
 import { csvInvitations } from './csvInvitations';
 import { connection } from './connection';
 import { importReducer } from './import';
-import { configuration } from './configuration';
+import { templateConfiguration } from './templateConfiguration';
+import { emailConfiguration } from './emailConfiguration';
 
 export default combineReducers({
   auth,
-  configuration,
+  templateConfiguration,
+  emailConfiguration,
   invitations,
   csvInvitations,
   connection,

@@ -77,9 +77,9 @@ class InvitationEmailForm extends Component {
             <Button className="btn btn-primary" type="submit" disabled={submitting}>
               {submitting ? <i/> : <i/>} Save
             </Button>
-            <Button className="btn btn-default" type="button" disabled={submitting} onClick={resetForm}>
+            {/*<Button className="btn btn-default" type="button" disabled={submitting} onClick={resetForm}>
               Reset
-            </Button>
+            </Button>*/}
           </ButtonToolbar>
         </div>
       </form>

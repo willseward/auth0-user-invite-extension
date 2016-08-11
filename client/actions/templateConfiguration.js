@@ -31,34 +31,3 @@ export function saveTemplateConfiguration(config) {
     }
   };
 }
-
-/*
- * Load email settings configuration data.
- */
-export function fetchEmailSettingsConfiguration() {
-  return {
-    type: constants.FETCH_EMAILSETTINGS_CONFIGURATION,
-    payload: {
-      promise: axios.get('/api/config/smtp', {
-        responseType: 'json'
-      })
-    }
-  };
-}
-
-/*
- * Save the email settings configuration.
- */
-export function saveEmailSettingsConfiguration(config) {
-  return {
-    type: constants.SAVE_EMAILSETTINGS_CONFIGURATION,
-    payload: {
-      promise: axios({
-        method: 'patch',
-        url: '/api/config/smtp',
-        data: config, // TODO: encrypt email settings
-        responseType: 'json'
-      })
-    }
-  };
-}
