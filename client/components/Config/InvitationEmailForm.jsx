@@ -90,7 +90,6 @@ class InvitationEmailForm extends Component {
 InvitationEmailForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  resetForm: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
   template: PropTypes.object
 }

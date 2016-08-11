@@ -61,7 +61,7 @@ export default connectContainer(class InvitationEmail extends Component {
           submitting={true}
         />
         {(this.state.formSubmitted && !loading && !error) ? 'Submited!' :
-          <Error message={this.state.error ? this.state.error : '' } />}
+          <Error message={error ? error : '' } />}
       </div>
     )
   }

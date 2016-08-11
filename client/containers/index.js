@@ -4,3 +4,4 @@ export RequireAuthentication from './RequireAuthentication';
 export WidgetContainer from './WidgetContainer';
 export InvitationsContainer from './InvitationsContainer';
 export ConfigurationContainer from './ConfigurationContainer';
+export ChangePasswordContainer from './ChangePasswordContainer';

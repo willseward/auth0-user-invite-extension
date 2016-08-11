@@ -25,7 +25,7 @@ export function saveEmailSettingsConfiguration(config) {
       promise: axios({
         method: 'patch',
         url: '/api/config/smtp',
-        data: config, // TODO: encrypt email settings
+        data: config,
         responseType: 'json'
       })
     }

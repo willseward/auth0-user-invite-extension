@@ -8,5 +8,6 @@ export default (history) =>
     <Route path="/" component={containers.Root}>
       <IndexRoute component={containers.App} />
       <Route path="configuration" component={containers.ConfigurationContainer} />
+      <Route path="changepassword" component={containers.ChangePasswordContainer} />
     </Route>
   </Router>;

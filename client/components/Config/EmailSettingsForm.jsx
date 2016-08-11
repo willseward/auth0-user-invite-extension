@@ -65,8 +65,8 @@ class EmailSettingsForm extends Component {
 EmailSettingsForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  resetForm: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired
+  submitting: PropTypes.bool.isRequired,
+  emailSettings: PropTypes.object
 }
 
 export default reduxForm({

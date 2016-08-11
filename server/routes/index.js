@@ -29,7 +29,11 @@ export default (storageContext) => {
   routes.use('/.extensions', hooks());
   routes.use('/', dashboardAdmins());
   routes.get('/', html());
+
+  // specific client routes
   routes.get('/configuration', html());
+  routes.get('/changepassword', html());
+
   routes.use('/meta', meta());
 
   routes.use(managementClient);
@@ -61,6 +65,15 @@ export default (storageContext) => {
     requireUser,
     invitations.validateInvitations,
     users.getUsers());
+
+  routes.get('/api/changepassword', (req, res) => {
+    res.send('Change password GET!')
+  });
+
+  routes.post('/api/changepassword', (req, res) => {
+    console.log(req.body)
+    res.send('Change password POST!')
+  });
 
   return routes;
 };
