@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-export const fields = [ 'from', 'subject', 'redirectTo', /*'urlLifeTime',*/ 'message' ];
+export const fields = [ 'from', 'subject', 'redirectTo', 'message' ];
 
 class InvitationEmailForm extends Component {
+
   render() {
     const {
-      fields: { from, subject, redirectTo, /*urlLifeTime,*/ message },
+      fields: { from, subject, redirectTo, message },
       handleSubmit,
       resetForm,
       submitting
@@ -19,7 +20,11 @@ class InvitationEmailForm extends Component {
         <div className="form-group">
           <label className="control-label col-xs-2">From</label>
           <div className="col-xs-10">
-            <input className="form-control" type="text" placeholder="From field will just work if you configure smtp settings" {...from}/>
+            <input className="form-control" type="text"
+            placeholder="From field will just work if you configure smtp settings"
+            {...from}
+            value={from.value || (this.props.template ? this.props.template.from : '')}
+            />
           </div>
         </div>
 
@@ -27,32 +32,43 @@ class InvitationEmailForm extends Component {
           <label className="control-label col-xs-2">Subject</label>
           <div className="col-xs-10">
             <input className="form-control" type="text"
-            placeholder={(this.props.configuration && this.props.configuration.subject) ? this.props.configuration.subject : 'Subject'}
-            {...subject}/>
+            placeholder="Subject"
+            {...subject}
+            value={subject.value || (this.props.template ? this.props.template.subject: '')}
+            />
           </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Redirect To</label>
           <div className="col-xs-10">
-            <input className="form-control" type="text" placeholder="Redirect To" {...redirectTo}/>
+            <input className="form-control" type="text"
+            placeholder="Redirect To"
+            {...redirectTo}
+            value={redirectTo.value || (this.props.template ? this.props.template.redirectTo : '')}
+            />
           </div>
         </div>
 
-        {/*<div className="form-group">
-          <label>URL Lifetime</label>
-          <div className="col-xs-10">
-            <input className="form-control" type="number" placeholder="URL Lifetime" {...urlLifeTime}/>
-          </div>
-        </div> */}
+        {
+          this.props.template ?
+          <div className="form-group">
+            <label className="control-label col-xs-2">Current Message</label>
+            <div className="col-xs-10">
+              <div style={{backgroundColor: '#f5f5f5'}}>
+              {this.props.template.message}
+              </div>
+            </div>
+          </div> : ''
+        }
 
         <div className="form-group">
-          <label className="control-label col-xs-2">Message</label>
+          <label className="control-label col-xs-2">Change Message</label>
           <div className="col-xs-10">
-            {(this.props.configuration && this.props.configuration.html) ? this.props.configuration.html : ''}
             <textarea className="form-control"
-              {...message}
-              value={message.value || ''}/>
+            value={message.value || ''}
+            {...message}
+            />
           </div>
         </div>
 
@@ -76,7 +92,7 @@ InvitationEmailForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
-  configuration: PropTypes.object
+  template: PropTypes.object
 }
 
 export default reduxForm({

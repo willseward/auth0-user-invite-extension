@@ -18,7 +18,8 @@ class EmailSettingsForm extends Component {
         <div className="form-group">
           <label className="control-label col-xs-2">Host</label>
           <div className="col-xs-10">
-            <input className="form-control" type="text" placeholder="smtp.gmail.com" {...host}/>
+            <input className="form-control" type="text" placeholder="smtp.gmail.com" {...host}
+            value={host.value || (this.props.emailSettings ? this.props.emailSettings.host : '')}/>
           </div>
         </div>
 
