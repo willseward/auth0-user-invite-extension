@@ -6,7 +6,7 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  connection: []
+  connection: [ ]
 };
 
 export const connection = createReducer(fromJS(initialState), {
