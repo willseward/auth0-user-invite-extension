@@ -38,7 +38,7 @@ export const readStorage = (storageContext) => {
 export const writeStorage = (storageContext, data) => {
   if (!storageContext) {
     logger.debug('Unable to write storage. Context not available.');
-    return Promise.resolve();
+    return Promise.resolve(data);
   }
 
   return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ export const writeStorage = (storageContext, data) => {
         return reject(err);
       }
 
-      return resolve();
+      return resolve(data);
     });
   });
 };
