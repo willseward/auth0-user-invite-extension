@@ -68,7 +68,7 @@ const createUser = () => {
         if (err) {
           return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when sending the email.' });
         }
-        res.json(result);
+        return res.json(result);
       });
     });
   }
