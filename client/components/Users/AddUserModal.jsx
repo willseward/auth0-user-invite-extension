@@ -4,6 +4,8 @@ import { Modal, Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 import { invitationsActions } from '../../actions';
 
+import Error from '../Error';
+
 export default connectContainer(class extends Component {
 
   constructor() {
@@ -11,7 +13,8 @@ export default connectContainer(class extends Component {
 
     this.state = {
       email: '',
-      selectedConnection: ''
+      selectedConnection: '',
+      error: ''
     };
 
     this.changeEmail = this.changeEmail.bind(this);
@@ -33,6 +36,27 @@ export default connectContainer(class extends Component {
     inviteUser: PropTypes.func.isRequired
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    // set selectedConnection default value as soon as we fetch connections
+    if (this.state.selectedConnection === '' &&
+      nextProps.connection.size) {
+        var connection = nextProps.connection.toJS();
+        if (connection && connection.connection &&
+        connection.connection.length) {
+          this.setState({
+            selectedConnection: connection.connection[0]
+          })
+        }
+    }
+
+    if (this.state.error !== '') {
+      this.setState({
+        error: ''
+      });
+    }
+  }
+
   changeEmail(ev) {
     this.setState({
       email: ev.target.value
@@ -48,8 +72,9 @@ export default connectContainer(class extends Component {
   onClick() {
 
     if (!this.state.email.length || !this.state.selectedConnection.length) {
-      // TODO show error
-      return;
+      return this.setState({
+        error: 'Email or connection are not selected.'
+      });
     }
 
     this.props.inviteUser({
@@ -100,6 +125,10 @@ export default connectContainer(class extends Component {
               </div>
               <form id="add-user-form">
                 <div className="modal-body">
+                  <div className="row col-xs-12">
+                    <p className="text-center">Add an email and select a connection to add a new user.</p>
+                    <Error message={this.state.error ? this.state.error : '' } />
+                  </div>
                   <div className="row">
                     <div className="col-xs-12 form-group">
                       <label htmlFor="email" className="control-label col-xs-3">Email</label>
@@ -128,8 +157,8 @@ export default connectContainer(class extends Component {
                   </div>
                 </div>
                 <div className="modal-footer">
-                {/*  data-dismiss="modal" */}
-                  <Button type="submit"
+                {/*  data-dismiss="modal" type="submit"*/}
+                  <Button
                     className="btn btn-primary"
                     value="validate"
                     onClick={this.onClick}>

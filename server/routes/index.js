@@ -93,7 +93,7 @@ export default (storageContext) => {
     validations.validateInvitations,
     users.getUsers());
 
-  routes.get('/api/changepassword',
+  routes.put('/api/changepassword',
     validations.validateUserToken,
     users.validateUserToken());
 

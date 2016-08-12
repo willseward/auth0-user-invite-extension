@@ -77,6 +77,45 @@ const createUser = () => {
 };
 
 /*
+ * Updates user "email_verified" field.
+ */
+const updateEmailVerified = (auth0, user, callback) => {
+
+  return auth0.users.update(
+    { id: user.user_id },
+    {
+      "email_verified": true
+    })
+    .then(user => {
+      if (!user) {
+        return callback({ error: 'There was a problem when updating the user email_verified field.' });
+      }
+      return callback(null, user);
+    })
+    .catch(callback);
+}
+
+const validateToken = (auth0, token, callback) => {
+
+  const options = {
+    sort: 'last_login:-1',
+    q: `app_metadata.invite.token:${token}`,
+    include_totals: false,
+    fields: 'user_id,email,email_verified,app_metadata',
+    search_engine: 'v2'
+  };
+
+  return auth0.users.get(options)
+    .then(users => {
+      if (!users || !users.length || users.length !== 1) {
+        return callback({ error: 'Token is invalid or user was not found.' });
+      }
+      return callback(null, users[0]);
+    })
+    .catch(callback);
+}
+
+/*
  * Validates user token.
  */
 const validateUserToken = () => {
@@ -84,22 +123,23 @@ const validateUserToken = () => {
 
     let token = req.query.token;
 
-    const options = {
-      sort: 'last_login:-1',
-      q: `app_metadata.invite.token:${token}`,
-      include_totals: false,
-      fields: 'user_id,email,app_metadata',
-      search_engine: 'v2'
-    };
+    validateToken(req.auth0, token, function(err, user) {
 
-    return req.auth0.users.get(options)
-      .then(result => {
-        if (!result || !result.length || result.length !== 1) {
-          return res.status(500).send({ error: 'Token is invalid or user was not found.' });
+      if (err || !user) {
+        return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when validating the token.' });
+      }
+
+      if (user.email_verified) {
+        return res.json(user);
+      }
+
+      updateEmailVerified(req.auth0, user, function(err, result) {
+        if(err) {
+          return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when updating field.' });
         }
-        return res.json(result[0]);
-      })
-      .catch(next);
+        return res.json(user);
+      });
+    });
   }
 };
 
@@ -111,26 +151,34 @@ const savePassword = () => {
 
     let id = req.body.user.id;
     let password = req.body.user.password;
-    let token = req.body.user.token; // TODO: confirm if we need to use it again
+    let token = req.body.user.token;
 
-    req.auth0.users.update(
-      { id: id },
-      {
-        "password": password,
-        // "email_verified": true,
-        "app_metadata": {
-          "invite": {
-            "status": "accepted"
-          }
-        }
-      })
-      .then(user => {
-        if (!user) {
-          return res.status(500).send({ error :'There was a problem when saving the user.' });
-        }
-        return res.sendStatus(200);
-      })
-      .catch(next);
+    validateToken(req.auth0, token, function(err, user) {
+
+      if (err || !user || user.user_id !== id) {
+        return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when saving the user.' });
+      }
+
+      return req.auth0.users.update(
+        { id: id },
+        {
+          "password": password,
+          "app_metadata": {
+            "invite": {
+              "status": "accepted"
+            }
+          }
+        })
+        .then(user => {
+          if (!user) {
+            return res.status(500).send({ error :'There was a problem when saving the user.' });
+          }
+          return res.sendStatus(200);
+        })
+        .catch(next);
+
+    });
+
   }
 };
 
