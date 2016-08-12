@@ -27,6 +27,22 @@ const getSavePasswordSchema = Joi.object().keys({
   })
 });
 
+const writeTemplateConfigSchema = Joi.object().keys({
+  from: Joi.string().email().required(),
+  subject: Joi.string().required(),
+  redirectTo: Joi.string().required(),
+  message: Joi.string().required()
+});
+
+const writeSMTPConfigSchema = Joi.object().keys({
+  host: Joi.string().required(),
+  port: Joi.number().required(),
+  auth: Joi.object().keys({
+    user: Joi.string().required(),
+    password: Joi.string().required()
+  })
+});
+
 function validateInviteUser(req, res, next) {
 
   if (!req.is('application/json')) {
@@ -80,9 +96,32 @@ function validateSavePassword(req, res, next) {
   });
 }
 
+function validateWriteTemplateConfig(req, res, next) {
+
+  Joi.validate(req.body, writeTemplateConfigSchema, (err, value) => {
+    if (err) {
+      res.status(500).send({ error: 'Missing information (from, subject, redirectTo or message).' });
+    }
+
+    next();
+  });
+}
+function validateWriteSMTPConfig(req, res, next) {
+
+  Joi.validate(req.body, writeSMTPConfigSchema, (err, value) => {
+    if (err) {
+      res.status(500).send({ error: 'Missing information (host, port, user or password).' });
+    }
+
+    next();
+  });
+}
+
 module.exports = {
   validateInviteUser,
   validateInvitations,
   validateUserToken,
-  validateSavePassword
+  validateSavePassword,
+  validateWriteTemplateConfig,
+  validateWriteSMTPConfig
 };
