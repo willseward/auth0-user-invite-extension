@@ -7,7 +7,7 @@ import hooks from './hooks';
 import config from '../lib/config';
 import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storage';
 import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
-import invitations from '../lib/invitations';
+import validations from '../lib/validations';
 import users from '../lib/users';
 
 import connections from './connections';
@@ -29,7 +29,11 @@ export default (storageContext) => {
   routes.use('/.extensions', hooks());
   routes.use('/', dashboardAdmins());
   routes.get('/', html());
+
+  // specific client routes
   routes.get('/configuration', html());
+  routes.get('/changepassword/*', html());
+
   routes.use('/meta', meta());
 
   routes.use(managementClient);
@@ -54,13 +58,21 @@ export default (storageContext) => {
 
   routes.post('/api/invitations/user',
     requireUser,
-    invitations.validateInviteUser,
+    validations.validateInviteUser,
     users.createUser());
 
   routes.get('/api/invitations',
     requireUser,
-    invitations.validateInvitations,
+    validations.validateInvitations,
     users.getUsers());
+
+  routes.get('/api/changepassword',
+    validations.validateUserToken,
+    users.validateUserToken());
+
+  routes.post('/api/changepassword',
+    validations.validateSavePassword,
+    users.savePassword());
 
   return routes;
 };

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { Configuration } from '../components/Config';
+import { ChangePassword } from '../components/ChangePassword';
 
-class ConfigurationContainer extends Component {
+class ChangePasswordContainer extends Component {
 
   render() {
     return (
@@ -17,13 +17,13 @@ class ConfigurationContainer extends Component {
                 <a href="https://manage.auth0.com/#/extensions">Extensions</a>
               </li>
             </ol>
-            <h1 className="pull-left" style={{ paddingTop: '10px' }}>Configuration</h1>
+            <h1 className="pull-left" style={{ paddingTop: '10px' }}>Change Password</h1>
           </div>
         </div>
-        <Configuration />
+        <ChangePassword {...this.props} />
       </div>
     );
   }
 };
 
-export default ConfigurationContainer;
+export default ChangePasswordContainer;

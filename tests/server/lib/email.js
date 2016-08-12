@@ -6,7 +6,7 @@ const Email = require('../../../server/lib/email');
 const templates = {
   subject: 'Definetely not spam!',
   text: 'Hello {{ name }}.\n{{ message }}',
-  html: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+  message: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
 };
 var email = new Email(stubTransport(), templates);
 

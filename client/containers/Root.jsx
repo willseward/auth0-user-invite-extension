@@ -6,7 +6,7 @@ import { logout } from '../actions/auth';
 import RequireAuthentication from './RequireAuthentication';
 import Header from '../components/Header';
 
-class App extends Component {
+class Root extends Component {
   static propTypes = {
     logout: PropTypes.func
   };
@@ -34,4 +34,4 @@ function select(state) {
   };
 }
 
-export default RequireAuthentication(connect(select, { logout })(App));
+export default RequireAuthentication(connect(select, { logout })(Root));

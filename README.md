@@ -8,7 +8,7 @@ TODO: This repo is based off the GitHub Deployments extension and is in the proc
 
 ### Local Development
 
-First create a `Client` in your account with `read:connections`, `create:users read:users` and `read/create/update/delete:rules` access to the Auth0 Management API. Then create a `config.json` file under `./server/` containing the following settings:
+First create a `Client` in your account with `read:connections` and `create/read/update:users` access to the Auth0 Management API. Then create a `config.json` file under `./server/` containing the following settings:
 
 ```json
 {

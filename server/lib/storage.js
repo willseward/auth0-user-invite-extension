@@ -6,7 +6,7 @@ import logger from '../lib/logger';
 const defaultStorage = {
   templateConfig: {
     subject: 'Definetely not spam!',
-    html: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+    message: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
   },
   smtpConfig: {}
 };

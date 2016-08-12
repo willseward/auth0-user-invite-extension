@@ -15,6 +15,18 @@ const getInvitationsSchema = Joi.object().keys({
   filter: Joi.string().valid('pending', 'accepted')
 });
 
+const getUserTokenSchema = Joi.object().keys({
+  token: Joi.string().required()
+});
+
+const getSavePasswordSchema = Joi.object().keys({
+  user: Joi.object().keys({
+    id: Joi.string().required(),
+    password: Joi.string().required(),
+    token: Joi.string().required()
+  })
+});
+
 function validateInviteUser(req, res, next) {
 
   if (!req.is('application/json')) {
@@ -46,7 +58,31 @@ function validateInvitations(req, res, next) {
   });
 }
 
+function validateUserToken(req, res, next) {
+
+  Joi.validate(req.query, getUserTokenSchema, (err, value) => {
+    if (err) {
+      res.status(500).send({ error: 'No token was provided.' });
+    }
+
+    next();
+  });
+}
+
+function validateSavePassword(req, res, next) {
+
+  Joi.validate(req.body, getSavePasswordSchema, (err, value) => {
+    if (err) {
+      res.status(500).send({ error: 'Missing information (user id, token or password).' });
+    }
+
+    next();
+  });
+}
+
 module.exports = {
-  validateInviteUser: validateInviteUser,
-  validateInvitations: validateInvitations
+  validateInviteUser,
+  validateInvitations,
+  validateUserToken,
+  validateSavePassword
 };

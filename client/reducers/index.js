@@ -1,18 +1,23 @@
 import { combineReducers } from 'redux';
-import reduceReducers from 'reduce-reducers';
+import {reducer as formReducer} from 'redux-form';
 
 import { auth } from './auth';
 import { invitations } from './invitations';
 import { csvInvitations } from './csvInvitations';
 import { connection } from './connection';
 import { importReducer } from './import';
-import { configuration } from './configuration';
+import { templateConfiguration } from './templateConfiguration';
+import { emailConfiguration } from './emailConfiguration';
+import { changePassword } from './changePassword';
 
 export default combineReducers({
   auth,
-  configuration,
+  templateConfiguration,
+  emailConfiguration,
+  changePassword,
   invitations,
   csvInvitations,
   connection,
-  importReducer
+  importReducer,
+  form: formReducer
 });
