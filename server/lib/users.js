@@ -37,7 +37,7 @@ const getUsers = () => {
  * Add a new user.
  */
 const createUser = () => {
-  return (req, res, next) => {
+  return (req, res) => {
     const token = uuid.v4();
     const options = {
       "connection": req.body.user.connection,
@@ -58,19 +58,17 @@ const createUser = () => {
       token: token
     };
 
-    let result = { emailSent: false, user: null };
+    let result = null;
     return req.auth0.users.create(options, function onCreateUser(err, user) {
-      result.user = user;
+      result = user;
       if (err) {
-        return next(err, result);
+        return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when creating the user.' });
       }
       email.sendEmail(transportOptions, templateData, function (err, emailResult) {
         if (err) {
-          return next(err, result);
+          return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when sending the email.' });
         }
-        result.emailSent = true;
         res.json(result);
-        return next(null, result);
       });
     });
   }
