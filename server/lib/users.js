@@ -92,10 +92,9 @@ const validateUserToken = () => {
     };
 
     return req.auth0.users.get(options)
-      // .then(user => res.json({ user }))
       .then(result => {
         if (!result || !result.length || result.length !== 1) {
-          return res.status(500).send('Token is invalid or user was not found.');
+          return res.status(500).send({ error: 'Token is invalid or user was not found.' });
         }
         return res.json(result[0]);
       })
@@ -126,7 +125,7 @@ const savePassword = () => {
       })
       .then(user => {
         if (!user) {
-          return res.status(500).send('There was a problem when saving the user.');
+          return res.status(500).send({ error :'There was a problem when saving the user.' });
         }
         return res.sendStatus(200);
       })

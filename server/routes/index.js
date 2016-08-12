@@ -41,9 +41,9 @@ export default (storageContext) => {
   const routes = router();
   routes.use('/.extensions', hooks());
   routes.use('/', dashboardAdmins());
-  routes.get('/', html());
 
   // specific client routes
+  routes.get('/', html());
   routes.get('/configuration', html());
   routes.get('/changepassword/*', html());
 
@@ -52,26 +52,30 @@ export default (storageContext) => {
   routes.use(managementClient);
 
   routes.get('/api/config/template', requireUser, (req, res) => {
-    readStorage(storageContext).then(data => { res.json(data.templateConfig || {}) });
+    readStorage(storageContext)
+    .then(data => { res.json(data.templateConfig || {}) });
   });
 
-  routes.patch('/api/config/template', requireUser, (req, res) => {
+  routes.patch('/api/config/template',
+    requireUser,
+    validations.validateWriteTemplateConfig,
     writeTemplateConfig(storageContext, req.body).then((data) => {
       configureEmail(data);
       res.sendStatus(200);
-    });
-  });
+    }));
 
   routes.get('/api/config/smtp', requireUser, (req, res) => {
-    readStorage(storageContext).then(data => { res.json(data.smtpConfig || {} ) });
+    readStorage(storageContext)
+    .then(data => { res.json(data.smtpConfig || {} ) });
   });
 
-  routes.patch('/api/config/smtp', requireUser, (req, res) => {
+  routes.patch('/api/config/smtp',
+    requireUser,
+    validations.validateWriteSMTPConfig,
     writeSMTPConfig(storageContext, req.body).then((data) => {
       configureEmail(data);
       res.sendStatus(200);
-    });
-  });
+    }));
 
   routes.use('/api/connections', requireUser, connections());
 

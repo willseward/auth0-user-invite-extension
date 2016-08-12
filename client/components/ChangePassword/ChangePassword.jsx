@@ -12,7 +12,7 @@ export default connectContainer(class ChangePassword extends Component {
 
     this.state = {
       formSubmitted: false,
-      tokenNotFoundError: ''
+      tokenNotFoundError: null
     }
   }
 
@@ -53,10 +53,9 @@ export default connectContainer(class ChangePassword extends Component {
 
   render() {
 
-    const { error, saveValidationErrors, validatetokenNotFoundErrors, template, loading } = this.props.changePassword.toJS();
-
-    if (this.state.tokenNotFoundError || validatetokenNotFoundErrors) {
-      return (<Error message={(this.state.tokenNotFoundError || validatetokenNotFoundErrors)} />);
+    const { error, saveValidationErrors, validateTokenErrors, template, loading } = this.props.changePassword.toJS();
+    if (this.state.tokenNotFoundError || validateTokenErrors) {
+      return (<Error message={(this.state.tokenNotFoundError || validateTokenErrors)} />);
     }
 
     return (

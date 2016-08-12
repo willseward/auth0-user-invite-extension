@@ -17,11 +17,14 @@ export const changePassword = createReducer(fromJS(initialState), {
       ...initialState,
       loading: true
     }),
-  [constants.VALIDATE_USER_TOKEN_REJECTED]: (state, action) =>
-    state.merge({
+  [constants.VALIDATE_USER_TOKEN_REJECTED]: (state, action) => {
+
+    const errorMessage = action.payload.response.data.error || action.errorMessage;
+    return state.merge({
       loading: true,
-      validateTokenErrors: `An error occured while validating: ${action.errorMessage}`
-    }),
+      validateTokenErrors: `An error occured while validating: ${errorMessage}`
+    });
+  },
   [constants.VALIDATE_USER_TOKEN_FULFILLED]: (state, action) => {
     return state.merge({
       loading: false,
@@ -33,7 +36,7 @@ export const changePassword = createReducer(fromJS(initialState), {
       loading: true
     }),
   [constants.SAVE_PASSWORD_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.data && action.payload.data.errors && 'Validation Error' || action.errorMessage;
+    const errorMessage = action.payload.data && action.payload.data.error && 'Validation Error' || action.errorMessage;
 
     return state.merge({
       loading: false,
