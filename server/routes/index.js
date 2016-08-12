@@ -59,10 +59,12 @@ export default (storageContext) => {
   routes.patch('/api/config/template',
     requireUser,
     validations.validateWriteTemplateConfig,
-    writeTemplateConfig(storageContext, req.body).then((data) => {
-      configureEmail(data);
-      res.sendStatus(200);
-    }));
+    (req, res) => {
+      writeTemplateConfig(storageContext, req.body).then((data) => {
+        configureEmail(data);
+        res.sendStatus(200);
+      });
+    });
 
   routes.get('/api/config/smtp', requireUser, (req, res) => {
     readStorage(storageContext)
@@ -72,10 +74,12 @@ export default (storageContext) => {
   routes.patch('/api/config/smtp',
     requireUser,
     validations.validateWriteSMTPConfig,
-    writeSMTPConfig(storageContext, req.body).then((data) => {
-      configureEmail(data);
-      res.sendStatus(200);
-    }));
+    (req, res) => {
+      writeSMTPConfig(storageContext, req.body).then((data) => {
+        configureEmail(data);
+        res.sendStatus(200);
+      });
+    });
 
   routes.use('/api/connections', requireUser, connections());
 
