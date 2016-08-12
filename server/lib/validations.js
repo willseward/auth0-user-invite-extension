@@ -46,7 +46,7 @@ const writeSMTPConfigSchema = Joi.object().keys({
 function validateInviteUser(req, res, next) {
 
   if (!req.is('application/json')) {
-    res.status(500).send({ error: 'Missing JSON information about user.' });
+    return res.status(500).send({ error: 'Missing JSON information about user.' });
   }
 
   var payload = {
@@ -56,7 +56,7 @@ function validateInviteUser(req, res, next) {
 
   Joi.validate(payload, inviteUserSchema, (err, value) => {
     if (err) {
-      res.status(500).send({ error: err });
+      return res.status(500).send({ error: err });
     }
 
     next();
@@ -67,7 +67,7 @@ function validateInvitations(req, res, next) {
 
   Joi.validate({ filter: req.query.filter }, getInvitationsSchema, (err, value) => {
     if (err) {
-      res.status(500).send({ error: err, filter: req.query.filter });
+      return res.status(500).send({ error: err, filter: req.query.filter });
     }
 
     next();
@@ -78,7 +78,7 @@ function validateUserToken(req, res, next) {
 
   Joi.validate(req.query, getUserTokenSchema, (err, value) => {
     if (err) {
-      res.status(500).send({ error: 'No token was provided.' });
+      return res.status(500).send({ error: 'No token was provided.' });
     }
 
     next();
@@ -89,7 +89,7 @@ function validateSavePassword(req, res, next) {
 
   Joi.validate(req.body, getSavePasswordSchema, (err, value) => {
     if (err) {
-      res.status(500).send({ error: 'Missing information (user id, token or password).' });
+    return res.status(500).send({ error: 'Missing information (user id, token or password).' });
     }
 
     next();
@@ -100,7 +100,7 @@ function validateWriteTemplateConfig(req, res, next) {
 
   Joi.validate(req.body, writeTemplateConfigSchema, (err, value) => {
     if (err) {
-      res.status(500).send({ error: 'Missing information (from, subject, redirectTo or message).' });
+      return res.status(500).send({ error: 'Missing information (from, subject, redirectTo or message).' });
     }
 
     next();
@@ -110,7 +110,7 @@ function validateWriteSMTPConfig(req, res, next) {
 
   Joi.validate(req.body, writeSMTPConfigSchema, (err, value) => {
     if (err) {
-      res.status(500).send({ error: 'Missing information (host, port, user or password).' });
+      return res.status(500).send({ error: 'Missing information (host, port, user or password).' });
     }
 
     next();
