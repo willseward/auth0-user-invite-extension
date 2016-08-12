@@ -54,6 +54,25 @@ const createUser = () => {
 };
 
 /*
+ * Updates user "email_verified" field.
+ */
+const updateEmailVerified = (auth0, user, callback) => {
+
+  return auth0.users.update(
+    { id: user.user_id },
+    {
+      "email_verified": true
+    })
+    .then(user => {
+      if (!user) {
+        return callback({ error: 'There was a problem when updating the user email_verified field.' });
+      }
+      return callback(null, user);
+    })
+    .catch(callback);
+}
+
+/*
  * Validates user token.
  */
 const validateUserToken = () => {
@@ -74,7 +93,13 @@ const validateUserToken = () => {
         if (!result || !result.length || result.length !== 1) {
           return res.status(500).send({ error: 'Token is invalid or user was not found.' });
         }
-        return res.json(result[0]);
+        var user = result[0];
+        updateEmailVerified(req.auth0, user, function(err, result) {
+          if(err) {
+            return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when updating field.' });
+          }
+          return res.json(user);
+        });
       })
       .catch(next);
   }
@@ -94,7 +119,6 @@ const savePassword = () => {
       { id: id },
       {
         "password": password,
-        // "email_verified": true,
         "app_metadata": {
           "invite": {
             "status": "accepted"

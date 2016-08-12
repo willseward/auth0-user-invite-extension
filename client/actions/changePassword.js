@@ -8,7 +8,7 @@ export function validateUserToken(token) {
   return {
     type: constants.VALIDATE_USER_TOKEN,
     payload: {
-      promise: axios.get(`/api/changepassword?token=${token}`, {
+      promise: axios.put(`/api/changepassword?token=${token}`, {
         responseType: 'json'
       })
     }
