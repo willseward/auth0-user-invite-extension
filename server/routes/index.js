@@ -7,6 +7,7 @@ import hooks from './hooks';
 import config from '../lib/config';
 import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storage';
 import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
+import stubTransport from 'nodemailer-stub-transport';
 import validations from '../lib/validations';
 import users from '../lib/users';
 
@@ -24,7 +25,19 @@ const getRepository = () => {
   return repo;
 };
 
+const configureEmail = (data) => {
+  let smtpConfig = data.smtpConfig;
+  if (!smtpConfig || Object.keys(smtpConfig) == 0) {
+    smtpConfig = stubTransport();
+  }
+  users.configureEmail(smtpConfig, data.templateConfig)
+};
+
 export default (storageContext) => {
+  readStorage(storageContext).then(data => {
+    configureEmail(data);
+  });
+
   const routes = router();
   routes.use('/.extensions', hooks());
   routes.use('/', dashboardAdmins());
@@ -46,10 +59,10 @@ export default (storageContext) => {
   routes.patch('/api/config/template',
     requireUser,
     validations.validateWriteTemplateConfig,
-    (req, res) => {
-      writeTemplateConfig(storageContext, req.body)
-      .then(() => { res.sendStatus(200) });
-  });
+    writeTemplateConfig(storageContext, req.body).then((data) => {
+      configureEmail(data);
+      res.sendStatus(200);
+    }));
 
   routes.get('/api/config/smtp', requireUser, (req, res) => {
     readStorage(storageContext)
@@ -59,10 +72,10 @@ export default (storageContext) => {
   routes.patch('/api/config/smtp',
     requireUser,
     validations.validateWriteSMTPConfig,
-    (req, res) => {
-      writeSMTPConfig(storageContext, req.body)
-      .then(res.sendStatus(200));
-  });
+    writeSMTPConfig(storageContext, req.body).then((data) => {
+      configureEmail(data);
+      res.sendStatus(200);
+    }));
 
   routes.use('/api/connections', requireUser, connections());
 

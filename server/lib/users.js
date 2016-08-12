@@ -1,10 +1,13 @@
 const uuid = require('uuid');
 const csv = require('csv');
 const each = require('each-async');
+const Email = require('./email');
 
 import _ from 'lodash';
 import { Router as router } from 'express';
 import { managementClient } from '../lib/middlewares';
+
+var email = null;
 
 /*
  * List all users.
@@ -35,6 +38,7 @@ const getUsers = () => {
  */
 const createUser = () => {
   return (req, res, next) => {
+    const token = uuid.v4();
     const options = {
       "connection": req.body.user.connection,
       "email": req.body.user.email,
@@ -42,14 +46,32 @@ const createUser = () => {
       "app_metadata": {
         "invite": {
           "status": "pending", // default status
-          "token": uuid.v4() // token that will be used to send invitation email
+          "token": token
         }
       }
     };
+    let transportOptions = {
+      to: options.email
+    };
+    let templateData = {
+      name: 'Auth0 Customer',
+      token: token
+    };
 
-    return req.auth0.users.create(options)
-      .then(result => res.json(result))
-      .catch(next);
+    let result = { emailSent: false, user: null };
+    return req.auth0.users.create(options, function onCreateUser(err, user) {
+      result.user = user;
+      if (err) {
+        return next(err, result);
+      }
+      email.sendEmail(transportOptions, templateData, function (err, emailResult) {
+        if (err) {
+          return next(err, result);
+        }
+        result.emailSent = true;
+        return next(null, result);
+      });
+    });
   }
 };
 
@@ -159,9 +181,14 @@ const savePassword = () => {
   }
 };
 
+const configureEmail = (emailTransport, templates) => {
+  email = new Email(emailTransport, templates);
+};
+
 module.exports = {
   getUsers,
   createUser,
   validateUserToken,
-  savePassword
-}
+  savePassword,
+  configureEmail
+};

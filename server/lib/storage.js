@@ -5,8 +5,8 @@ import logger from '../lib/logger';
 
 const defaultStorage = {
   templateConfig: {
-    subject: 'Definetely not spam!',
-    message: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+    subject: 'Welcome to Auth0',
+    message: '<h1>Welcome {{ email }}!\nClick <a href="{{ url }}">here</a> to set your password.'
   },
   smtpConfig: {}
 };
