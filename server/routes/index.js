@@ -7,7 +7,7 @@ import hooks from './hooks';
 import config from '../lib/config';
 import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storage';
 import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
-import invitations from '../lib/invitations';
+import validations from '../lib/validations';
 import users from '../lib/users';
 
 import connections from './connections';
@@ -58,20 +58,20 @@ export default (storageContext) => {
 
   routes.post('/api/invitations/user',
     requireUser,
-    invitations.validateInviteUser,
+    validations.validateInviteUser,
     users.createUser());
 
   routes.get('/api/invitations',
     requireUser,
-    invitations.validateInvitations,
+    validations.validateInvitations,
     users.getUsers());
 
   routes.get('/api/changepassword',
-  /* validate, */
+    validations.validateUserToken,
     users.validateUserToken());
 
   routes.post('/api/changepassword',
-  /* validate, */
+    validations.validateSavePassword,
     users.savePassword());
 
   return routes;

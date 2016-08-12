@@ -61,10 +61,6 @@ const validateUserToken = () => {
 
     let token = req.query.token;
 
-    // if(!token) {
-    //   res.status(500).send({ error: 'Token not found' });
-    // };
-
     const options = {
       sort: 'last_login:-1',
       q: `app_metadata.invite.token:${token}`,
@@ -99,13 +95,20 @@ const savePassword = () => {
       { id: id },
       {
         "password": password,
+        // "email_verified": true,
         "app_metadata": {
           "invite": {
             "status": "accepted"
           }
         }
       })
-      .then(user => res.json({ user }))
+      .then(user => {
+        console.log(user)
+        if (!user) {
+          return res.status(500).send('There was a problem when saving the user.');
+        }
+        return res.sendStatus(200);
+      })
       .catch(next);
   }
 };
