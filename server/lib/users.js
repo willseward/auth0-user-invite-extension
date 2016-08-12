@@ -69,6 +69,7 @@ const createUser = () => {
           return next(err, result);
         }
         result.emailSent = true;
+        res.json(result);
         return next(null, result);
       });
     });
