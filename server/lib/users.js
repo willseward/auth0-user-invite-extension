@@ -136,7 +136,7 @@ const validateUserToken = () => {
         if(err) {
           return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when updating field.' });
         }
-        return res.json(user);
+        return res.json(result);
       });
     });
   }
@@ -148,9 +148,7 @@ const validateUserToken = () => {
 const savePassword = () => {
   return (req, res, next) => {
 
-    let id = req.body.user.id;
-    let password = req.body.user.password;
-    let token = req.body.user.token;
+    let { id, password, token } = req.body;
 
     validateToken(req.auth0, token, function(err, user) {
 

@@ -14,7 +14,8 @@ export default connectContainer(class extends Component {
     this.state = {
       email: '',
       selectedConnection: '',
-      error: ''
+      error: '',
+      formSubmitted: false
     };
 
     this.changeEmail = this.changeEmail.bind(this);
@@ -84,8 +85,9 @@ export default connectContainer(class extends Component {
 
     // reset values
     this.setState({
-      email: '',
-      selectedConnection: ''
+      // email: '',
+      // selectedConnection: '',
+      formSubmitted: true
     });
   }
 
@@ -127,7 +129,8 @@ export default connectContainer(class extends Component {
                 <div className="modal-body">
                   <div className="row col-xs-12">
                     <p className="text-center">Add an email and select a connection to add a new user.</p>
-                    <Error message={this.state.error ? this.state.error : '' } />
+                    {(this.state.formSubmitted && !this.state.error) ? 'Submited!' :
+                    <Error message={this.state.error ? this.state.error : '' } />}
                   </div>
                   <div className="row">
                     <div className="col-xs-12 form-group">

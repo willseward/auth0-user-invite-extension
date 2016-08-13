@@ -20,11 +20,9 @@ const getUserTokenSchema = Joi.object().keys({
 });
 
 const getSavePasswordSchema = Joi.object().keys({
-  user: Joi.object().keys({
-    id: Joi.string().required(),
-    password: Joi.string().required(),
-    token: Joi.string().required()
-  })
+  id: Joi.string().required(),
+  password: Joi.string().required(),
+  token: Joi.string().required()
 });
 
 const writeTemplateConfigSchema = Joi.object().keys({
@@ -87,6 +85,7 @@ function validateUserToken(req, res, next) {
 
 function validateSavePassword(req, res, next) {
 
+  console.log(req.body)
   Joi.validate(req.body, getSavePasswordSchema, (err, value) => {
     if (err) {
     return res.status(500).send({ error: 'Missing information (user id, token or password).' });

@@ -1,6 +1,7 @@
 import { Router as router } from 'express';
 
 import html from './html';
+import changepassword from '../views/changepassword';
 import meta from './meta';
 import hooks from './hooks';
 
@@ -45,7 +46,8 @@ export default (storageContext) => {
   // specific client routes
   routes.get('/', html());
   routes.get('/configuration', html());
-  routes.get('/changepassword/*', html());
+  // routes.get('/changepassword/*', html());
+  routes.get('/changepassword/*', changepassword());
 
   routes.use('/meta', meta());
 

@@ -50,9 +50,7 @@ export function savePassword(user, config, token) {
       promise: axios({
         method: 'post',
         url: '/api/changepassword',
-        data: {
-          user: userData
-        },
+        data: userData,
         responseType: 'json'
       })
     }
