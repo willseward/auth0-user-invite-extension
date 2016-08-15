@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import connectContainer from 'redux-static';
+import { Button } from 'react-bootstrap';
 
 import { invitationsActions } from '../actions';
 
@@ -54,12 +55,17 @@ export default connectContainer(class extends Component {
     }
   }
 
+  refresh() {
+    this.props.fetchInvitations(this.props.filter);
+  }
+
   render() {
     const { error, invitations, loading } = this.props.invitations.toJS();
     return (
       <div className="row">
         <div className="col-xs-12">
           <LoadingPanel show={loading[this.props.filter]} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+            <Button type="button" className="pull-right" onClick={this.refresh.bind(this)}>Refresh</Button>
             <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : ''} />
             <InvitationsTable invitations={invitations[this.props.filter]} />
           </LoadingPanel>
