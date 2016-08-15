@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-export const fields = [ 'host', 'port', 'user', 'password' ];
+export const fields = [ 'host', 'port', 'secure', 'user', 'pass' ];
 
 const validate = values => {
   const errors = {}
@@ -18,8 +18,8 @@ const validate = values => {
     errors.user = 'Required';
   }
 
-  if (!values.password) {
-    errors.password = 'Required';
+  if (!values.pass) {
+    errors.pass = 'Required';
   }
 
   return errors;
@@ -28,7 +28,7 @@ const validate = values => {
 class EmailSettingsForm extends Component {
   render() {
     const {
-      fields: { host, port, user, password },
+      fields: { host, port, secure, user, pass },
       handleSubmit,
       resetForm,
       submitting
@@ -39,7 +39,7 @@ class EmailSettingsForm extends Component {
         <div className="form-group">
           <label className="control-label col-xs-2">Host</label>
           <div className="col-xs-7">
-            <input className="form-control" type="text" placeholder="smtp.gmail.com"
+            <input className="form-control" type="text" placeholder="your.smtp.host.com"
             {...host}
             />
           </div>
@@ -51,7 +51,7 @@ class EmailSettingsForm extends Component {
         <div className="form-group">
           <label className="control-label col-xs-2">Port</label>
           <div className="col-xs-7">
-            <input className="form-control" type="number" placeholder="465"
+            <input className="form-control" type="number" placeholder="587"
             {...port}
             />
           </div>
@@ -61,9 +61,19 @@ class EmailSettingsForm extends Component {
         </div>
 
         <div className="form-group">
+          <label className="control-label col-xs-2">Require TLS?</label>
+          <div className="col-xs-7">
+            <input type="checkbox" {...secure}/>
+          </div>
+          <div className="col-xs-3">
+            {secure.touched && secure.error && <div>{secure.error}</div>}
+          </div>
+        </div>
+
+        <div className="form-group">
           <label className="control-label col-xs-2">Auth User</label>
           <div className="col-xs-7">
-            <input className="form-control" type="email" placeholder="user@gmail.com"
+            <input className="form-control" type="text" placeholder="SMTP username"
             {...user}
             />
           </div>
@@ -75,12 +85,12 @@ class EmailSettingsForm extends Component {
         <div className="form-group">
           <label className="control-label col-xs-2">Auth Password</label>
           <div className="col-xs-7">
-            <input className="form-control" type="password" placeholder="your password"
-            {...password}
+            <input className="form-control" type="password" placeholder="SMTP password"
+            {...pass}
             />
           </div>
           <div className="col-xs-3">
-            {password.touched && password.error && <div>{password.error}</div>}
+            {pass.touched && pass.error && <div>{pass.error}</div>}
           </div>
         </div>
 
@@ -110,8 +120,9 @@ function mapStateToProps(state) {
     initialValues: {
       host: emailConfig.host,
       port: emailConfig.port,
+      secure: emailConfig.secure || false,
       user: (emailConfig.auth ? emailConfig.auth.user : emailConfig.auth),
-      password: (emailConfig.auth ? emailConfig.auth.password: emailConfig.auth)
+      pass: (emailConfig.auth ? emailConfig.auth.pass: emailConfig.auth)
     }
   }
 }

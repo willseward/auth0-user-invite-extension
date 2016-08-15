@@ -16,10 +16,19 @@ export const emailConfiguration = createReducer(fromJS(initialState), {
       loading: true
     }),
   [constants.FETCH_EMAIL_CONFIGURATION_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.data && action.payload.data.error && 'Validation Error' || action.errorMessage;
+    const errorMessage = action.payload.response.data.error || action.errorMessage;
+    let error;
+    if(errorMessage.isJoi && typeof errorMessage.details === 'object') {
+      error = errorMessage.details[0].message;
+    } else if(errorMessage.message) {
+      error = errorMessage.message;
+    } else {
+      error = errorMessage;
+    }
+
     return state.merge({
       loading: true,
-      error: `An error occured while loading the configuration: ${errorMessage}`
+      error: `An error occured while loading the configuration: ${error}`
     });
   },
   [constants.FETCH_EMAIL_CONFIGURATION_FULFILLED]: (state, action) =>

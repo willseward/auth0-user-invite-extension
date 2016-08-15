@@ -22,9 +22,10 @@ export function saveEmailSettingsConfiguration(config) {
   let data = {
     host: config.host,
     port: config.port,
+    secure: config.secure,
     auth: {
       user: config.user,
-      password: config.password
+      pass: config.pass
     }
   };
 
