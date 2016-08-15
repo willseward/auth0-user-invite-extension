@@ -4,3 +4,4 @@ node_modules
 npm-debug.log
 dist
 server/config.json
+tests/server/lib/transporter-options.json

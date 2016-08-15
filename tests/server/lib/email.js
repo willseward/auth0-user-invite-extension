@@ -8,9 +8,13 @@ const templates = {
   text: 'Hello {{ name }}.\n{{ message }}',
   message: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
 };
-var email = new Email(stubTransport(), templates);
 
+var email;
 describe('email', () => {
+  before(function() {
+    email = new Email(stubTransport(), templates);
+  });
+
   it('# gets sent', function(done) {
     var context = { name: 'doge', message: 'such email' };
     email.sendEmail({ to: 'joe@bloggs.com' }, context, function(err, info) {
