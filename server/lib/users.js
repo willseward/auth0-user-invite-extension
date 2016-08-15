@@ -62,11 +62,11 @@ const createUser = () => {
     return req.auth0.users.create(options, function onCreateUser(err, user) {
       result = user;
       if (err) {
-        return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when creating the user.' });
+        return res.status(500).send({ error: err ? err : 'There was an error when creating the user.' });
       }
       email.sendEmail(transportOptions, templateData, function (err, emailResult) {
         if (err) {
-          return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when sending the email.' });
+          return res.status(500).send({ error: err ? err : 'There was an error when sending the email.' });
         }
         return res.json(result);
       });
