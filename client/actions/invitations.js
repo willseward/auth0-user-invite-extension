@@ -87,7 +87,7 @@ export function inviteUsersPreview(file) {
           return dispatch({
             type: constants.FORM_VALIDATION_FAILED,
             payload: {
-              error: 'There was an error with the submited file. Please check if you have some errors.'
+              error: 'There was an error with the submitted file. Please check if you have some errors.'
             }
           });
         }

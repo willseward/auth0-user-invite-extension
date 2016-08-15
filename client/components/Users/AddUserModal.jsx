@@ -166,7 +166,7 @@ export default connectContainer(class extends Component {
                   <div className="row col-xs-12">
                     <p className="text-center">Add an email and select a connection to add a new user.</p>
                     {(this.state.formSubmitted && !this.state.error && !invitations.error) ?
-                    <Info message={'Form Submited!'} /> :
+                    <Info message={'Form Submitted!'} /> :
                     <Error message={(this.state.error || invitations.error) ? (this.state.error || invitations.error) : '' } />}
                   </div>
                   <div className="row">

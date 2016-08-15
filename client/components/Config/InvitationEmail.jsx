@@ -61,7 +61,7 @@ export default connectContainer(class InvitationEmail extends Component {
           onSubmit={this.handleSubmit.bind(this)}
           submitting={true}
         />
-        {(this.state.formSubmitted && !loading && !error) ? <Info message={'Form Submited!'} /> :
+        {(this.state.formSubmitted && !loading && !error) ? <Info message={'Form Submitted!'} /> :
           <Error message={error ? error : '' } />}
       </div>
     )
