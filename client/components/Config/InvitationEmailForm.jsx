@@ -4,13 +4,30 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import Codemirror from 'react-codemirror';
 require('codemirror/mode/xml/xml');
 
-export const fields = [ 'from', 'subject', 'redirectTo', 'message' ];
+export const fields = [ 'from', 'subject', 'redirectTo' ];
+
+const validate = values => {
+  const errors = {}
+  if (!values.from) {
+    errors.from = 'Required';
+  }
+
+  if (!values.subject) {
+    errors.subject = 'Required';
+  }
+
+  if (!values.redirectTo) {
+    errors.redirectTo = 'Required';
+  }
+
+  return errors;
+}
 
 class InvitationEmailForm extends Component {
 
   render() {
     const {
-      fields: { from, subject, redirectTo, message },
+      fields: { from, subject, redirectTo },
       handleSubmit,
       resetForm,
       submitting
@@ -26,34 +43,43 @@ class InvitationEmailForm extends Component {
 
         <div className="form-group">
           <label className="control-label col-xs-2">From</label>
-          <div className="col-xs-10">
+          <div className="col-xs-5">
             <input className="form-control" type="text"
             placeholder="From field will just work if you configure smtp settings"
             {...from}
             value={from.value || (this.props.template ? this.props.template.from : '')}
             />
           </div>
+          <div className="col-xs-5">
+            {from.touched && from.error && <div>{from.error}</div>}
+          </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Subject</label>
-          <div className="col-xs-10">
+          <div className="col-xs-5">
             <input className="form-control" type="text"
             placeholder="Subject"
             {...subject}
             value={subject.value || (this.props.template ? this.props.template.subject: '')}
             />
           </div>
+          <div className="col-xs-5">
+            {subject.touched && subject.error && <div>{subject.error}</div>}
+          </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Redirect To</label>
-          <div className="col-xs-10">
+          <div className="col-xs-5">
             <input className="form-control" type="text"
             placeholder="Redirect To"
             {...redirectTo}
             value={redirectTo.value || (this.props.template ? this.props.template.redirectTo : '')}
             />
+          </div>
+          <div className="col-xs-5">
+            {redirectTo.touched && redirectTo.error && <div>{redirectTo.error}</div>}
           </div>
         </div>
 
@@ -90,5 +116,6 @@ InvitationEmailForm.propTypes = {
 
 export default reduxForm({
   form: 'simple',
-  fields
+  fields,
+  validate
 })(InvitationEmailForm)
