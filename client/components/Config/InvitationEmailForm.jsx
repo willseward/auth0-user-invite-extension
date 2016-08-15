@@ -4,7 +4,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import Codemirror from 'react-codemirror';
 require('codemirror/mode/xml/xml');
 
-export const fields = [ 'from', 'subject', 'redirectTo' ];
+export const fields = [ 'from', 'subject', 'redirectTo', 'message' ];
 
 const validate = values => {
   const errors = {}
@@ -20,6 +20,10 @@ const validate = values => {
     errors.redirectTo = 'Required';
   }
 
+  if (!values.message) {
+    errors.message = 'Required';
+  }
+
   return errors;
 }
 
@@ -27,14 +31,13 @@ class InvitationEmailForm extends Component {
 
   render() {
     const {
-      fields: { from, subject, redirectTo },
+      fields: { from, subject, redirectTo, message },
       handleSubmit,
       resetForm,
       submitting
     } = this.props;
 
     var messageOptions = {
-      lineNumbers: true,
       mode: 'xml' //we only support html for now
     };
 
@@ -44,10 +47,9 @@ class InvitationEmailForm extends Component {
         <div className="form-group">
           <label className="control-label col-xs-2">From</label>
           <div className="col-xs-5">
-            <input className="form-control" type="text"
+            <input className="form-control" type="email"
             placeholder="From field will just work if you configure smtp settings"
             {...from}
-            value={from.value || (this.props.template ? this.props.template.from : '')}
             />
           </div>
           <div className="col-xs-5">
@@ -61,7 +63,6 @@ class InvitationEmailForm extends Component {
             <input className="form-control" type="text"
             placeholder="Subject"
             {...subject}
-            value={subject.value || (this.props.template ? this.props.template.subject: '')}
             />
           </div>
           <div className="col-xs-5">
@@ -75,7 +76,6 @@ class InvitationEmailForm extends Component {
             <input className="form-control" type="text"
             placeholder="Redirect To"
             {...redirectTo}
-            value={redirectTo.value || (this.props.template ? this.props.template.redirectTo : '')}
             />
           </div>
           <div className="col-xs-5">
@@ -83,17 +83,14 @@ class InvitationEmailForm extends Component {
           </div>
         </div>
 
-        {
-          this.props.template ?
-          <div className="form-group">
-            <label className="control-label col-xs-2">Current Message</label>
-            <div className="col-xs-10">
-              <Codemirror value={this.props.message}
-              onChange={this.props.updateMessage}
-              options={messageOptions} />
-            </div>
-          </div> : ''
-        }
+        <div className="form-group">
+          <label className="control-label col-xs-2">Current Message</label>
+          <div className="col-xs-10">
+            <Codemirror {...message}
+            options={messageOptions} />
+          </div>
+        </div>
+
 
         <div className="form-group">
           <ButtonToolbar>
@@ -110,12 +107,16 @@ class InvitationEmailForm extends Component {
 InvitationEmailForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
-  template: PropTypes.object
+  submitting: PropTypes.bool.isRequired
 }
 
 export default reduxForm({
   form: 'simple',
   fields,
   validate
-})(InvitationEmailForm)
+},
+state => ({ // mapStateToProps
+  // NOTE: we should not require acess to state.templateConfiguration here,
+  // but currently there is no simpler way to do it with redux-form
+  initialValues: state.templateConfiguration.toJS().template
+}))(InvitationEmailForm)
