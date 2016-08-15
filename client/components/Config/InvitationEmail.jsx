@@ -12,7 +12,8 @@ export default connectContainer(class InvitationEmail extends Component {
     super(props);
 
     this.state = {
-      formSubmitted: false
+      formSubmitted: false,
+      message: ''
     }
   }
 
@@ -35,14 +36,33 @@ export default connectContainer(class InvitationEmail extends Component {
     this.props.fetchTemplateConfiguration();
   }
 
+  componentWillReceiveProps(nextProps) {
+    // init message
+    if (this.state.message === '') {
+      const { template } = nextProps.templateConfiguration.toJS();
+      if(template && typeof template.message !== 'undefined') {
+        this.setState({
+          message: template.message
+        });
+      }
+    }
+  }
+
+  updateMessage(newMessage) {
+    this.setState({
+      message: newMessage
+    });
+  }
+
   handleSubmit(data) {
     let defaultValues = this.props.templateConfiguration.toJS().template;
     let template = {
       from: data.from || defaultValues.from,
       subject: data.subject || defaultValues.subject,
       redirectTo: data.redirectTo || defaultValues.redirectTo,
-      message: data.message || defaultValues.message
+      message: this.state.message || defaultValues.message
     };
+
     this.props.saveTemplateConfiguration(template);
 
     this.setState({
@@ -60,6 +80,8 @@ export default connectContainer(class InvitationEmail extends Component {
           template={template}
           onSubmit={this.handleSubmit.bind(this)}
           submitting={true}
+          message={this.state.message}
+          updateMessage={this.updateMessage.bind(this)}
         />
         {(this.state.formSubmitted && !loading && !error) ? <Info message={'Form Submitted!'} /> :
           <Error message={error ? error : '' } />}

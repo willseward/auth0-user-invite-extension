@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
+import Codemirror from 'react-codemirror';
+require('codemirror/mode/xml/xml');
 
 export const fields = [ 'from', 'subject', 'redirectTo', 'message' ];
 
@@ -13,6 +15,11 @@ class InvitationEmailForm extends Component {
       resetForm,
       submitting
     } = this.props;
+
+    var messageOptions = {
+      lineNumbers: true,
+      mode: 'xml' //we only support html for now
+    };
 
     return (
       <form className="form-horizontal" onSubmit={handleSubmit}>
@@ -55,31 +62,18 @@ class InvitationEmailForm extends Component {
           <div className="form-group">
             <label className="control-label col-xs-2">Current Message</label>
             <div className="col-xs-10">
-              <div style={{backgroundColor: '#f5f5f5'}}>
-              {this.props.template.message}
-              </div>
+              <Codemirror value={this.props.message}
+              onChange={this.props.updateMessage}
+              options={messageOptions} />
             </div>
           </div> : ''
         }
-
-        <div className="form-group">
-          <label className="control-label col-xs-2">Change Message</label>
-          <div className="col-xs-10">
-            <textarea className="form-control"
-            value={message.value || ''}
-            {...message}
-            />
-          </div>
-        </div>
 
         <div className="form-group">
           <ButtonToolbar>
             <Button className="btn btn-primary" type="submit" disabled={submitting}>
               {submitting ? <i/> : <i/>} Save
             </Button>
-            {/*<Button className="btn btn-default" type="button" disabled={submitting} onClick={resetForm}>
-              Reset
-            </Button>*/}
           </ButtonToolbar>
         </div>
       </form>
