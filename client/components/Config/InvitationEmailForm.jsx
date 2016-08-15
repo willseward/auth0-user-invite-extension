@@ -46,48 +46,51 @@ class InvitationEmailForm extends Component {
 
         <div className="form-group">
           <label className="control-label col-xs-2">From</label>
-          <div className="col-xs-5">
+          <div className="col-xs-7">
             <input className="form-control" type="email"
-            placeholder="From field will just work if you configure smtp settings"
-            {...from}
+            {...from} readOnly
             />
           </div>
-          <div className="col-xs-5">
+          <div className="col-xs-3">
             {from.touched && from.error && <div>{from.error}</div>}
           </div>
+          <p className="help-block">'From' field comes from your Email Settings (SMTP).</p>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Subject</label>
-          <div className="col-xs-5">
+          <div className="col-xs-7">
             <input className="form-control" type="text"
             placeholder="Subject"
             {...subject}
             />
           </div>
-          <div className="col-xs-5">
+          <div className="col-xs-3">
             {subject.touched && subject.error && <div>{subject.error}</div>}
           </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Redirect To</label>
-          <div className="col-xs-5">
+          <div className="col-xs-7">
             <input className="form-control" type="text"
             placeholder="Redirect To"
             {...redirectTo}
             />
           </div>
-          <div className="col-xs-5">
+          <div className="col-xs-3">
             {redirectTo.touched && redirectTo.error && <div>{redirectTo.error}</div>}
           </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Current Message</label>
-          <div className="col-xs-10">
+          <div className="col-xs-7">
             <Codemirror {...message}
             options={messageOptions} />
+          </div>
+          <div className="col-xs-3">
+            {message.touched && message.error && <div>{message.error}</div>}
           </div>
         </div>
 
@@ -110,13 +113,23 @@ InvitationEmailForm.propTypes = {
   submitting: PropTypes.bool.isRequired
 }
 
-export default reduxForm({
-  form: 'simple',
-  fields,
-  validate
-},
-state => ({ // mapStateToProps
+function mapStateToProps(state) {
   // NOTE: we should not require acess to state.templateConfiguration here,
   // but currently there is no simpler way to do it with redux-form
-  initialValues: state.templateConfiguration.toJS().template
-}))(InvitationEmailForm)
+  let emailConfig = state.emailConfiguration.toJS().emailSettings;
+  let template = state.templateConfiguration.toJS().template;
+  return {
+    initialValues: {
+      from: (emailConfig.auth ? emailConfig.auth.user : emailConfig.auth),
+      subject: template.subject,
+      redirectTo: template.redirectTo,
+      message: template.message
+    }
+  }
+}
+
+export default reduxForm({
+  form: 'invitation email',
+  fields,
+  validate
+}, mapStateToProps)(InvitationEmailForm)

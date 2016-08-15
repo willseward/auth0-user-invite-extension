@@ -39,9 +39,21 @@ export const templateConfiguration = createReducer(fromJS(initialState), {
       error: `An error occured while saving the configuration: ${errorMessage}`
     });
   },
-  [constants.SAVE_TEMPLATE_CONFIGURATION_FULFILLED]: (state, action) =>
-    state.merge({
+  [constants.SAVE_TEMPLATE_CONFIGURATION_FULFILLED]: (state, action) => {
+    let data = {};
+    if (action.payload.config && action.payload.config.data) {
+      data = JSON.parse(action.payload.config.data);
+    } else {
+      return state.merge({
+        loading: false,
+        error: null
+      })
+    }
+
+    return state.merge({
       loading: false,
-      template: fromJS(action.payload.data)
+      template: data,
+      error: null
     })
+  }
 });

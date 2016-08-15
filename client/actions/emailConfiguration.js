@@ -19,13 +19,22 @@ export function fetchEmailSettingsConfiguration() {
  * Save the email settings configuration.
  */
 export function saveEmailSettingsConfiguration(config) {
+  let data = {
+    host: config.host,
+    port: config.port,
+    auth: {
+      user: config.user,
+      password: config.password
+    }
+  };
+
   return {
     type: constants.SAVE_EMAIL_CONFIGURATION,
     payload: {
       promise: axios({
         method: 'patch',
         url: '/api/config/smtp',
-        data: config,
+        data: data,
         responseType: 'json'
       })
     }

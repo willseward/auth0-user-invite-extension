@@ -40,9 +40,22 @@ export const emailConfiguration = createReducer(fromJS(initialState), {
       error: `An error occured while saving the configuration: ${errorMessage}`
     });
   },
-  [constants.SAVE_EMAIL_CONFIGURATION_FULFILLED]: (state, action) =>
-    state.merge({
-      loading: false,
-      emailSettings: fromJS(action.payload.data)
-    })
+  [constants.SAVE_EMAIL_CONFIGURATION_FULFILLED]: (state, action) => {
+
+      let data = {};
+      if (action.payload.config && action.payload.config.data) {
+        data = JSON.parse(action.payload.config.data);
+      } else {
+        return state.merge({
+          loading: false,
+          error: null
+        })
+      }
+
+      return state.merge({
+        loading: false,
+        emailSettings: data,
+        error: null
+      });
+    }
 });

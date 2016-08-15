@@ -36,16 +36,7 @@ export default connectContainer(class EmailSettings extends Component {
   }
 
   handleSubmit(data) {
-    let defaultValues = this.props.emailConfiguration.toJS().emailSettings;
-    let emailSettings = {
-      host: data.host || defaultValues.host,
-      port: data.port || defaultValues.port,
-      auth: {
-        user: data.user || defaultValues.user,
-        password: data.password || defaultValues.password
-      }
-    };
-    this.props.saveEmailSettingsConfiguration(emailSettings);
+    this.props.saveEmailSettingsConfiguration(data);
 
     this.setState({
       formSubmitted: true
@@ -53,12 +44,11 @@ export default connectContainer(class EmailSettings extends Component {
   }
 
   render() {
-    const { error, emailSettings, loading } = this.props.emailConfiguration.toJS();
+    const { error, loading } = this.props.emailConfiguration.toJS();
 
     return (
       <div>
         <EmailSettingsForm
-          emailSettings={emailSettings}
           onSubmit={this.handleSubmit.bind(this)}
           submitting={true}
         />
