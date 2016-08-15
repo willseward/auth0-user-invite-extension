@@ -99,8 +99,7 @@ class EmailSettingsForm extends Component {
 EmailSettingsForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
-  emailSettings: PropTypes.object
+  submitting: PropTypes.bool.isRequired
 }
 
 function mapStateToProps(state) {

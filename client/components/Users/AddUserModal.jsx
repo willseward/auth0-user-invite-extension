@@ -4,8 +4,10 @@ import { Modal, Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 import { invitationsActions } from '../../actions';
 
+import AddUserForm from './AddUserForm';
 import Error from '../Messages/Error';
 import Info from '../Messages/Info';
+import Success from '../Messages/Success';
 
 export default connectContainer(class extends Component {
 
@@ -13,21 +15,15 @@ export default connectContainer(class extends Component {
     super();
 
     this.state = {
-      email: '',
-      selectedConnection: '',
-      error: '',
-      formSubmitted: false
+      formSubmitted: false,
+      shouldResetForm: false
     };
 
-    this.changeEmail = this.changeEmail.bind(this);
-    this.changeConnection = this.changeConnection.bind(this);
-    this.onClick = this.onClick.bind(this);
     this.clearAllFields = this.clearAllFields.bind(this);
   }
 
   static stateToProps = (state) => {
     return {
-      connection: state.connection,
       invitations: state.invitations
     }
   }
@@ -40,56 +36,11 @@ export default connectContainer(class extends Component {
     inviteUser: PropTypes.func.isRequired
   }
 
-  componentWillReceiveProps(nextProps) {
-
-    // set selectedConnection default value as soon as we fetch connections
-    if (this.state.selectedConnection === '' &&
-      nextProps.connection.size) {
-        var connection = nextProps.connection.toJS();
-        if (connection && connection.connection &&
-        connection.connection.length) {
-          this.setState({
-            selectedConnection: connection.connection[0]
-          })
-        }
-    }
-
-    if (this.state.error !== '') {
-      this.setState({
-        error: ''
-      });
-    }
-
-    const nextInvitations = nextProps.invitations.toJS();
-    const { invitations } = this.props.invitations.toJS();
-    if (nextInvitations.invitations.length > invitations.length) {
-      this.clearAllFields();
-    }
-  }
-
-  changeEmail(ev) {
-    this.setState({
-      email: ev.target.value
-    });
-  }
-
-  changeConnection(ev) {
-    this.setState({
-      selectedConnection: ev.target.value
-    });
-  }
-
-  onClick() {
-
-    if (!this.state.email.length || !this.state.selectedConnection.length) {
-      return this.setState({
-        error: 'Email or connection are not selected.'
-      });
-    }
+  handleSubmit(data) {
 
     this.props.inviteUser({
-      email: this.state.email,
-      connection: this.state.selectedConnection
+      email: data.email,
+      connection: data.selectedConnection
     });
 
     this.setState({
@@ -100,11 +51,17 @@ export default connectContainer(class extends Component {
   clearAllFields() {
     // reset values
     this.setState({
-      email: '',
-      selectedConnection: '',
-      formSubmitted: false
+      formSubmitted: false,
+      shouldResetForm: true
     });
   }
+
+  handleResetForm() {
+    this.setState({
+      shouldResetForm: false
+    });
+  }
+
 
   renderAddUserBtn() {
     return (
@@ -115,38 +72,24 @@ export default connectContainer(class extends Component {
     );
   }
 
-  renderModalFooter(invitationsError) {
-
-    return (
-      (!this.state.formSubmitted || invitationsError) ?
-        <Button
-          className="btn btn-primary"
-          value="validate"
-          onClick={this.onClick}>
-            Invite User
-        </Button>
-        :
-        <Button
-          className="btn btn-default"
-          data-dismiss="modal"
-          onClick={this.clearAllFields}>
-            Close
-        </Button>
-    );
+  renderCloseModalFooter(invitationsError) {
+    if (this.state.formSubmitted && !invitationsError) {
+      return (
+        <div className="modal-footer">
+          <Button
+            className="btn btn-default"
+            data-dismiss="modal"
+            onClick={this.clearAllFields}>
+              Close
+          </Button>
+        </div>
+      );
+    }
   }
 
   render() {
 
-    const { connection } = this.props.connection.toJS();
     const invitations = this.props.invitations.toJS();
-
-    if (!connection || !connection.length) {
-      return (<div>{this.renderAddUserBtn()}</div>);
-    }
-
-    let connectionOptions = connection.map((item) => {
-      return <option key={item}>{item}</option>
-    });
 
     return (
       <div className="modal-container">
@@ -161,50 +104,24 @@ export default connectContainer(class extends Component {
                 </Button>
                 <h4 id="myModalLabel" className="modal-title">Invite User</h4>
               </div>
-              <form id="add-user-form">
-                <div className="modal-body">
-                  <div className="row col-xs-12">
-                    <p className="text-center">Add an email and select a connection to add a new user.</p>
-                    {(this.state.formSubmitted && !this.state.error && !invitations.error) ?
-                    <Info message={'Form Submitted!'} /> :
-                    <Error message={(this.state.error || invitations.error) ? (this.state.error || invitations.error) : '' } />}
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-12 form-group">
-                      <label htmlFor="email" className="control-label col-xs-3">Email</label>
-                      <div className="col-xs-9">
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={this.state.email}
-                          onChange={this.changeEmail}
-                          className="input-block-level form-control"/>
-                      </div>
-                    </div>
-                    <div className="col-xs-12 form-group">
-                      <label htmlFor="connection" className="control-label col-xs-3">Connection</label>
-                      <div className="col-xs-9">
-                        <select className="form-control"
-                          name="connection"
-                          value={this.state.selectedConnection}
-                          onChange={this.changeConnection}>
-                          { connectionOptions }
-                        </select>
-                        <p className="help-block">This is a logical identifier of the connection.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="modal-footer">
-                  {this.renderModalFooter(invitations.error)}
-                </div>
-              </form>
+
+              <Error message={invitations.error ? invitations.error : ''}/>
+              <Success message={(this.state.formSubmitted && !invitations.loading
+                && !invitations.error) ? 'User Added.' : ''}/>
+
+              <AddUserForm
+              onSubmit={this.handleSubmit.bind(this)}
+              submitting={true}
+              formSubmitted={this.state.formSubmitted}
+              shouldResetForm={this.state.shouldResetForm}
+              handleResetForm={this.handleResetForm.bind(this)}
+              invitationsError={invitations.error} />
+
+              {this.renderCloseModalFooter(invitations.error)}
             </div>
           </div>
         </div>
       </div>
-
     );
   }
 });

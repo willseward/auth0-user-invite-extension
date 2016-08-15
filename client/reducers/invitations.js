@@ -52,10 +52,18 @@ export const invitations = createReducer(fromJS(initialState), {
     }),
   [constants.INVITE_USER_REJECTED]: (state, action) => {
     const errorMessage = action.payload.response.data.error || action.errorMessage;
-    
+    let error;
+    if(errorMessage.isJoi && typeof errorMessage.details === 'object') {
+      error = errorMessage.details[0].message;
+    } else if(errorMessage.message) {
+      error = errorMessage.message;
+    } else {
+      error = errorMessage;
+    }
+
     return state.merge({
       loading: false,
-      error: `An error occured while inviting an user: ${errorMessage.isJoi && typeof errorMessage.details === 'object' ? errorMessage.details[0].message : errorMessage}`
+      error: `An error occured while inviting an user: ${error}`
     });
   },
   [constants.INVITE_USER_FULFILLED]: (state) =>

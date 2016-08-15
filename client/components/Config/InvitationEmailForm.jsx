@@ -33,7 +33,6 @@ class InvitationEmailForm extends Component {
     const {
       fields: { from, subject, redirectTo, message },
       handleSubmit,
-      resetForm,
       submitting
     } = this.props;
 
