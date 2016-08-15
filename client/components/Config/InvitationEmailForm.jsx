@@ -47,13 +47,13 @@ class InvitationEmailForm extends Component {
           <label className="control-label col-xs-2">From</label>
           <div className="col-xs-7">
             <input className="form-control" type="email"
-            {...from} readOnly
+            placeholder="Your email"
+            {...from}
             />
           </div>
           <div className="col-xs-3">
             {from.touched && from.error && <div>{from.error}</div>}
           </div>
-          <p className="help-block">'From' field comes from your Email Settings (SMTP).</p>
         </div>
 
         <div className="form-group">
@@ -115,11 +115,10 @@ InvitationEmailForm.propTypes = {
 function mapStateToProps(state) {
   // NOTE: we should not require acess to state.templateConfiguration here,
   // but currently there is no simpler way to do it with redux-form
-  let emailConfig = state.emailConfiguration.toJS().emailSettings;
   let template = state.templateConfiguration.toJS().template;
   return {
     initialValues: {
-      from: (emailConfig.auth ? emailConfig.auth.user : emailConfig.auth),
+      from: template.from,
       subject: template.subject,
       redirectTo: template.redirectTo,
       message: template.message
