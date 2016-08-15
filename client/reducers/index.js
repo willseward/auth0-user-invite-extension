@@ -8,13 +8,11 @@ import { connection } from './connection';
 import { importReducer } from './import';
 import { templateConfiguration } from './templateConfiguration';
 import { emailConfiguration } from './emailConfiguration';
-import { changePassword } from './changePassword';
 
 export default combineReducers({
   auth,
   templateConfiguration,
   emailConfiguration,
-  changePassword,
   invitations,
   csvInvitations,
   connection,
