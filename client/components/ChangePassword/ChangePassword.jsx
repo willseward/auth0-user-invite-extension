@@ -3,7 +3,8 @@ import connectContainer from 'redux-static';
 
 import { changePasswordActions } from '../../actions';
 import { ChangePasswordForm } from './';
-import Error from '../Error';
+import Error from '../Messages/Error';
+import Info from '../Messages/Info';
 
 export default connectContainer(class ChangePassword extends Component {
 
@@ -65,7 +66,7 @@ export default connectContainer(class ChangePassword extends Component {
           onSubmit={this.handleSubmit.bind(this)}
           submitting={true}
         />
-        {(this.state.formSubmitted && !loading && !error && !saveValidationErrors) ? 'Submited!' :
+        {(this.state.formSubmitted && !loading && !error && !saveValidationErrors) ? <Info message={'Form Submited!'} /> :
         <Error message={(error || saveValidationErrors) ? (error || saveValidationErrors) : '' } />}
       </div>
     )

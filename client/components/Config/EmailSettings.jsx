@@ -3,7 +3,8 @@ import connectContainer from 'redux-static';
 
 import { emailConfigurationActions } from '../../actions';
 import { EmailSettingsForm } from './';
-import Error from '../Error';
+import Error from '../Messages/Error';
+import Info from '../Messages/Info';
 
 export default connectContainer(class EmailSettings extends Component {
 
@@ -61,7 +62,7 @@ export default connectContainer(class EmailSettings extends Component {
           onSubmit={this.handleSubmit.bind(this)}
           submitting={true}
         />
-        {(this.state.formSubmitted && !loading && !error) ? 'Submited!' :
+        {(this.state.formSubmitted && !loading && !error) ? <Info message={'Form Submited!'} /> :
           <Error message={error ? error : '' } />}
       </div>
     )

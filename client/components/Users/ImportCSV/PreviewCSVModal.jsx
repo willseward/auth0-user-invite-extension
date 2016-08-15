@@ -5,7 +5,7 @@ import connectContainer from 'redux-static';
 import { invitationsActions, importActions } from '../../../actions';
 
 import CSVInvitationsTable from '../CSVInvitationsTable';
-import Error from '../../Error';
+import Error from '../../Messages/Error';
 
 export default connectContainer(class extends Component {
 

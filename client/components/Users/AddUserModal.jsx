@@ -4,7 +4,8 @@ import { Modal, Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 import { invitationsActions } from '../../actions';
 
-import Error from '../Error';
+import Error from '../Messages/Error';
+import Info from '../Messages/Info';
 
 export default connectContainer(class extends Component {
 
@@ -21,11 +22,13 @@ export default connectContainer(class extends Component {
     this.changeEmail = this.changeEmail.bind(this);
     this.changeConnection = this.changeConnection.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.clearAllFields = this.clearAllFields.bind(this);
   }
 
   static stateToProps = (state) => {
     return {
-      connection: state.connection
+      connection: state.connection,
+      invitations: state.invitations
     }
   }
 
@@ -56,6 +59,12 @@ export default connectContainer(class extends Component {
         error: ''
       });
     }
+
+    const nextInvitations = nextProps.invitations.toJS();
+    const { invitations } = this.props.invitations.toJS();
+    if (nextInvitations.invitations.length > invitations.length) {
+      this.clearAllFields();
+    }
   }
 
   changeEmail(ev) {
@@ -83,11 +92,17 @@ export default connectContainer(class extends Component {
       connection: this.state.selectedConnection
     });
 
+    this.setState({
+      formSubmitted: true
+    });
+  }
+
+  clearAllFields() {
     // reset values
     this.setState({
-      // email: '',
-      // selectedConnection: '',
-      formSubmitted: true
+      email: '',
+      selectedConnection: '',
+      formSubmitted: false
     });
   }
 
@@ -97,12 +112,33 @@ export default connectContainer(class extends Component {
         <i className="icon icon-budicon-473"></i> Add Single User
         <Modal></Modal>
       </Button>
-    )
+    );
+  }
+
+  renderModalFooter(invitationsError) {
+
+    return (
+      (!this.state.formSubmitted || invitationsError) ?
+        <Button
+          className="btn btn-primary"
+          value="validate"
+          onClick={this.onClick}>
+            Invite User
+        </Button>
+        :
+        <Button
+          className="btn btn-default"
+          data-dismiss="modal"
+          onClick={this.clearAllFields}>
+            Close
+        </Button>
+    );
   }
 
   render() {
 
-    const { error, connection, loading } = this.props.connection.toJS();
+    const { connection } = this.props.connection.toJS();
+    const invitations = this.props.invitations.toJS();
 
     if (!connection || !connection.length) {
       return (<div>{this.renderAddUserBtn()}</div>);
@@ -120,7 +156,7 @@ export default connectContainer(class extends Component {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header has-border">
-                <Button type="button" data-dismiss="modal" className="close">
+                <Button type="button" data-dismiss="modal" className="close" onClick={this.clearAllFields}>
                   <span aria-hidden="true">×</span><span className="sr-only">Close</span>
                 </Button>
                 <h4 id="myModalLabel" className="modal-title">Invite User</h4>
@@ -129,8 +165,9 @@ export default connectContainer(class extends Component {
                 <div className="modal-body">
                   <div className="row col-xs-12">
                     <p className="text-center">Add an email and select a connection to add a new user.</p>
-                    {(this.state.formSubmitted && !this.state.error) ? 'Submited!' :
-                    <Error message={this.state.error ? this.state.error : '' } />}
+                    {(this.state.formSubmitted && !this.state.error && !invitations.error) ?
+                    <Info message={'Form Submited!'} /> :
+                    <Error message={(this.state.error || invitations.error) ? (this.state.error || invitations.error) : '' } />}
                   </div>
                   <div className="row">
                     <div className="col-xs-12 form-group">
@@ -160,13 +197,7 @@ export default connectContainer(class extends Component {
                   </div>
                 </div>
                 <div className="modal-footer">
-                {/*  data-dismiss="modal" type="submit"*/}
-                  <Button
-                    className="btn btn-primary"
-                    value="validate"
-                    onClick={this.onClick}>
-                      Invite User
-                  </Button>
+                  {this.renderModalFooter(invitations.error)}
                 </div>
               </form>
             </div>
