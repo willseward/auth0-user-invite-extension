@@ -6,7 +6,7 @@ import logger from '../lib/logger';
 const defaultStorage = {
   templateConfig: {
     subject: 'Welcome to Auth0',
-    message: '<h3>Welcome {{ email }}!\nYou were invited to join Auth0.\nClick <a href="{{ url }}">here</a> to set your password.</h3>'
+    message: '<h5>Welcome {{ email }}!\nYou were invited to join Auth0.\nClick <a href="{{ url }}">here</a> to set your password.</h5>'
   },
   smtpConfig: {}
 };
@@ -21,7 +21,7 @@ export const readStorage = (storageContext) => {
   }
 
   return new Promise((resolve, reject) => {
-    storageContext.get((err, webtaskData) => {
+    return storageContext.get((err, webtaskData) => {
       if (err) {
         return reject(err);
       }
@@ -42,7 +42,7 @@ export const writeStorage = (storageContext, data) => {
   }
 
   return new Promise((resolve, reject) => {
-    storageContext.set(data, { force: 1 }, (err) => {
+    return storageContext.set(data, { force: 1 }, (err) => {
       if (err) {
         return reject(err);
       }

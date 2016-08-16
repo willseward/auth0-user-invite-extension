@@ -2,10 +2,13 @@ const uuid = require('uuid');
 const csv = require('csv');
 const each = require('each-async');
 const Email = require('./email');
+const getChangePassURL = require('./get-change-password-url');
 
 import _ from 'lodash';
 import { Router as router } from 'express';
 import { managementClient } from '../lib/middlewares';
+import config from './config';
+import logger from '../lib/logger';
 
 var email = null;
 
@@ -50,23 +53,26 @@ const createUser = () => {
         }
       }
     };
+    let changePasswordURL = getChangePassURL(config('NODE_ENV'), req.get('host'), token);
     let transportOptions = {
       to: options.email
     };
     let templateData = {
       name: 'Auth0 Customer',
       email: options.email,
-      url: '/changepassword/' + token
+      url: changePasswordURL
     };
 
     let result = null;
     return req.auth0.users.create(options, function onCreateUser(err, user) {
       result = user;
       if (err) {
+        logger.debug('Error creating user', err);
         return res.status(500).send({ error: err ? err : 'There was an error when creating the user.' });
       }
       email.sendEmail(transportOptions, templateData, function (err, emailResult) {
         if (err) {
+          logger.debug('Error sending email', err);
           return res.status(500).send({ error: err ? err : 'There was an error when sending the email.' });
         }
         return res.json(result);
