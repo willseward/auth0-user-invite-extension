@@ -46,7 +46,6 @@ export default (storageContext) => {
   // specific client routes
   routes.get('/', html());
   routes.get('/configuration', html());
-  // routes.get('/changepassword/*', html());
   routes.get('/changepassword/*', changePassword());
 
   routes.use('/meta', meta());
