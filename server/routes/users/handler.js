@@ -15,6 +15,22 @@ function getUsersHandler(req, res, next) {
   });
 }
 
+function createUserHandler(req, res, next) {
+  let options = {
+    auth0: req.auth0,
+    connection: req.body.user.connection,
+    email: req.body.user.email,
+    host: req.get('host')
+  };
+  users.createUser(options, function onCreateUser(err, result) {
+    if (err) {
+      return next(err);
+    }
+    return res.json(result);
+  });
+}
+
 module.exports = {
-  getUsersHandler: getUsersHandler
+  getUsersHandler: getUsersHandler,
+  createUserHandler: createUserHandler
 };
