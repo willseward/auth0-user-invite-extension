@@ -8,32 +8,34 @@ import _ from 'lodash';
 import { Router as router } from 'express';
 import { managementClient } from '../lib/middlewares';
 import config from './config';
-import logger from '../lib/logger';
+import logger from './logger';
 
 var email = null;
 
 /*
  * List all users.
  */
-const getUsers = () => {
-  return (req, res, next) => {
-    const options = {
-      sort: 'last_login:-1',
-      q: `app_metadata.invite.status:${req.query.filter}`,
-      per_page: req.query.per_page || 100,
-      page: req.query.page || 0,
-      include_totals: true,
-      fields: 'user_id,name,email,app_metadata',
-      search_engine: 'v2'
-    };
+function getUsers(options, callback) {
+  const auth0Options = {
+    sort: 'last_login:-1',
+    q: `app_metadata.invite.status:${options.filter}`,
+    per_page: options.perPage || 100,
+    page: options.page || 0,
+    include_totals: true,
+    fields: 'user_id,name,email,app_metadata',
+    search_engine: 'v2'
+  };
 
-    return req.auth0.users.getAll(options)
-      .then(result => res.json({
-        result,
-        filter: req.query.filter
-      }))
-      .catch(next);
-  }
+  options.auth0.users.getAll(auth0Options, function onGetUsers(err, result) {
+    if (err) {
+      logger.debug('Error getting users:', err);
+      return callback(err);
+    }
+    return callback(null, {
+      result,
+      filter: options.filter
+    });
+  });
 };
 
 /*
@@ -190,7 +192,7 @@ const configureEmail = (emailTransport, templates) => {
 };
 
 module.exports = {
-  getUsers,
+  getUsers: getUsers,
   createUser,
   validateUserToken,
   savePassword,

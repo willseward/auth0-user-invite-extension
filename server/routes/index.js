@@ -4,6 +4,7 @@ import html from './html';
 import changePassword from '../views/changePassword';
 import meta from './meta';
 import hooks from './hooks';
+import logger from '../lib/logger';
 
 import config from '../lib/config';
 import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storage';
@@ -80,7 +81,20 @@ export default (storageContext) => {
   routes.get('/api/invitations',
     requireUser,
     validations.validateInvitations,
-    users.getUsers());
+    (req, res, next) => {
+      let options = {
+        auth0: req.auth0,
+        filter: req.query.filter,
+        perPage: req.query.per_page,
+        page: req.query.page
+      };
+      users.getUsers(options, function onGetUsers(err, result) {
+        if (err) {
+          return next(err);
+        }
+        return res.json(result);
+      });
+    });
 
   routes.put('/api/changepassword',
     validations.validateUserToken,
