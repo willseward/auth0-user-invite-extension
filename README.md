@@ -14,8 +14,8 @@ First create a `Client` in your account with `read:connections` and `create/read
 {
   "EXTENSION_SECRET": "any-random-value-will-do",
   "AUTH0_DOMAIN": "YOUR_DOMAIN",
-  "AUTH0_CLIENT_ID": "YOUR_CLIENT_SECRET",
-  "AUTH0_CLIENT_SECRET": "YOUR_CLIENT_ID"
+  "AUTH0_CLIENT_ID": "AUTH0_CLIENT_ID",
+  "AUTH0_CLIENT_SECRET": "YOUR_CLIENT_SECRET"
 }
 ```
 
