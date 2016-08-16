@@ -78,7 +78,7 @@ export default (storageContext) => {
   routes.post('/api/invitations/user',
     requireUser,
     validations.validateInviteUser,
-    users.createUser());
+    usersNew.createUserHandler);
 
   routes.get('/api/invitations',
     requireUser,

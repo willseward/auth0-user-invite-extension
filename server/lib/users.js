@@ -41,47 +41,45 @@ function getUsers(options, callback) {
 /*
  * Add a new user.
  */
-const createUser = () => {
-  return (req, res) => {
-    const token = uuid.v4();
-    const options = {
-      "connection": req.body.user.connection,
-      "email": req.body.user.email,
-      "password": uuid.v4(), // required field
-      "app_metadata": {
-        "invite": {
-          "status": "pending", // default status
-          "token": token
-        }
-      }
-    };
-    let changePasswordURL = getChangePassURL(config('NODE_ENV'), req.get('host'), token);
-    let transportOptions = {
-      to: options.email
-    };
-    let templateData = {
-      name: 'Auth0 Customer',
-      email: options.email,
-      url: changePasswordURL
-    };
+function createUser(options, callback) {
+  const token = uuid.v4();
+  const auth0Options = {
+    "connection": options.connection,
+    "email": options.email,
+    "password": uuid.v4(), // required field
+    "app_metadata": {
+      "invite": {
+        "status": "pending", // default status
+        "token": token
+      }
+    }
+  };
+  let changePasswordURL = getChangePassURL(config('NODE_ENV'), options.host, token);
+  let transportOptions = {
+    to: auth0Options.email
+  };
+  let templateData = {
+    name: 'Auth0 Customer',
+    email: auth0Options.email,
+    url: changePasswordURL
+  };
 
-    let result = null;
-    return req.auth0.users.create(options, function onCreateUser(err, user) {
-      result = user;
+  let result = null;
+  return options.auth0.users.create(auth0Options, function onCreateUser(err, user) {
+    result = user;
+    if (err) {
+      logger.debug('Error creating user', err);
+      return callback(err);
+    }
+    email.sendEmail(transportOptions, templateData, function (err, emailResult) {
       if (err) {
-        logger.debug('Error creating user', err);
-        return res.status(500).send({ error: err ? err : 'There was an error when creating the user.' });
+        logger.debug('Error sending email', err);
+        return callback(err);
       }
-      email.sendEmail(transportOptions, templateData, function (err, emailResult) {
-        if (err) {
-          logger.debug('Error sending email', err);
-          return res.status(500).send({ error: err ? err : 'There was an error when sending the email.' });
-        }
-        return res.json(result);
-      });
+      return callback(null, result);
     });
-  }
-};
+  });
+}
 
 /*
  * Updates user "email_verified" field.
@@ -193,7 +191,7 @@ const configureEmail = (emailTransport, templates) => {
 
 module.exports = {
   getUsers: getUsers,
-  createUser,
+  createUser: createUser,
   validateUserToken,
   savePassword,
   configureEmail
