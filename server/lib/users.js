@@ -55,7 +55,8 @@ const createUser = () => {
     };
     let templateData = {
       name: 'Auth0 Customer',
-      token: token
+      email: options.email,
+      url: '/changepassword/' + token
     };
 
     let result = null;

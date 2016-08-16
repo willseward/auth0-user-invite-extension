@@ -6,7 +6,7 @@ import logger from '../lib/logger';
 const defaultStorage = {
   templateConfig: {
     subject: 'Welcome to Auth0',
-    message: '<h1>Welcome {{ email }}!\nClick <a href="{{ url }}">here</a> to set your password.'
+    message: '<h5>Welcome {{ email }}!\nYou were invited to join Auth0.\nClick <a href="{{ url }}">here</a> to set your password.</h5>'
   },
   smtpConfig: {}
 };
@@ -21,7 +21,7 @@ export const readStorage = (storageContext) => {
   }
 
   return new Promise((resolve, reject) => {
-    storageContext.get((err, webtaskData) => {
+    return storageContext.get((err, webtaskData) => {
       if (err) {
         return reject(err);
       }
@@ -42,7 +42,7 @@ export const writeStorage = (storageContext, data) => {
   }
 
   return new Promise((resolve, reject) => {
-    storageContext.set(data, { force: 1 }, (err) => {
+    return storageContext.set(data, { force: 1 }, (err) => {
       if (err) {
         return reject(err);
       }
@@ -55,13 +55,23 @@ export const writeStorage = (storageContext, data) => {
 /*
  * Write template config to Webtask storage.
  */
-export const writeTemplateConfig = (storageContext, templateConfig) =>
-  readStorage(storageContext).then(data => {
+export const writeTemplateConfig = (storageContext, templateConfig) => {
+
+  let nodemailerTemplateConfig = {
+    from: templateConfig.from,
+    subject: templateConfig.subject,
+    redirectTo: templateConfig.redirectTo,
+    html: templateConfig.message // specific to nodemailer (in the future we may have html, markdown, etc.)
+  }
+
+  return readStorage(storageContext).then(data => {
     data.smtpConfig = data.smtpConfig || {};
-    data.templateConfig = templateConfig || {};
+    data.templateConfig = nodemailerTemplateConfig || {};
     return data;
   })
   .then(data => writeStorage(storageContext, data));
+
+}
 
 /*
  * Write smtp config to Webtask storage.
