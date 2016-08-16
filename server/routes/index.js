@@ -14,6 +14,18 @@ import users from '../lib/users';
 
 import connections from './connections';
 
+const getRepository = () => {
+  const repo = config('GITHUB_REPOSITORY');
+
+  const parts = repo.split('/');
+  if (parts.length === 5) {
+    const [ , , , account, repository ] = parts;
+    return `${account}/${repository}`;
+  }
+
+  return repo;
+};
+
 const configureEmail = (data) => {
   let smtpConfig = data.smtpConfig;
   if (!smtpConfig || Object.keys(smtpConfig) == 0) {
