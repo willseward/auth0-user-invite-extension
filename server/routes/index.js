@@ -87,7 +87,7 @@ export default (storageContext) => {
 
   routes.put('/api/changepassword',
     validations.validateUserToken,
-    users.validateUserToken());
+    usersNew.validateUserTokenHandler);
 
   routes.post('/api/changepassword',
     validations.validateSavePassword,

@@ -123,30 +123,24 @@ const validateToken = (auth0, token, callback) => {
 /*
  * Validates user token.
  */
-const validateUserToken = () => {
-  return (req, res, next) => {
+function validateUserToken(options, callback) {
+  validateToken(options.auth0, options.token, function (err, user) {
+    if (err || !user) {
+      return callback(err);
+    }
 
-    let token = req.query.token;
+    if (user.email_verified) {
+      return callback(null, user);
+    }
 
-    validateToken(req.auth0, token, function(err, user) {
-
-      if (err || !user) {
-        return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when validating the token.' });
+    updateEmailVerified(options.auth0, user, function (err, result) {
+      if (err) {
+        return callback(err);
       }
-
-      if (user.email_verified) {
-        return res.json(user);
-      }
-
-      updateEmailVerified(req.auth0, user, function(err, result) {
-        if(err) {
-          return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when updating field.' });
-        }
-        return res.json(result);
-      });
+      return callback(null, result);
     });
-  }
-};
+  });
+}
 
 /*
  * Updates user with a new password. This also removes token and updates status.
@@ -192,7 +186,7 @@ const configureEmail = (emailTransport, templates) => {
 module.exports = {
   getUsers: getUsers,
   createUser: createUser,
-  validateUserToken,
+  validateUserToken: validateUserToken,
   savePassword,
   configureEmail
 };

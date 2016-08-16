@@ -30,7 +30,21 @@ function createUserHandler(req, res, next) {
   });
 }
 
+function validateUserTokenHandler(req, res, next) {
+  let options = {
+    auth0: req.auth0,
+    token: req.query.token
+  };
+  users.validateUserToken(options, function onValidateToken(err, result) {
+    if (err) {
+      return next(err);
+    }
+    return res.json(result);
+  });
+}
+
 module.exports = {
   getUsersHandler: getUsersHandler,
-  createUserHandler: createUserHandler
+  createUserHandler: createUserHandler,
+  validateUserTokenHandler: validateUserTokenHandler
 };
