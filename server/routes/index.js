@@ -11,6 +11,8 @@ import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storag
 import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
 import stubTransport from 'nodemailer-stub-transport';
 import validations from '../lib/validations';
+
+import usersNew from './users/handler';
 import users from '../lib/users';
 
 import connections from './connections';
@@ -81,20 +83,7 @@ export default (storageContext) => {
   routes.get('/api/invitations',
     requireUser,
     validations.validateInvitations,
-    (req, res, next) => {
-      let options = {
-        auth0: req.auth0,
-        filter: req.query.filter,
-        perPage: req.query.per_page,
-        page: req.query.page
-      };
-      users.getUsers(options, function onGetUsers(err, result) {
-        if (err) {
-          return next(err);
-        }
-        return res.json(result);
-      });
-    });
+    usersNew.getUsersHandler);
 
   routes.put('/api/changepassword',
     validations.validateUserToken,
