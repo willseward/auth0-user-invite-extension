@@ -11,7 +11,10 @@ const templates = {
 };
 
 // skip this test if transporter-options.json doesn't exist (file with secrets)
-var skip = false;
+let skip = false;
+let transporterOptions;
+let email;
+
 try {
   fs.statSync('tests/server/lib/transporter-options.json');
 } catch (err) {
@@ -19,10 +22,9 @@ try {
   skip = true;
 }
 if (!skip) {
-  var transporterOptions = require('./transporter-options.json');
+  transporterOptions = require('./transporter-options.json');
 }
 
-var email;
 describe('email with real credentials', () => {
   before(function () {
     if (skip) {
@@ -33,7 +35,7 @@ describe('email with real credentials', () => {
   });
 
   it('# gets sent', function(done) {
-    var context = { name: 'doge', message: 'such email' };
+    const context = { name: 'doge', message: 'such email' };
     email.sendEmail({ from: 'luke@yld.io', to: 'luke@yld.io' }, context, function(err, info) {
       expect(err).not.to.be.ok;
       return done();
