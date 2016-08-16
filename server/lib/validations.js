@@ -35,9 +35,10 @@ const writeTemplateConfigSchema = Joi.object().keys({
 const writeSMTPConfigSchema = Joi.object().keys({
   host: Joi.string().required(),
   port: Joi.number().required(),
+  secure: Joi.boolean().required(),
   auth: Joi.object().keys({
     user: Joi.string().required(),
-    password: Joi.string().required()
+    pass: Joi.string().required()
   })
 });
 
