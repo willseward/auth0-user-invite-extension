@@ -6,7 +6,7 @@ import logger from '../lib/logger';
 const defaultStorage = {
   templateConfig: {
     subject: 'Welcome to Auth0',
-    message: '<h5>Welcome {{ email }}!\nYou were invited to join Auth0.\nClick <a href="{{ url }}">here</a> to set your password.</h5>'
+    html: '<h5>Welcome {{ email }}!\nYou were invited to join Auth0.\nClick <a href="{{ url }}">here</a> to set your password.</h5>'
   },
   smtpConfig: {}
 };
@@ -57,16 +57,9 @@ export const writeStorage = (storageContext, data) => {
  */
 export const writeTemplateConfig = (storageContext, templateConfig) => {
 
-  let nodemailerTemplateConfig = {
-    from: templateConfig.from,
-    subject: templateConfig.subject,
-    redirectTo: templateConfig.redirectTo,
-    html: templateConfig.message // specific to nodemailer (in the future we may have html, markdown, etc.)
-  }
-
   return readStorage(storageContext).then(data => {
     data.smtpConfig = data.smtpConfig || {};
-    data.templateConfig = nodemailerTemplateConfig || {};
+    data.templateConfig = templateConfig || {};
     return data;
   })
   .then(data => writeStorage(storageContext, data));

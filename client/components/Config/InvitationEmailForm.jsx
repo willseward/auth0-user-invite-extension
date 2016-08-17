@@ -4,7 +4,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import Codemirror from 'react-codemirror';
 require('codemirror/mode/xml/xml');
 
-export const fields = [ 'from', 'subject', 'redirectTo', 'message' ];
+export const fields = [ 'from', 'subject', 'html' ];
 
 const validate = values => {
   const errors = {}
@@ -16,12 +16,8 @@ const validate = values => {
     errors.subject = 'Required';
   }
 
-  if (!values.redirectTo) {
-    errors.redirectTo = 'Required';
-  }
-
-  if (!values.message) {
-    errors.message = 'Required';
+  if (!values.html) {
+    errors.html = 'Required';
   }
 
   return errors;
@@ -31,7 +27,7 @@ class InvitationEmailForm extends Component {
 
   render() {
     const {
-      fields: { from, subject, redirectTo, message },
+      fields: { from, subject, html },
       handleSubmit,
       submitting
     } = this.props;
@@ -70,26 +66,13 @@ class InvitationEmailForm extends Component {
         </div>
 
         <div className="form-group">
-          <label className="control-label col-xs-2">Redirect To</label>
-          <div className="col-xs-7">
-            <input className="form-control" type="text"
-            placeholder="Redirect To"
-            {...redirectTo}
-            />
-          </div>
-          <div className="col-xs-3">
-            {redirectTo.touched && redirectTo.error && <div>{redirectTo.error}</div>}
-          </div>
-        </div>
-
-        <div className="form-group">
           <label className="control-label col-xs-2">Current Message</label>
           <div className="col-xs-7">
-            <Codemirror {...message}
+            <Codemirror {...html}
             options={messageOptions} />
           </div>
           <div className="col-xs-3">
-            {message.touched && message.error && <div>{message.error}</div>}
+            {html.touched && html.error && <div>{html.error}</div>}
           </div>
         </div>
 
@@ -116,12 +99,12 @@ function mapStateToProps(state) {
   // NOTE: we should not require acess to state.templateConfiguration here,
   // but currently there is no simpler way to do it with redux-form
   let template = state.templateConfiguration.toJS().template;
+
   return {
     initialValues: {
       from: template.from,
       subject: template.subject,
-      redirectTo: template.redirectTo,
-      message: template.message
+      html: template.html
     }
   }
 }

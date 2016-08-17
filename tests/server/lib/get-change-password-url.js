@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-var getChangePassURL = require('../../../server/lib/change-password-path');
+var getChangePassURL = require('../../../server/lib/get-change-password-url');
 
 describe('getChangePasswordURL', function () {
   it('# produces the expected dev URL', function (done) {

@@ -5,8 +5,8 @@ const Email = require('../../../server/lib/email');
 
 const templates = {
   subject: 'Definetely not spam!',
-  text: 'Hello {{ name }}.\n{{ message }}',
-  message: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+  text: 'Hello {{ name }}.\n{{ html }}',
+  html: 'Hello <strong>{{ name }}</strong>.<h1>{{ html }}</h1>'
 };
 
 var email;
@@ -16,7 +16,7 @@ describe('email', () => {
   });
 
   it('# gets sent', function(done) {
-    var context = { name: 'doge', message: 'such email' };
+    var context = { name: 'doge', html: 'such email' };
     email.sendEmail({ to: 'joe@bloggs.com' }, context, function(err, info) {
       expect(err).not.to.be.ok;
       return done();
@@ -24,7 +24,7 @@ describe('email', () => {
   });
 
   it('# templating works', function(done) {
-    var context = { name: 'doge', message: 'such email' };
+    var context = { name: 'doge', html: 'such email' };
     email.sendEmail({ to: 'joe@bloggs.com' }, context, function(err, info) {
       expect(info.response.toString()).to.contain('such email');
       return done();

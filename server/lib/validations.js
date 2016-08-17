@@ -28,8 +28,7 @@ const getSavePasswordSchema = Joi.object().keys({
 const writeTemplateConfigSchema = Joi.object().keys({
   from: Joi.string().email().required(),
   subject: Joi.string().required(),
-  redirectTo: Joi.string().required(),
-  message: Joi.string().required()
+  html: Joi.string().required()
 });
 
 const writeSMTPConfigSchema = Joi.object().keys({
@@ -86,7 +85,6 @@ function validateUserToken(req, res, next) {
 
 function validateSavePassword(req, res, next) {
 
-  console.log(req.body)
   Joi.validate(req.body, getSavePasswordSchema, (err, value) => {
     if (err) {
     return res.status(500).send({ error: 'Missing information (user id, token or password).' });
@@ -100,7 +98,7 @@ function validateWriteTemplateConfig(req, res, next) {
 
   Joi.validate(req.body, writeTemplateConfigSchema, (err, value) => {
     if (err) {
-      return res.status(500).send({ error: 'Missing information (from, subject, redirectTo or message).' });
+      return res.status(500).send({ error: 'Missing information (from, subject or message).' });
     }
 
     next();

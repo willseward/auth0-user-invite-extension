@@ -6,8 +6,8 @@ const Email = require('../../../server/lib/email');
 
 const templates = {
   subject: 'Definetely not spam!',
-  text: 'Hello {{ name }}.\n{{ message }}',
-  message: '<em>Hello <strong>{{ name }}</strong>.<h1>{{ message }}</h1>'
+  text: 'Hello {{ name }}.\n{{ html }}',
+  html: 'Hello <strong>{{ name }}</strong>.<h1>{{ html }}</h1>'
 };
 
 // skip this test if transporter-options.json doesn't exist (file with secrets)
@@ -35,7 +35,7 @@ describe('email with real credentials', () => {
   });
 
   it('# gets sent', function(done) {
-    const context = { name: 'doge', message: 'such email' };
+    const context = { name: 'doge', html: 'such email' };
     email.sendEmail({ from: 'luke@yld.io', to: 'luke@yld.io' }, context, function(err, info) {
       expect(err).not.to.be.ok;
       return done();
