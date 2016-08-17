@@ -1,21 +1,21 @@
 import { Router as router } from 'express';
+import stubTransport from 'nodemailer-stub-transport';
 
-import html from './html';
 import changePassword from '../views/changePassword';
-import meta from './meta';
+import html from './html';
 import hooks from './hooks';
-import logger from '../lib/logger';
+import meta from './meta';
 
 import config from '../lib/config';
-import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storage';
-import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
-import stubTransport from 'nodemailer-stub-transport';
+import logger from '../lib/logger';
+import users from '../lib/users';
 import validations from '../lib/validations';
 
-import userHandlers from './users/handler';
-import users from '../lib/users';
+import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
+import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storage';
 
-import connections from './connections';
+import connectionsHandlers from './connections';
+import userHandlers from './users';
 
 const configureEmail = (data) => {
   let smtpConfig = data.smtpConfig;
@@ -73,7 +73,9 @@ export default (storageContext) => {
       });
     });
 
-  routes.use('/api/connections', requireUser, connections());
+  routes.use('/api/connections',
+    requireUser,
+    connectionsHandlers.getConnectionsHandler);
 
   routes.post('/api/invitations/user',
     requireUser,

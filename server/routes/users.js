@@ -1,4 +1,4 @@
-import users from '../../lib/users';
+import users from '../lib/users';
 
 function getUsersHandler(req, res, next) {
   let options = {
