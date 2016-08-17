@@ -5,6 +5,6 @@ module.exports = function getChangePasswordPath(env, host, token) {
   return url.format({
     protocol: env !== 'production' ? 'http' : 'https',
     host: host,
-    pathname: path.join('api', 'changepassword', token)
+    pathname: path.join('changepassword', token)
   });
 };
