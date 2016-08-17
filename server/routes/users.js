@@ -9,7 +9,7 @@ function getUsersHandler(req, res, next) {
   };
   users.getUsers(options, function onGetUsers(err, result) {
     if (err) {
-      return next(err);
+      return (err.error && err.error.statusCode) ? res.status(err.error.statusCode).send(err) : res.status(500).send(err);
     }
     return res.json(result);
   });
@@ -24,7 +24,7 @@ function createUserHandler(req, res, next) {
   };
   users.createUser(options, function onCreateUser(err, result) {
     if (err) {
-      return next(err);
+      return (err.error && err.error.statusCode) ? res.status(err.error.statusCode).send(err) : res.status(500).send(err);
     }
     return res.json(result);
   });
@@ -37,7 +37,7 @@ function validateUserTokenHandler(req, res, next) {
   };
   users.validateUserToken(options, function onValidateToken(err, result) {
     if (err) {
-      return next(err);
+      return (err.error && err.error.statusCode) ? res.status(err.error.statusCode).send(err) : res.status(500).send(err);
     }
     return res.json(result);
   });
@@ -52,7 +52,7 @@ function savePasswordHandler(req, res, next) {
   };
   users.savePassword(options, function onSavePassword(err, result) {
     if (err) {
-      return next(err);
+      return (err.error && err.error.statusCode) ? res.status(err.error.statusCode).send(err) : res.status(500).send(err);
     }
     return res.json(result);
   });
