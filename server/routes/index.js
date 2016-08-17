@@ -12,14 +12,14 @@ import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewar
 import stubTransport from 'nodemailer-stub-transport';
 import validations from '../lib/validations';
 
-import usersNew from './users/handler';
+import userHandlers from './users/handler';
 import users from '../lib/users';
 
 import connections from './connections';
 
 const configureEmail = (data) => {
   let smtpConfig = data.smtpConfig;
-  if (!smtpConfig || Object.keys(smtpConfig) == 0) {
+  if (!smtpConfig || Object.keys(smtpConfig).length == 0) {
     smtpConfig = stubTransport();
   }
   users.configureEmail(smtpConfig, data.templateConfig)
@@ -78,20 +78,20 @@ export default (storageContext) => {
   routes.post('/api/invitations/user',
     requireUser,
     validations.validateInviteUser,
-    usersNew.createUserHandler);
+    userHandlers.createUserHandler);
 
   routes.get('/api/invitations',
     requireUser,
     validations.validateInvitations,
-    usersNew.getUsersHandler);
+    userHandlers.getUsersHandler);
 
   routes.put('/api/changepassword',
     validations.validateUserToken,
-    usersNew.validateUserTokenHandler);
+    userHandlers.validateUserTokenHandler);
 
   routes.post('/api/changepassword',
     validations.validateSavePassword,
-    users.savePassword());
+    userHandlers.savePasswordHandler);
 
   return routes;
 };

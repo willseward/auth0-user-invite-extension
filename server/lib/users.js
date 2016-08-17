@@ -69,12 +69,12 @@ function createUser(options, callback) {
     result = user;
     if (err) {
       logger.debug('Error creating user', err);
-      return callback(err);
+      return callback({ error: err ? err : 'There was an error when creating the user.' });
     }
     email.sendEmail(transportOptions, templateData, function (err, emailResult) {
       if (err) {
         logger.debug('Error sending email', err);
-        return callback(err);
+        return callback({ error: err ? err : 'There was an error when sending the email.' });
       }
       return callback(null, result);
     });
@@ -126,7 +126,7 @@ const validateToken = (auth0, token, callback) => {
 function validateUserToken(options, callback) {
   validateToken(options.auth0, options.token, function (err, user) {
     if (err || !user) {
-      return callback(err);
+      return callback({ error: (err.error) ? err.error : 'There was an error when validating the token.' });
     }
 
     if (user.email_verified) {
@@ -135,7 +135,7 @@ function validateUserToken(options, callback) {
 
     updateEmailVerified(options.auth0, user, function (err, result) {
       if (err) {
-        return callback(err);
+        return callback({ error: (err.error) ? err.error : 'There was an error when updating field.' });
       }
       return callback(null, result);
     });
@@ -145,39 +145,29 @@ function validateUserToken(options, callback) {
 /*
  * Updates user with a new password. This also removes token and updates status.
  */
-const savePassword = () => {
-  return (req, res, next) => {
+function savePassword(options, callback) {
+  validateToken(options.auth0, options.token, function (err, user) {
+    if (err || !user || user.user_id !== id) {
+      return callback({ error: (err.error) ? err.error : 'There was an error when saving the user.' });
+    }
 
-    let { id, password, token } = req.body;
-
-    validateToken(req.auth0, token, function(err, user) {
-
-      if (err || !user || user.user_id !== id) {
-        return res.status(500).send({ error: (err.error) ? err.error : 'There was an error when saving the user.' });
-      }
-
-      return req.auth0.users.update(
-        { id: id },
-        {
-          "password": password,
-          "app_metadata": {
-            "invite": {
-              "status": "accepted"
-            }
-          }
-        })
-        .then(user => {
-          if (!user) {
-            return res.status(500).send({ error :'There was a problem when saving the user.' });
-          }
-          return res.sendStatus(200);
-        })
-        .catch(next);
-
-    });
-
-  }
-};
+    return req.auth0.users.update(
+      { id: id },
+      {
+        "password": password,
+        "app_metadata": {
+          "invite": {
+            "status": "accepted"
+          }
+        }
+      }, function onUpdateUser(err, user) {
+        if (err || !user) {
+          return callback({ error: (err && err.error) ? err.error : 'There was an error when saving the user.' });
+        }
+        return callback(null);
+      });
+  });
+}
 
 const configureEmail = (emailTransport, templates) => {
   email = new Email(emailTransport, templates);
@@ -187,6 +177,6 @@ module.exports = {
   getUsers: getUsers,
   createUser: createUser,
   validateUserToken: validateUserToken,
-  savePassword,
+  savePassword: savePassword,
   configureEmail
 };

@@ -43,8 +43,24 @@ function validateUserTokenHandler(req, res, next) {
   });
 }
 
+function savePasswordHandler(req, res, next) {
+  let options = {
+    auth0: req.auth0,
+    id: req.body.id,
+    password: req.body.password,
+    token: req.body.token
+  };
+  users.savePassword(options, function onSavePassword(err, result) {
+    if (err) {
+      return next(err);
+    }
+    return res.json(result);
+  });
+}
+
 module.exports = {
   getUsersHandler: getUsersHandler,
   createUserHandler: createUserHandler,
-  validateUserTokenHandler: validateUserTokenHandler
+  validateUserTokenHandler: validateUserTokenHandler,
+  savePasswordHandler: savePasswordHandler
 };
