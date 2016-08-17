@@ -4,6 +4,7 @@ import _ from 'lodash';
  * List all connections.
  */
 function getConnections(options, callback) {
+
   options.auth0.connections
     .getAll({ fields: 'name', 'strategy': 'auth0' })
     .then(connections => _.chain(connections)
