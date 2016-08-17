@@ -2,8 +2,6 @@
 
 This extension makes it possible to invite users to your Auth0 account, either individually or in bulk.
 
-TODO: This repo is based off the GitHub Deployments extension and is in the process of being modified.
-
 ## Running
 
 ### Local Development
