@@ -147,14 +147,15 @@ function validateUserToken(options, callback) {
  */
 function savePassword(options, callback) {
   validateToken(options.auth0, options.token, function (err, user) {
-    if (err || !user || user.user_id !== id) {
+
+    if (err || !user || user.user_id !== options.id) {
       return callback({ error: (err.error) ? err.error : 'There was an error when saving the user.' });
     }
 
-    return req.auth0.users.update(
-      { id: id },
+    return options.auth0.users.update(
+      { id: options.id },
       {
-        "password": password,
+        "password": options.password,
         "app_metadata": {
           "invite": {
             "status": "accepted"
@@ -164,7 +165,7 @@ function savePassword(options, callback) {
         if (err || !user) {
           return callback({ error: (err && err.error) ? err.error : 'There was an error when saving the user.' });
         }
-        return callback(null);
+        return callback();
       });
   });
 }
