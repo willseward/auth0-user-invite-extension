@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 
+var logger = require('../../../server/lib/logger');
 var users = require('../../../server/lib/users');
+
 var nock = require('nock');
 var stubTransport = require('nodemailer-stub-transport');
 var ManagementClient = require('auth0').ManagementClient;
@@ -18,13 +20,10 @@ describe('users', function () {
       domain: AUTH0_DOMAIN
     });
     users.configureEmail(stubTransport(), {})
+    logger.transports.console.level = 'error';
   });
 
   describe('getUsers', function (done) {
-    beforeEach(function () {
-      nock.cleanAll();
-    });
-
     it('calls the auth0 v2 api users endpoint', function (done) {
       let request = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
         .get('/api/v2/users')
@@ -95,10 +94,6 @@ describe('users', function () {
   });
 
   describe('createUser', function (done) {
-    beforeEach(function () {
-      nock.cleanAll();
-    });
-
     it('calls the auth0 v2 api users endpoint', function (done) {
       let request = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
         .post('/api/v2/users')
