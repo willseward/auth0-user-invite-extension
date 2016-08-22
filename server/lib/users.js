@@ -137,9 +137,8 @@ function validateUserToken(options, callback) {
  */
 function savePassword(options, callback) {
   validateToken(options.auth0, options.token, function (err, user) {
-
     if (err || !user || user.user_id !== options.id) {
-      return callback({ error: (err.error) ? err.error : 'There was an error when saving the user.' });
+      return callback({ error: (err && err.error) ? err.error : 'There was an error when saving the user.' });
     }
 
     return options.auth0.users.update(

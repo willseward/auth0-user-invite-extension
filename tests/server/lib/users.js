@@ -23,7 +23,7 @@ describe('users', function () {
     logger.transports.console.level = 'error';
   });
 
-  describe('getUsers', function (done) {
+  describe('getUsers', function () {
     it('calls the auth0 v2 api users endpoint', function (done) {
       let request = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
         .get('/api/v2/users')
@@ -93,7 +93,7 @@ describe('users', function () {
     });
   });
 
-  describe('createUser', function (done) {
+  describe('createUser', function () {
     it('calls the auth0 v2 api users endpoint', function (done) {
       let request = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
         .post('/api/v2/users')
@@ -143,7 +143,7 @@ describe('users', function () {
     });
   });
 
-  describe('validateUserToken', function (done) {
+  describe('validateUserToken', function () {
     it('calls the auth0 v2 api users endpoint', function (done) {
       let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
         .get('/api/v2/users')
@@ -163,14 +163,124 @@ describe('users', function () {
       });
     });
 
-    it.skip('short-circuits the verification if the email address is verified', function (done) {
-      // user.email_verified
+    it('exits early if the email address is already verified', function (done) {
+      let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .get('/api/v2/users')
+        .query({"search_engine":"v2","fields":"user_id%2Cemail%2Cemail_verified%2Capp_metadata","include_totals":"false","q":"app_metadata.invite.token%3Ac207aece-b4d3-492e-9d35-276a71b77867","sort":"last_login%3A-1"})
+        .reply(200, [{ user_id: 'auth0|57b7173d3fa4e89a29e9e2db', email_verified: true }]);
+      let patchRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .patch(/^\/api\/v2\/users\/auth0%7C[0-9a-z]{24}$/, { email_verified: true })
+        .reply(200);
+      let options = {
+        auth0: auth0,
+        token: 'c207aece-b4d3-492e-9d35-276a71b77867'
+      };
+      users.validateUserToken(options, function (err, result) {
+        expect(getRequest.isDone()).to.be.true;
+        expect(patchRequest.isDone()).to.be.false;
+        expect(err).not.to.be.ok;
+        nock.cleanAll();
+        return done();
+      });
+    });
+
+    it('errors cleanly on a 4xx from the the API get request', function (done) {
+      let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .get('/api/v2/users')
+        .query({"search_engine":"v2","fields":"user_id%2Cemail%2Cemail_verified%2Capp_metadata","include_totals":"false","q":"app_metadata.invite.token%3Ac207aece-b4d3-492e-9d35-276a71b77867","sort":"last_login%3A-1"})
+        .reply(400, [{ user_id: 'auth0|57b7173d3fa4e89a29e9e2db'}]);
+      let options = {
+        auth0: auth0,
+        token: 'c207aece-b4d3-492e-9d35-276a71b77867'
+      };
+      users.validateUserToken(options, function (err, result) {
+        expect(err).to.be.ok;
+        return done();
+      });
+    });
+
+    it('errors cleanly on a 5xx from the the API get request', function (done) {
+      let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .get('/api/v2/users')
+        .query({"search_engine":"v2","fields":"user_id%2Cemail%2Cemail_verified%2Capp_metadata","include_totals":"false","q":"app_metadata.invite.token%3Ac207aece-b4d3-492e-9d35-276a71b77867","sort":"last_login%3A-1"})
+        .reply(500, [{ user_id: 'auth0|57b7173d3fa4e89a29e9e2db'}]);
+      let options = {
+        auth0: auth0,
+        token: 'c207aece-b4d3-492e-9d35-276a71b77867'
+      };
+      users.validateUserToken(options, function (err, result) {
+        expect(err).to.be.ok;
+        return done();
+      });
+    });
+
+    it('errors cleanly on a 4xx from the the API patch request', function (done) {
+      let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .get('/api/v2/users')
+        .query({"search_engine":"v2","fields":"user_id%2Cemail%2Cemail_verified%2Capp_metadata","include_totals":"false","q":"app_metadata.invite.token%3Ac207aece-b4d3-492e-9d35-276a71b77867","sort":"last_login%3A-1"})
+        .reply(200, [{ user_id: 'auth0|57b7173d3fa4e89a29e9e2db'}]);
+      let patchRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .patch(/^\/api\/v2\/users\/auth0%7C[0-9a-z]{24}$/, { email_verified: true })
+        .reply(400);
+      let options = {
+        auth0: auth0,
+        token: 'c207aece-b4d3-492e-9d35-276a71b77867'
+      };
+      users.validateUserToken(options, function (err, result) {
+        expect(err).to.be.ok;
+        return done();
+      });
+    });
+
+    it('errors cleanly on a 5xx from the the API patch request', function (done) {
+      let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .get('/api/v2/users')
+        .query({"search_engine":"v2","fields":"user_id%2Cemail%2Cemail_verified%2Capp_metadata","include_totals":"false","q":"app_metadata.invite.token%3Ac207aece-b4d3-492e-9d35-276a71b77867","sort":"last_login%3A-1"})
+        .reply(200, [{ user_id: 'auth0|57b7173d3fa4e89a29e9e2db'}]);
+      let patchRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .patch(/^\/api\/v2\/users\/auth0%7C[0-9a-z]{24}$/, { email_verified: true })
+        .reply(500);
+      let options = {
+        auth0: auth0,
+        token: 'c207aece-b4d3-492e-9d35-276a71b77867'
+      };
+      users.validateUserToken(options, function (err, result) {
+        expect(err).to.be.ok;
+        return done();
+      });
     });
   });
 
-  describe.skip('savePassword', function (done) {
-  });
-
-  describe.skip('configureEmail', function (done) {
+  describe('savePassword', function () {
+    it('calls the auth0 v2 api users endpoint', function (done) {
+      let id = 'auth0|57b7173d3fa4e89a29e9e2db';
+      let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .get('/api/v2/users')
+        .query({"search_engine":"v2","fields":"user_id%2Cemail%2Cemail_verified%2Capp_metadata","include_totals":"false","q":"app_metadata.invite.token%3Ac207aece-b4d3-492e-9d35-276a71b77867","sort":"last_login%3A-1"})
+        .reply(200, [{ user_id: id }]);
+      let patchBody = {
+        password: 'wow',
+        app_metadata: {
+          invite: {
+            status: 'accepted'
+          }
+        }
+      };
+      let patchRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .patch(/^\/api\/v2\/users\/auth0%7C[0-9a-z]{24}$/, patchBody)
+        .reply(200);
+      let options = {
+        auth0: auth0,
+        id: id,
+        password: 'wow',
+        token: 'c207aece-b4d3-492e-9d35-276a71b77867'
+      };
+      users.savePassword(options, function (err, result) {
+        expect(getRequest.isDone()).to.be.true;
+        expect(patchRequest.isDone()).to.be.true;
+        expect(err).not.to.be.ok;
+        return done();
+      });
+    });
   });
 });
