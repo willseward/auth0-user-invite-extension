@@ -143,13 +143,29 @@ describe('users', function () {
     });
   });
 
-  describe.skip('updateEmailVerified', function (done) {
-  });
+  describe('validateUserToken', function (done) {
+    it('calls the auth0 v2 api users endpoint', function (done) {
+      let getRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .get('/api/v2/users')
+        .query({"search_engine":"v2","fields":"user_id%2Cemail%2Cemail_verified%2Capp_metadata","include_totals":"false","q":"app_metadata.invite.token%3Ac207aece-b4d3-492e-9d35-276a71b77867","sort":"last_login%3A-1"})
+        .reply(200, [{ user_id: 'auth0|57b7173d3fa4e89a29e9e2db'}]);
+      let patchRequest = nock('https://user-invite-extension.auth0.com:443', {"encodedQueryParams":true})
+        .patch(/^\/api\/v2\/users\/auth0%7C[0-9a-z]{24}$/, { email_verified: true })
+        .reply(200);
+      let options = {
+        auth0: auth0,
+        token: 'c207aece-b4d3-492e-9d35-276a71b77867'
+      };
+      users.validateUserToken(options, function (err, result) {
+        expect(getRequest.isDone()).to.be.true;
+        expect(patchRequest.isDone()).to.be.true;
+        return done();
+      });
+    });
 
-  describe.skip('validateToken', function (done) {
-  });
-
-  describe.skip('validateUserToken', function (done) {
+    it.skip('short-circuits the verification if the email address is verified', function (done) {
+      // user.email_verified
+    });
   });
 
   describe.skip('savePassword', function (done) {

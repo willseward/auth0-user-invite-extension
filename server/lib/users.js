@@ -85,23 +85,16 @@ function createUser(options, callback) {
  * Updates user "email_verified" field.
  */
 const updateEmailVerified = (auth0, user, callback) => {
-
-  return auth0.users.update(
-    { id: user.user_id },
-    {
-      "email_verified": true
-    })
-    .then(user => {
-      if (!user) {
-        return callback({ error: 'There was a problem when updating the user email_verified field.' });
+  return auth0.users.update({ id: user.user_id }, { "email_verified": true },
+    function (err, user) {
+      if (err || !user) {
+        return callback({ error: err ? err : 'There was a problem when updating the user email_verified field.' });
       }
       return callback(null, user);
-    })
-    .catch(callback);
+    });
 }
 
 const validateToken = (auth0, token, callback) => {
-
   const options = {
     sort: 'last_login:-1',
     q: `app_metadata.invite.token:${token}`,
@@ -109,15 +102,12 @@ const validateToken = (auth0, token, callback) => {
     fields: 'user_id,email,email_verified,app_metadata',
     search_engine: 'v2'
   };
-
-  return auth0.users.get(options)
-    .then(users => {
-      if (!users || !users.length || users.length !== 1) {
-        return callback({ error: 'Token is invalid or user was not found.' });
-      }
-      return callback(null, users[0]);
-    })
-    .catch(callback);
+  return auth0.users.get(options, function (err, users) {
+    if (err || !users || !users.length || users.length !== 1) {
+      return callback({ error: 'Token is invalid or user was not found.' });
+    }
+    return callback(null, users[0]);
+  });
 }
 
 /*
