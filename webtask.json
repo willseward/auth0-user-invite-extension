@@ -18,5 +18,30 @@
     "onUninstallPath": "/.extensions/on-uninstall",
     "scopes": "read:connections read:users create:users update:users"
   },
-  "secrets": { }
+  "secrets": {
+    "SMTP_HOST": {
+      "example": "smtp.my-domain.com",
+      "description": "SMTP server hostname",
+      "required": true
+    },
+    "SMTP_PORT": {
+      "example": 465,
+      "description": "SMTP server port",
+      "required": true
+    },
+    "SMTP_SECURE": {
+      "example": true,
+      "description": "Require TLS?",
+      "required": true
+    },
+    "SMTP_AUTH_USER": {
+      "description": "SMTP authentication username",
+      "required": true
+    },
+    "SMTP_AUTH_PASS": {
+      "description": "SMTP authentication password",
+      "required": true,
+      "type": "password"
+    }
+  }
 }

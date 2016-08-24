@@ -7,8 +7,7 @@ const defaultStorage = {
   templateConfig: {
     subject: 'Welcome to Auth0',
     html: '<p>Welcome {{ email }}!</p>\n<p>You were invited to join Auth0.</p>\n<p>Click <a href="{{ url }}">here</a> to set your password.</p>'
-  },
-  smtpConfig: {}
+  }
 };
 
 /*
@@ -56,23 +55,9 @@ export const writeStorage = (storageContext, data) => {
  * Write template config to Webtask storage.
  */
 export const writeTemplateConfig = (storageContext, templateConfig) => {
-
   return readStorage(storageContext).then(data => {
-    data.smtpConfig = data.smtpConfig || {};
     data.templateConfig = templateConfig || {};
     return data;
   })
   .then(data => writeStorage(storageContext, data));
-
 }
-
-/*
- * Write smtp config to Webtask storage.
- */
-export const writeSMTPConfig = (storageContext, smtpConfig) =>
-  readStorage(storageContext).then(data => {
-    data.templateConfig = data.templateConfig || {};
-    data.smtpConfig = smtpConfig || {};
-    return data;
-  })
-  .then(data => writeStorage(storageContext, data));

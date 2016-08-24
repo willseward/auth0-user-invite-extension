@@ -12,22 +12,30 @@ import users from '../lib/users';
 import validations from '../lib/validations';
 
 import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
-import { readStorage, writeTemplateConfig, writeSMTPConfig } from '../lib/storage';
+import { readStorage, writeTemplateConfig } from '../lib/storage';
 
 import connectionsHandlers from './connections';
 import userHandlers from './users';
 
-const configureEmail = (data) => {
-  let smtpConfig = data.smtpConfig;
-  if (!smtpConfig || Object.keys(smtpConfig).length == 0) {
+const configureEmail = (smtpConfig, templateConfig) => {
+  if (!smtpConfig || Object.keys(smtpConfig).length == 0 || !smtpConfig.host) {
     smtpConfig = stubTransport();
   }
-  users.configureEmail(smtpConfig, data.templateConfig)
+  users.configureEmail(smtpConfig, templateConfig)
 };
 
 export default (storageContext) => {
+  let smtpConfig = {
+    host: config('SMTP_HOST'),
+    port: config('SMTP_PORT'),
+    secure: config('SMTP_SECURE'),
+    auth: {
+      user: config('SMTP_AUTH_USER'),
+      pass: config('SMTP_AUTH_PASS')
+    }
+  };
   readStorage(storageContext).then(data => {
-    configureEmail(data);
+    configureEmail(smtpConfig, data.templateConfig);
   });
 
   const routes = router();
@@ -53,22 +61,7 @@ export default (storageContext) => {
     validations.validateWriteTemplateConfig,
     (req, res) => {
       writeTemplateConfig(storageContext, req.body).then((data) => {
-        configureEmail(data);
-        res.sendStatus(200);
-      });
-    });
-
-  routes.get('/api/config/smtp', requireUser, (req, res) => {
-    readStorage(storageContext)
-    .then(data => { res.json(data.smtpConfig || {} ) });
-  });
-
-  routes.patch('/api/config/smtp',
-    requireUser,
-    validations.validateWriteSMTPConfig,
-    (req, res) => {
-      writeSMTPConfig(storageContext, req.body).then((data) => {
-        configureEmail(data);
+        configureEmail(smtpConfig, data.templateConfig);
         res.sendStatus(200);
       });
     });

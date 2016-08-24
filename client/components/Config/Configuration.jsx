@@ -17,21 +17,11 @@ export default class Configuration extends Component {
                 </span>
               </a>
             </li>
-            <li>
-              <a data-toggle="tab" href="#email-settings">
-                <span className="tab-title">
-                  Email Settings
-                </span>
-              </a>
-            </li>
           </ul>
         </div>
         <div id="content-area" className="tab-content">
           <div id="invitation-email" className="tab-pane active">
             <InvitationEmail />
-          </div>
-          <div id="email-settings" className="tab-pane">
-            <EmailSettings />
           </div>
         </div>
       </div>

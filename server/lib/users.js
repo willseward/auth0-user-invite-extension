@@ -159,8 +159,8 @@ function savePassword(options, callback) {
   });
 }
 
-const configureEmail = (emailTransport, templates) => {
-  email = new Email(emailTransport, templates);
+const configureEmail = (smtpConfig, templates) => {
+  email = new Email(smtpConfig, templates);
 };
 
 module.exports = {

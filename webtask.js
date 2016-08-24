@@ -18,6 +18,11 @@ const getServer = (req, res) => {
         NODE_ENV: 'production',
         HOSTING_ENV: 'webtask',
         CLIENT_VERSION: process.env.CLIENT_VERSION,
+        SMTP_HOST: req.webtaskContext.secrets.SMTP_HOST,
+        SMTP_PORT: req.webtaskContext.secrets.SMTP_PORT,
+        SMTP_SECURE: req.webtaskContext.secrets.SMTP_SECURE,
+        SMTP_AUTH_USER: req.webtaskContext.secrets.SMTP_AUTH_USER,
+        SMTP_AUTH_PASS: req.webtaskContext.secrets.SMTP_AUTH_PASS,
         WT_URL: req.webtaskContext.secrets.WT_URL
       });
 
