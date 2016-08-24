@@ -41,3 +41,12 @@ https://YOU.ngrok.io/login
 ```
 npm run build
 ```
+
+### Configuration
+
+SMTP email settings can be configured when the extension is installed. If not
+specified it defaults to the nodemailer stub transport (i.e. no email will be
+sent, but it won't error).
+
+The invitation email template can be configured in the configuration page in
+the UI.
