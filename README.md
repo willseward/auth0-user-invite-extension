@@ -13,7 +13,12 @@ First create a `Client` in your account with `read:connections` and `create/read
   "EXTENSION_SECRET": "any-random-value-will-do",
   "AUTH0_DOMAIN": "YOUR_DOMAIN",
   "AUTH0_CLIENT_ID": "AUTH0_CLIENT_ID",
-  "AUTH0_CLIENT_SECRET": "YOUR_CLIENT_SECRET"
+  "AUTH0_CLIENT_SECRET": "YOUR_CLIENT_SECRET",
+  "SMTP_HOST": "SMTP_HOST",
+  "SMTP_PORT": "SMTP_PORT",
+  "SMTP_SECURE": "SMTP_SECURE",
+  "SMTP_AUTH_USER": "SMTP_AUTH_USER",
+  "SMTP_AUTH_PASS": "SMTP_AUTH_PASS"
 }
 ```
 
