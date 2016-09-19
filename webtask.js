@@ -23,6 +23,7 @@ const getServer = (req, res) => {
         SMTP_SECURE: req.webtaskContext.secrets.SMTP_SECURE,
         SMTP_AUTH_USER: req.webtaskContext.secrets.SMTP_AUTH_USER,
         SMTP_AUTH_PASS: req.webtaskContext.secrets.SMTP_AUTH_PASS,
+        CUSTOM_CSS: req.webtaskContext.secrets.CUSTOM_CSS,
         WT_URL: req.webtaskContext.secrets.WT_URL
       });
 

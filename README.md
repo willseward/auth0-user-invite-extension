@@ -18,7 +18,8 @@ First create a `Client` in your account with `read:connections` and `create/read
   "SMTP_PORT": "SMTP_PORT",
   "SMTP_SECURE": "SMTP_SECURE",
   "SMTP_AUTH_USER": "SMTP_AUTH_USER",
-  "SMTP_AUTH_PASS": "SMTP_AUTH_PASS"
+  "SMTP_AUTH_PASS": "SMTP_AUTH_PASS",
+  "CUSTOM_CSS": "CUSTOM_CSS"
 }
 ```
 

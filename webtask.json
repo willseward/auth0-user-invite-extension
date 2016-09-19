@@ -42,6 +42,11 @@
       "description": "SMTP authentication password",
       "required": true,
       "type": "password"
+    },
+    "CUSTOM_CSS": {
+      "description": "A CSS file containing custom styles for the extension change password page",
+      "example": "https://cdn.fabrikam.com/static/extensions/theme/fabrikam.css",
+      "required": false
     }
   }
 }
