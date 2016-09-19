@@ -26,6 +26,7 @@ module.exports = (storageContext) => {
   app.use('/app', Express.static(path.join(__dirname, '../dist')));
   app.use('/', routes(storageContext));
 
+
   // Generic error handler.
   app.use(middlewares.errorHandler);
   return app;
