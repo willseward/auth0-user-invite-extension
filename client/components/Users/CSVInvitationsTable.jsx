@@ -1,3 +1,4 @@
+import './InvitationsTable.css';
 import React, { Component } from 'react';
 import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
@@ -20,7 +21,7 @@ export default class CSVInvitationsTable extends Component {
     }
 
     return (
-      <div>
+      <div className="invitationstable-header">
         <Table>
           <TableHeader>
             <TableColumn width="50%">Email</TableColumn>
