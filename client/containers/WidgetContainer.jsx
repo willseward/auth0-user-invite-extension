@@ -5,7 +5,7 @@ import { connectionActions } from '../actions';
 
 import { InvitationsContainer } from './';
 
-export default connectContainer(class extends Component {
+export default connectContainer(class WidgetContainer extends Component {
 
   constructor(props) {
     super(props);

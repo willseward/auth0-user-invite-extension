@@ -3,8 +3,7 @@ import connectContainer from 'redux-static';
 
 import { templateConfigurationActions } from '../../actions';
 import { InvitationEmailForm } from './';
-import Error from '../Messages/Error';
-import Info from '../Messages/Info';
+import { Error, Info } from '../Messages';
 
 export default connectContainer(class InvitationEmail extends Component {
 

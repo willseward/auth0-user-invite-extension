@@ -2,12 +2,12 @@ import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
-import { invitationsActions, importActions } from '../../../actions';
+import { invitationsActions, importActions } from '../../../../actions';
 
-import CSVInvitationsTable from '../CSVInvitationsTable';
-import Error from '../../Messages/Error';
+import CSVInvitationsTable from './CSVInvitationsTable';
+import { Error } from '../../../Messages';
 
-export default connectContainer(class extends Component {
+export default connectContainer(class PreviewCSVModal extends Component {
 
   constructor() {
     super();
@@ -81,6 +81,11 @@ export default connectContainer(class extends Component {
     this.props.nextView();
   }
 
+  goBack() {
+    this.props.clearImportedData(); //clears imported csv data
+    this.props.goBackView();
+  }
+
   renderPreview(csvInvitations) {
     return (
       <CSVInvitationsTable {...csvInvitations} />
@@ -92,8 +97,8 @@ export default connectContainer(class extends Component {
     return (
       <Button
         type="button"
-        className="btn btn-default"
-        onClick={this.props.tryAgain}>
+        className="btn btn-transparent"
+        onClick={this.goBack.bind(this)}>
           Back
       </Button>
     );
@@ -139,10 +144,9 @@ export default connectContainer(class extends Component {
             </div>
             <form id="preview-csv-form">
               <div className="modal-body">
-                <div className="row col-xs-12">
-                  <p className="text-center">Import a CSV file with all the data of your users.</p>
-                  <Error message={this.state.error ? this.state.error : '' } />
-                </div>
+
+                <p className="text-center">Import a CSV file with all the data of your users.</p>
+                <Error message={this.state.error ? this.state.error : '' } />
 
                 <div className="row">
                   <div className="col-xs-12 form-group">

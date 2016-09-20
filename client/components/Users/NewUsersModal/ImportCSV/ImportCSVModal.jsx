@@ -1,13 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import ImportDropFiles from '../ImportDropFiles';
-import Error from '../../Messages/Error';
+import ImportDropFiles from './ImportDropFiles';
+import { Error } from '../../../Messages';
 
 import connectContainer from 'redux-static';
-import { invitationsActions, importActions } from '../../../actions';
+import { invitationsActions, importActions } from '../../../../actions';
 
-
-export default connectContainer(class extends Component {
+export default connectContainer(class ImportCSVModal extends Component {
 
   constructor() {
     super();
@@ -82,7 +81,7 @@ export default connectContainer(class extends Component {
     return (
       <Button
         type="button"
-        className="btn btn-default"
+        className="btn btn-transparent"
         onClick={this.props.tryAgain}
         data-dismiss="modal">
           Cancel
@@ -97,6 +96,17 @@ export default connectContainer(class extends Component {
         className="btn btn-primary"
         onClick={this.onSubmit.bind(this, file)}>
           Next
+      </Button>
+    );
+  }
+
+  renderBackBtn() {
+    return (
+      <Button
+        type="button"
+        className="btn btn-transparent"
+        onClick={this.props.goBackView}>
+          Back
       </Button>
     );
   }
@@ -122,22 +132,20 @@ export default connectContainer(class extends Component {
               </Button>
               <h4 id="myModalLabel" className="modal-title">Import CSV</h4>
             </div>
-            <form id="import-csv-form">
-              <div className="modal-body">
-                <div className="row col-xs-12">
-                  <p className="text-center">Import a CSV file with all the data of your users.</p>
-                  <Error message={(this.state.error || importError) ? (this.state.error || validationErrors) : '' } />
-                </div>
-                <div className="row">
-                  <div className="col-xs-12 form-group">
-                  { this.renderDropFilesArea(file) }
-                  </div>
+            <div className="modal-body">
+
+              <p className="text-center">Import a CSV file with all the data of your users.</p>
+              <Error message={(this.state.error || importError) ? (this.state.error || validationErrors) : '' } />
+
+              <div className="row">
+                <div className="col-xs-12 form-group">
+                { this.renderDropFilesArea(file) }
                 </div>
               </div>
-              <div className="modal-footer">
-                { this.renderCancelBtn() } { this.renderNextBtn(file) }
-              </div>
-            </form>
+            </div>
+            <div className="modal-footer">
+              { this.renderBackBtn() } { this.renderNextBtn(file) }
+            </div>
           </div>
         </div>
       </div>

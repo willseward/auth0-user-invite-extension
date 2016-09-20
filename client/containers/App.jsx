@@ -3,7 +3,7 @@ import { ButtonToolbar } from 'react-bootstrap';
 
 import { WidgetContainer } from './';
 import Header from '../components/Header';
-import { AddUserModal, CSVModal } from '../components/Users';
+import { NewUsersModal } from '../components/Users';
 
 class App extends Component {
 
@@ -22,12 +22,17 @@ class App extends Component {
             </ol>
             <h1 className="pull-left" style={{ paddingTop: '10px' }}>User Invitations</h1>
           </div>
+
           <div className="col-xs-6">
-            <ButtonToolbar className="pull-right">
-              <AddUserModal />
-              <CSVModal />
-            </ButtonToolbar>
+            <div className="pull-right">
+              <NewUsersModal />
+            </div>
           </div>
+        </div>
+        <div className="row">
+          <p className="col-xs-6 help-block">
+            Here you will find all the users whether they accepted their invitations or not.
+          </p>
         </div>
         <WidgetContainer />
       </div>

@@ -1,6 +1,6 @@
-import './InvitationsTable.css';
+import '../Modal.css';
 import React, { Component } from 'react';
-import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../../../Dashboard';
 
 export default class CSVInvitationsTable extends Component {
 

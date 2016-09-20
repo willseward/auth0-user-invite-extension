@@ -1,21 +1,10 @@
+import '../Modal.css';
 import React, { PropTypes, Component } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
 
-import CSVInvitationsTable from '../CSVInvitationsTable';
-
-export default connectContainer(class extends Component {
-
-  constructor() {
-    super();
-  }
-
-  static stateToProps = (state) => {
-    return {
-      csvInvitations: state.csvInvitations
-    }
-  }
+export default connectContainer(class UserAdded extends Component {
 
   static propTypes = {
     tryAgain: PropTypes.func.isRequired,
@@ -25,7 +14,7 @@ export default connectContainer(class extends Component {
     return (
       <Button
         type="button"
-        className="btn btn-default"
+        className="btn btn-transparent"
         onClick={this.props.tryAgain}>
           Add More Users
       </Button>
@@ -45,9 +34,7 @@ export default connectContainer(class extends Component {
   }
 
   render() {
-
-    const csvInvitations = this.props.csvInvitations.toJS();
-
+    
     return (
       <div>
         <div className="modal-backdrop"></div>
@@ -57,20 +44,23 @@ export default connectContainer(class extends Component {
               <Button type="button" data-dismiss="modal" className="close" onClick={this.props.tryAgain}>
                 <span aria-hidden="true">×</span><span className="sr-only">Close</span>
               </Button>
-              <h4 id="importedCSVModalLabel" className="modal-title">CSV Imported!</h4>
+              <h4 className="modal-title">User created!</h4>
             </div>
-            <form id="imported-csv-form">
-              <div className="modal-body">
-                <div className="row col-xs-12">
-                  <p className="text-center">CSV file imported! Successfully invited users will receive an email with a link to join.</p>
-                </div>
+            <div className="modal-body">
+              <div className="row col-xs-12">
+                <p className="text-center">User created successfully! an email was sent to the address to finish the process.</p>
+              </div>
 
-                <CSVInvitationsTable {...csvInvitations} />
+              <div className="row">
+                <div className="col-xs-12 form-group UserAdded-iconSection">
+                  <i className="icon-budicon-470"></i>
+                </div>
               </div>
-              <div className="modal-footer">
-                { this.renderAddMoreUsersBtn() } { this.renderDoneBtn() }
-              </div>
-            </form>
+
+            </div>
+            <div className="modal-footer">
+              { this.renderAddMoreUsersBtn() } { this.renderDoneBtn() }
+            </div>
           </div>
         </div>
       </div>
