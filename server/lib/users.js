@@ -69,12 +69,12 @@ function createUser(options, callback) {
     result = user;
     if (err) {
       logger.debug('Error creating user', err);
-      return callback({ error: err ? err : 'There was an error when creating the user.' });
+      return callback(err);
     }
     email.sendEmail(transportOptions, templateData, function (err, emailResult) {
       if (err) {
         logger.debug('Error sending email', err);
-        return callback({ error: err ? err : 'There was an error when sending the email.' });
+        return callback(err);
       }
       return callback(null, result);
     });
@@ -88,7 +88,8 @@ const updateEmailVerified = (auth0, user, callback) => {
   return auth0.users.update({ id: user.user_id }, { "email_verified": true },
     function (err, user) {
       if (err || !user) {
-        return callback({ error: err ? err : 'There was a problem when updating the user email_verified field.' });
+        logger.debug('There was a problem when updating the user email_verified field.', err);
+        return callback(err);
       }
       return callback(null, user);
     });
@@ -104,7 +105,8 @@ const validateToken = (auth0, token, callback) => {
   };
   return auth0.users.get(options, function (err, users) {
     if (err || !users || !users.length || users.length !== 1) {
-      return callback({ error: 'Token is invalid or user was not found.' });
+      logger.debug('Token is invalid or user was not found.');
+      return callback(err);
     }
     return callback(null, users[0]);
   });
@@ -116,7 +118,8 @@ const validateToken = (auth0, token, callback) => {
 function validateUserToken(options, callback) {
   validateToken(options.auth0, options.token, function (err, user) {
     if (err || !user) {
-      return callback({ error: (err.error) ? err.error : 'There was an error when validating the token.' });
+      logger.debug('There was an error when validating the token.' );
+      return callback(err);
     }
 
     if (user.email_verified) {
@@ -125,7 +128,8 @@ function validateUserToken(options, callback) {
 
     updateEmailVerified(options.auth0, user, function (err, result) {
       if (err) {
-        return callback({ error: (err.error) ? err.error : 'There was an error when updating field.' });
+        logger.debug('There was an error when updating field.'  );
+        return callback(err);
       }
       return callback(null, result);
     });
@@ -138,7 +142,8 @@ function validateUserToken(options, callback) {
 function savePassword(options, callback) {
   validateToken(options.auth0, options.token, function (err, user) {
     if (err || !user || user.user_id !== options.id) {
-      return callback({ error: (err && err.error) ? err.error : 'There was an error when saving the user.' });
+      logger.debug('There was an error when saving the user.');
+      return callback(err);
     }
 
     return options.auth0.users.update(
@@ -152,7 +157,8 @@ function savePassword(options, callback) {
         }
       }, function onUpdateUser(err, user) {
         if (err || !user) {
-          return callback({ error: (err && err.error) ? err.error : 'There was an error when saving the user.' });
+          logger.debug('There was an error when saving the user.');
+          return callback(err);
         }
         return callback();
       });

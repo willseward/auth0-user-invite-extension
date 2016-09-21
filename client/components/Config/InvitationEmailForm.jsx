@@ -80,7 +80,7 @@ class InvitationEmailForm extends Component {
           <div className="col-xs-offset-2 col-xs-9">
             <ButtonToolbar>
               <Button className="btn btn-primary" type="submit" disabled={submitting}>
-                {submitting ? <i/> : <i/>} Save
+                Save
               </Button>
             </ButtonToolbar>
           </div>

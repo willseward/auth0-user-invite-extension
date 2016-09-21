@@ -42,7 +42,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
 
     const user = {
       email: configData.user.email,
-      status: data.error.message
+      status: data.message
     };
     return state.merge({
       loading: false,

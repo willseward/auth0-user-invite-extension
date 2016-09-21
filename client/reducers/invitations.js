@@ -51,8 +51,9 @@ export const invitations = createReducer(fromJS(initialState), {
       error: null
     }),
   [constants.INVITE_USER_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.response.data.error || action.errorMessage;
+    const errorMessage = action.payload.response.data.message || action.errorMessage;
     let error;
+    debugger;
     if(errorMessage.isJoi && typeof errorMessage.details === 'object') {
       error = errorMessage.details[0].message;
     } else if(errorMessage.message) {
