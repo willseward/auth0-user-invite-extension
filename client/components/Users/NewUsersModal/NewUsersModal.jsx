@@ -40,6 +40,7 @@ export default connectContainer(class NewUsersModal extends Component {
   static propTypes = {
     clearImport: PropTypes.func.isRequired,
     clearCSVUsers: PropTypes.func.isRequired,
+    clearImportUser: PropTypes.func.isRequired,
   }
 
   componentWillMount() {
@@ -86,13 +87,17 @@ export default connectContainer(class NewUsersModal extends Component {
     });
   }
 
-  clearImportedData() {
+  clearCSVImportedData() {
     this.props.clearImport();
     this.props.clearCSVUsers();
   }
 
   tryAgain() {
-    this.clearImportedData();
+    if (this.state.path === 'CSV') {
+      this.clearCSVImportedData();
+    } else {
+      this.props.clearImportUser();
+    }
 
     this.setState({
       idx: 0,

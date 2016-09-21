@@ -13,6 +13,7 @@ export const INVITE_USER = 'INVITE_USER';
 export const INVITE_USER_PENDING = 'INVITE_USER_PENDING';
 export const INVITE_USER_REJECTED = 'INVITE_USER_REJECTED';
 export const INVITE_USER_FULFILLED = 'INVITE_USER_FULFILLED';
+export const CLEAR_IMPORT_USER = 'CLEAR_IMPORT_USER';
 
 // Invite Users (save state from CSV invited users).
 export const INVITE_USERS = 'INVITE_USERS';

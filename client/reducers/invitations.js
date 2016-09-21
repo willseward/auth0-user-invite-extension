@@ -51,12 +51,9 @@ export const invitations = createReducer(fromJS(initialState), {
       error: null
     }),
   [constants.INVITE_USER_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.response.data.message || action.errorMessage;
+    const errorMessage = action.payload.response.data || action.errorMessage;
     let error;
-    debugger;
-    if(errorMessage.isJoi && typeof errorMessage.details === 'object') {
-      error = errorMessage.details[0].message;
-    } else if(errorMessage.message) {
+    if(errorMessage.message) {
       error = errorMessage.message;
     } else {
       error = errorMessage;
@@ -70,5 +67,9 @@ export const invitations = createReducer(fromJS(initialState), {
   [constants.INVITE_USER_FULFILLED]: (state) =>
     state.merge({
       loading: false
+    }),
+  [constants.CLEAR_IMPORT_USER]: (state) =>
+    state.merge({
+      ...initialState
     })
 });

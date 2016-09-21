@@ -45,6 +45,12 @@ export function inviteUser(user) {
   };
 }
 
+export function clearImportUser() {
+  return {
+    type: constants.CLEAR_IMPORT_USER
+  }
+}
+
 /*
  * Auxiliary function to turn CSV data into an array that has the list of users
  * with respective fields (email, username, etc.)
