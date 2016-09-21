@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import Codemirror from 'react-codemirror';
+import Codemirror from '../Editor';
 require('codemirror/mode/xml/xml');
 
 export const fields = [ 'from', 'subject', 'html' ];
