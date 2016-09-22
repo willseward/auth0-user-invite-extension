@@ -119,7 +119,7 @@ export function inviteUsersPreview(file) {
 /*
  * Import a list of users to a specific connection.
  */
-export function inviteUsers(csvInvitations, connection) {
+export function inviteUsers(invitations, connection, requiresUsername) {
   if (!connection) {
     return {
       type: constants.FORM_VALIDATION_FAILED,
@@ -129,9 +129,17 @@ export function inviteUsers(csvInvitations, connection) {
     };
   }
 
+  // remove username field if not required by this connection
+  if (!requiresUsername) {
+    invitations = invitations.map(item => {
+      delete item.username;
+      return item;
+    })
+  }
+
   return (dispatch) => {
-    if (csvInvitations) {
-      csvInvitations.invitations.map((user) => {
+    if (invitations) {
+      invitations.map((user) => {
         if (user.email && user.email.length) {
           user.connection = connection;
 
@@ -156,4 +164,27 @@ export function clearCSVUsers() {
   return {
     type: constants.CLEAR_CSV_USERS
   };
+}
+
+export function validateCSVFields(invitations, connection, requiresUsername) {
+  // confirm that all users have username field, else FORM_VALIDATION_FAILED
+  debugger;
+  if (requiresUsername) {
+    let propertyUsernameNotFound = _.find(invitations, item => {
+      return !item.hasOwnProperty('username') || item['username'] === '';
+    });
+    if (propertyUsernameNotFound) {
+      return {
+        type: constants.FORM_VALIDATION_FAILED,
+        payload: {
+          error: 'There is an error in your CSV because this connection requires username field. Select another connection or check if every row has a username and resend the file.'
+        }
+      };
+    }
+  } else {
+    // clear validationErrors
+    return {
+      type: constants.CLEAR_FORM_VALIDATION_ERROR
+    }
+  }
 }

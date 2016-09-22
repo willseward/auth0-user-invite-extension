@@ -84,7 +84,7 @@ export default connectContainer(class ImportedCSVModal extends Component {
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
-                    <CSVInvitationsTable {...csvInvitations} />
+                    <CSVInvitationsTable {...csvInvitations} fields={['email', 'status']} />
                   </div>
                 </div>
 

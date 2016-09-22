@@ -14,6 +14,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
 
     this.state = {
       selectedConnection: '',
+      requiresUsername: false,
       error: ''
     };
 
@@ -29,9 +30,16 @@ export default connectContainer(class PreviewCSVModal extends Component {
         if (connection && connection.connection &&
         connection.connection.length) {
           this.setState({
-            selectedConnection: connection.connection[0]
-          })
+            selectedConnection: connection.connection[0].name,
+            requiresUsername: connection.connection[0].requires_username
+          });
         }
+    }
+
+    const { invitations } = nextProps.csvInvitations.toJS();
+    if (this.state.selectedConnection !== '' && invitations.length) {
+      debugger;
+      this.props.validateCSVFields(invitations, this.state.selectedConnection, this.state.requiresUsername);
     }
 
     if (this.state.error !== '') {
@@ -56,15 +64,27 @@ export default connectContainer(class PreviewCSVModal extends Component {
 
   static propTypes = {
     inviteUsers: PropTypes.func.isRequired,
+    validateCSVFields: PropTypes.func.isRequired,
     nextView: PropTypes.func.isRequired,
     goBackView: PropTypes.func.isRequired,
     tryAgain: PropTypes.func.isRequired,
   }
 
   changeConnection(ev) {
+
+    const connectionName = ev.target.value;
+    const { connection } = this.props.connection.toJS();
+    const selectedConn = connection.find((conn) => conn.name === connectionName);
+
     this.setState({
-      selectedConnection: ev.target.value
+      selectedConnection: connectionName,
+      requiresUsername: selectedConn ? selectedConn.requires_username : false
+    }, function() {
+      debugger;
+      const { invitations } = this.props.csvInvitations.toJS();
+      this.props.validateCSVFields(invitations, this.state.selectedConnection, this.state.requiresUsername);
     });
+
   }
 
   onSubmit(csvInvitations) {
@@ -75,7 +95,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
       });
     }
 
-    this.props.inviteUsers(csvInvitations, this.state.selectedConnection);
+    this.props.inviteUsers(csvInvitations.invitations, this.state.selectedConnection, this.state.requiresUsername);
 
     // go to the next view
     this.props.nextView();
@@ -87,8 +107,13 @@ export default connectContainer(class PreviewCSVModal extends Component {
   }
 
   renderPreview(csvInvitations) {
+    let fields = ['email', 'status'];
+    if (this.state.requiresUsername) {
+      fields.unshift('username');
+    }
+
     return (
-      <CSVInvitationsTable {...csvInvitations} />
+      <CSVInvitationsTable {...csvInvitations} fields={fields}/>
     )
   }
 
@@ -119,7 +144,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
 
     const { error, connection, loading } = this.props.connection.toJS();
     const importReducer = this.props.importReducer.toJS();
-    const [ file ] = [ importReducer.file ];
+    const [ file ] = [ importReducer.file];
 
     const csvInvitations = this.props.csvInvitations.toJS();
 
@@ -128,7 +153,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
     }
 
     let connectionOptions = connection.map((item) => {
-      return <option key={item}>{item}</option>
+      return <option key={item.name}>{item.name}</option>
     });
 
     return (
@@ -146,7 +171,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
               <div className="modal-body">
 
                 <p className="text-center">Import a CSV file with all the data of your users.</p>
-                <Error message={this.state.error ? this.state.error : '' } />
+                <Error message={(this.state.error || csvInvitations.validationErrors) ? (this.state.error || csvInvitations.validationErrors) : '' } />
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
@@ -158,7 +183,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
 
                       <select className="form-control"
                         name="connection"
-                        value={this.state.selectedConnection}
+                        value={this.state.selectedConnection.name}
                         onChange={this.changeConnection}>
                         { connectionOptions }
                       </select>

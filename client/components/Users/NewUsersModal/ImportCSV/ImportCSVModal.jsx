@@ -20,7 +20,6 @@ export default connectContainer(class ImportCSVModal extends Component {
 
   static stateToProps = (state) => {
     return {
-      connection: state.connection,
       importReducer: state.importReducer,
       csvInvitations: state.csvInvitations
     }
@@ -114,11 +113,10 @@ export default connectContainer(class ImportCSVModal extends Component {
   render() {
 
     const importReducer = this.props.importReducer.toJS();
-    const [ importError, file, importLoading, validationErrors] = [
+    const [ importError, file, importLoading] = [
       importReducer.error,
       importReducer.file,
-      importReducer.loading,
-      importReducer.validationErrors
+      importReducer.loading
     ];
 
     return (
@@ -135,7 +133,7 @@ export default connectContainer(class ImportCSVModal extends Component {
             <div className="modal-body">
 
               <p className="text-center">Import a CSV file with all the data of your users.</p>
-              <Error message={(this.state.error || importError) ? (this.state.error || validationErrors) : '' } />
+              <Error message={(this.state.error || importError) ? (this.state.error || importError) : '' } />
 
               <div className="row">
                 <div className="col-xs-12 form-group">

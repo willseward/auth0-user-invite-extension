@@ -70,8 +70,12 @@ export const csvInvitations = createReducer(fromJS(initialState), {
   [constants.FORM_VALIDATION_FAILED]: (state, action) =>
     state.merge({
       loading: false,
-      validationErrors: action.payload.error,
-      error: 'Validation error'
+      validationErrors: action.payload.error
+    }),
+  [constants.CLEAR_FORM_VALIDATION_ERROR]: (state, action) =>
+    state.merge({
+      loading: false,
+      validationErrors: ''
     }),
   [constants.CLEAR_CSV_USERS]: (state) =>
     state.merge({
