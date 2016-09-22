@@ -82,7 +82,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
   }
 
   goBack() {
-    this.props.clearImportedData(); //clears imported csv data
+    this.props.clearCSVImportedData(); //clears imported csv data
     this.props.goBackView();
   }
 
@@ -93,7 +93,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
   }
 
 
-  renderBackBtn(file) {
+  renderBackBtn() {
     return (
       <Button
         type="button"

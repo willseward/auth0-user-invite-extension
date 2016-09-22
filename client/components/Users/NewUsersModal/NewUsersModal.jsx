@@ -145,7 +145,7 @@ export default connectContainer(class NewUsersModal extends Component {
           nextView={this.nextView.bind(this)}
           goBackView={this.goBackView.bind(this)}
           tryAgain={this.tryAgain.bind(this)}
-          clearImportedData={this.clearImportedData.bind(this)}/>
+          clearCSVImportedData={this.clearCSVImportedData.bind(this)}/>
       );
     }
     else if (view === 'IMPORTED') {
