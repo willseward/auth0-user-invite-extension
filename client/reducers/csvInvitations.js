@@ -6,7 +6,9 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   validationErrors: '',
-  invitations: [ ]
+  invitations: [ ],
+  current: 0,
+  failed: 0
 };
 
 /*
@@ -46,7 +48,9 @@ export const csvInvitations = createReducer(fromJS(initialState), {
     };
     return state.merge({
       loading: false,
-      invitations: updateInvitations(state, user)
+      invitations: updateInvitations(state, user),
+      current: state.get('current') + 1,
+      failed: state.get('failed') + 1
     });
   },
   [constants.INVITE_USERS_FULFILLED]: (state, action) => {
@@ -59,7 +63,8 @@ export const csvInvitations = createReducer(fromJS(initialState), {
 
     return state.merge({
       loading: false,
-      invitations: updateInvitations(state, user)
+      invitations: updateInvitations(state, user),
+      current: state.get('current') + 1,
     });
   },
   [constants.FORM_VALIDATION_FAILED]: (state, action) =>

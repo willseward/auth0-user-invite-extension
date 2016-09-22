@@ -1,6 +1,6 @@
 import '../Modal.css';
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, ProgressBar } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
 
@@ -49,6 +49,12 @@ export default connectContainer(class ImportedCSVModal extends Component {
 
     const csvInvitations = this.props.csvInvitations.toJS();
 
+    let percentage = 0;
+    const invitationsLength = csvInvitations.invitations.length;
+    if (invitationsLength) {
+     percentage = Math.round((csvInvitations.current / invitationsLength) * 100);
+    }
+
     return (
       <div>
         <div className="modal-backdrop"></div>
@@ -63,18 +69,22 @@ export default connectContainer(class ImportedCSVModal extends Component {
             <form id="imported-csv-form">
               <div className="modal-body">
                 <div className="row col-xs-12">
-                  <p className="text-center">CSV file imported! Successfully invited users will receive an email with a link to join.</p>
+                  <p className="text-center">CSV file imported. Successfully invited users will receive an email with a link to join.</p>
+                  <p className="text-center">{csvInvitations.current === invitationsLength ? `There were ${csvInvitations.current - csvInvitations.failed} successfully imported users and ${csvInvitations.failed} that failed.` : '' }</p>
+                </div>
+
+                <div className="row">
+                  <div className="col-xs-12 form-group">
+                    <ProgressBar
+                    active={percentage !== 100}
+                    now={percentage}
+                    label={`${csvInvitations.current} of ${invitationsLength}`} />
+                  </div>
                 </div>
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
                     <CSVInvitationsTable {...csvInvitations} />
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col-xs-12 form-group UserAdded-iconSection">
-                    <i className="icon-budicon-470"></i>
                   </div>
                 </div>
 
