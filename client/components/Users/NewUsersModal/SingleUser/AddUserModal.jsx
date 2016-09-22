@@ -36,11 +36,21 @@ export default connectContainer(class AddUserModal extends Component {
   }
 
   handleSubmit(data) {
+    let connection;
+    if (data.selectedConnection && typeof data.selectedConnection === 'string') {
+      connection = JSON.parse(data.selectedConnection);
+    }
 
-    this.props.inviteUser({
+    let user = {
       email: data.email,
-      connection: data.selectedConnection
-    });
+      connection: connection && connection.name ? connection.name : null
+    }
+    
+    if (connection && connection.requires_username) {
+      user.username = data.username;
+    }
+
+    this.props.inviteUser(user);
 
     this.setState({
       formSubmitted: true
@@ -62,7 +72,6 @@ export default connectContainer(class AddUserModal extends Component {
   }
 
   render() {
-
     const invitations = this.props.invitations.toJS();
 
     return (

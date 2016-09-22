@@ -54,6 +54,12 @@ function createUser(options, callback) {
       }
     }
   };
+
+  //optional value that depends on connection
+  if (options.username) {
+    auth0Options.username = options.username;
+  }
+
   let changePasswordURL = getChangePassURL(config('NODE_ENV'), options.host, token);
   let transportOptions = {
     to: auth0Options.email

@@ -168,8 +168,6 @@ export default connectContainer(class NewUsersModal extends Component {
   }
 
   render() {
-
-    console.log('statusView', this.state.statusView)
     return (
       <div className="modal-container">
         {this.renderModalOpenBtn()}

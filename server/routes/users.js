@@ -20,6 +20,7 @@ function createUserHandler(req, res, next) {
     auth0: req.auth0,
     connection: req.body.user.connection,
     email: req.body.user.email,
+    username: req.body.user.username,
     host: req.get('host')
   };
   users.createUser(options, function onCreateUser(err, result) {

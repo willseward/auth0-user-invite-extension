@@ -4,16 +4,27 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import { Error, Info, Success } from '../../../Messages';
 
-export const fields = [ 'email', 'selectedConnection' ];
+export const fields = [ 'username', 'email', 'selectedConnection' ];
 
 const validate = values => {
   const errors = {}
-  if (!values.email) {
-    errors.email = 'Required';
-  }
 
   if (!values.selectedConnection) {
     errors.selectedConnection = 'Required';
+  }
+
+  var connection = values.selectedConnection ? JSON.parse(values.selectedConnection) : null;
+
+  if (!connection || !connection.name) {
+    errors.selectedConnection = 'Required';
+  }
+
+  if (!values.username && connection && connection.requires_username) {
+    errors.username = 'Required'; //may be required or not, depending on the connection
+  }
+
+  if (!values.email) {
+    errors.email = 'Required';
   }
 
   return errors;
@@ -23,7 +34,7 @@ class AddUserForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.shouldResetForm) {
-      this.props.resetForm(); //reset email property
+      this.props.resetForm(); //reset email and username properties
       this.props.handleResetForm();
     }
     if (nextProps.formSubmitted && !nextProps.invitations.loading
@@ -33,7 +44,6 @@ class AddUserForm extends Component {
   }
 
   renderNextBtn() {
-
     return (
       <Button
         type="button"
@@ -54,9 +64,32 @@ class AddUserForm extends Component {
     );
   }
 
+  renderUsername(connections, connectionField, usernameField) {
+    if (!connectionField || !connectionField.value) {
+      return null;
+    }
+
+    let selectedConnection = JSON.parse(connectionField.value);
+    if (!selectedConnection || !selectedConnection.requires_username) {
+      return null;
+    }
+
+    return (
+      <div className="form-group">
+        <label className="control-label col-xs-2">Username</label>
+        <div className="col-xs-7">
+          <input className="form-control" type="text" {...usernameField} />
+        </div>
+        <div className="col-xs-3">
+          {usernameField.touched && usernameField.error && <div>{usernameField.error}</div>}
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const {
-      fields: { email, selectedConnection },
+      fields: { username, email, selectedConnection },
       handleSubmit,
       handleResetForm,
       submitting,
@@ -83,6 +116,8 @@ class AddUserForm extends Component {
             <Success message={(formSubmitted && !invitations.loading
             && !invitations.error) ? 'User Added.' : ''}/>
 
+            { this.renderUsername(connection, selectedConnection, username) }
+
             <div className="form-group">
               <label className="control-label col-xs-2">Email</label>
               <div className="col-xs-7">
@@ -99,7 +134,7 @@ class AddUserForm extends Component {
               <label className="control-label col-xs-2">Connection</label>
               <div className="col-xs-7">
                 <select className="form-control" {...selectedConnection}>
-                  {connection ? connection.map(connectionOption => <option value={connectionOption} key={connectionOption}>{connectionOption}</option>) : ''}
+                  {connection ? connection.map(connectionOption => <option value={JSON.stringify(connectionOption)} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
                 </select>
               </div>
               <div className="col-xs-3">
@@ -137,7 +172,7 @@ function mapStateToProps(state) {
   return {
     connection: connection,
     initialValues: {
-      selectedConnection: (connection && connection.length) ? connection[0] : ''
+      selectedConnection: JSON.stringify((connection && connection.length) ? connection[0] : '')
     }
   }
 }

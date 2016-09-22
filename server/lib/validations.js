@@ -4,7 +4,7 @@ import users from './users';
 
 const inviteUserSchema = Joi.object().keys({
   email: Joi.string().email().required(),
-  // username: Joi.string()
+  username: Joi.string().allow('').optional()
 });
 
 const inviteUsersSchema = Joi.object().keys({
@@ -46,10 +46,9 @@ function validateInviteUser(req, res, next) {
   if (!req.is('application/json')) {
     return res.status(500).send({ error: 'Missing JSON information about user.' });
   }
-
   var payload = {
     email: req.body.user.email,
-    // username: req.body.user.username
+    username: req.body.user.username
   }
 
   Joi.validate(payload, inviteUserSchema, (err, value) => {
