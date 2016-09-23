@@ -168,7 +168,6 @@ export function clearCSVUsers() {
 
 export function validateCSVFields(invitations, connection, requiresUsername) {
   // confirm that all users have username field, else FORM_VALIDATION_FAILED
-  debugger;
   if (requiresUsername) {
     let propertyUsernameNotFound = _.find(invitations, item => {
       return !item.hasOwnProperty('username') || item['username'] === '';

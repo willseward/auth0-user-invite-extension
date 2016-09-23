@@ -7,11 +7,7 @@ import connectContainer from 'redux-static';
 import CSVInvitationsTable from './CSVInvitationsTable';
 
 export default connectContainer(class ImportedCSVModal extends Component {
-
-  constructor() {
-    super();
-  }
-
+  
   static stateToProps = (state) => {
     return {
       csvInvitations: state.csvInvitations

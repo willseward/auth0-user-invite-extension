@@ -11,10 +11,6 @@ export default connectContainer(class ImportCSVModal extends Component {
   constructor() {
     super();
 
-    this.state = {
-      error: ''
-    }
-
     this.onDrop = this.onDrop.bind(this);
   }
 
@@ -37,12 +33,13 @@ export default connectContainer(class ImportCSVModal extends Component {
     tryAgain: PropTypes.func.isRequired,
   }
 
-  componentWillReceiveProps() {
-    // means that file was received
-    if (this.state.error !== '') {
-      this.setState({
-        error: ''
-      });
+  componentWillReceiveProps(nextProps) {
+    // means that a file was uploaded
+
+    let { file, validationErrors } = nextProps.importReducer.toJS();
+    if (file && !validationErrors.length) {
+      this.props.inviteUsersPreview(file);
+      this.props.nextView();
     }
   }
 
@@ -50,30 +47,8 @@ export default connectContainer(class ImportCSVModal extends Component {
     this.props.handleFileDrop(newFile);
   }
 
-  renderDropFilesArea(file) {
-    if (!file) {
-      return (<ImportDropFiles onDrop={this.onDrop} />);
-    }
-    else {
-      return (
-        <div>
-          <p className="alert alert-info">
-            File '{file.name}' added. Click 'Next' to preview users and select connection.
-          </p>
-        </div>
-      );
-    }
-  }
-
-  onSubmit(file) {
-    if (!file) {
-      return this.setState({
-        error: 'File not uploaded.'
-      });
-    }
-
-    this.props.inviteUsersPreview(file);
-    this.props.nextView();
+  renderDropFilesArea() {
+    return (<ImportDropFiles onDrop={this.onDrop} />);
   }
 
   renderCancelBtn(file) {
@@ -88,12 +63,12 @@ export default connectContainer(class ImportCSVModal extends Component {
     );
   }
 
-  renderNextBtn(file) {
+  renderNextBtn(file, validationErrors) {
     return (
       <Button
         type="button"
         className="btn btn-primary"
-        onClick={this.onSubmit.bind(this, file)}>
+        disabled={validationErrors.length ? true : false} >
           Next
       </Button>
     );
@@ -112,12 +87,7 @@ export default connectContainer(class ImportCSVModal extends Component {
 
   render() {
 
-    const importReducer = this.props.importReducer.toJS();
-    const [ importError, file, importLoading] = [
-      importReducer.error,
-      importReducer.file,
-      importReducer.loading
-    ];
+    const { file, validationErrors } = this.props.importReducer.toJS();
 
     return (
       <div>
@@ -133,16 +103,16 @@ export default connectContainer(class ImportCSVModal extends Component {
             <div className="modal-body">
 
               <p className="text-center">Import a CSV file with all the data of your users.</p>
-              <Error message={(this.state.error || importError) ? (this.state.error || importError) : '' } />
+              <Error message={validationErrors.length ? validationErrors : '' } />
 
               <div className="row">
                 <div className="col-xs-12 form-group">
-                { this.renderDropFilesArea(file) }
+                { this.renderDropFilesArea() }
                 </div>
               </div>
             </div>
             <div className="modal-footer">
-              { this.renderBackBtn() } { this.renderNextBtn(file) }
+              { this.renderBackBtn() } { this.renderNextBtn(file,  validationErrors) }
             </div>
           </div>
         </div>

@@ -38,7 +38,6 @@ export default connectContainer(class PreviewCSVModal extends Component {
 
     const { invitations } = nextProps.csvInvitations.toJS();
     if (this.state.selectedConnection !== '' && invitations.length) {
-      debugger;
       this.props.validateCSVFields(invitations, this.state.selectedConnection, this.state.requiresUsername);
     }
 
@@ -80,7 +79,6 @@ export default connectContainer(class PreviewCSVModal extends Component {
       selectedConnection: connectionName,
       requiresUsername: selectedConn ? selectedConn.requires_username : false
     }, function() {
-      debugger;
       const { invitations } = this.props.csvInvitations.toJS();
       this.props.validateCSVFields(invitations, this.state.selectedConnection, this.state.requiresUsername);
     });

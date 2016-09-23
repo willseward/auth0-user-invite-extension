@@ -5,8 +5,7 @@ import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } f
 export default class CSVInvitationsTable extends Component {
 
   static propTypes = {
-    invitations: React.PropTypes.array,
-    validationErrors: React.PropTypes.string
+    invitations: React.PropTypes.array
   };
 
   capitalizeItem(str) {
@@ -30,9 +29,9 @@ export default class CSVInvitationsTable extends Component {
   }
 
   render() {
-    const { validationErrors, invitations } = this.props;
+    const { invitations } = this.props;
 
-    if (!invitations || !invitations.length || validationErrors) {
+    if (!invitations || !invitations.length) {
       return (<div>Please summit a valid CSV file with the list of users.</div>);
     }
 
