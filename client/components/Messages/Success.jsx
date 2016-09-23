@@ -10,7 +10,8 @@ class Success extends Component {
 
     return (
       <Alert bsStyle="success">
-        <strong>Success: </strong> {this.props.message}
+        <h4>Well done!</h4>
+        <p>{this.props.message}</p>
       </Alert>
    );
   }

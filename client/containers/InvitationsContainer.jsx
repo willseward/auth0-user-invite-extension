@@ -4,8 +4,9 @@ import { Button } from 'react-bootstrap';
 
 import { invitationsActions } from '../actions';
 
-import { Error, LoadingPanel } from '../components/Dashboard';
+import { LoadingPanel } from '../components/Dashboard';
 import { InvitationsTable } from '../components/Users';
+import { Error } from '../components/Messages';
 
 export default connectContainer(class InvitationsContainer extends Component {
 
