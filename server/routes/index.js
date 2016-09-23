@@ -12,7 +12,7 @@ import users from '../lib/users';
 import validations from '../lib/validations';
 
 import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
-import { readStorage, writeTemplateConfig } from '../lib/storage';
+import { readStorage, writeTemplateConfig, readConfigStatus } from '../lib/storage';
 
 import connectionsHandlers from './connections';
 import userHandlers from './users';
@@ -65,6 +65,14 @@ export default (storageContext) => {
         res.sendStatus(200);
       });
     });
+
+  routes.get('/api/config/status',
+    requireUser,
+    (req, res) => {
+      readConfigStatus(storageContext).then((status) => {
+        res.json(status);
+      });
+  });
 
   routes.use('/api/connections',
     requireUser,

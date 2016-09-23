@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { Configuration } from '../components/Config';
+import { WarningsContainer } from './';
 
 class ConfigurationContainer extends Component {
 
@@ -20,6 +21,7 @@ class ConfigurationContainer extends Component {
             <h1 className="pull-left" style={{ paddingTop: '10px' }}>Configuration</h1>
           </div>
         </div>
+        <WarningsContainer />
         <Configuration />
       </div>
     );

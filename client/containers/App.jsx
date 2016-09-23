@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ButtonToolbar } from 'react-bootstrap';
 
-import { WidgetContainer } from './';
+import { WidgetContainer, WarningsContainer } from './';
 import Header from '../components/Header';
 import { NewUsersModal } from '../components/Users';
 
@@ -34,6 +34,7 @@ class App extends Component {
             Here you will find all the users whether they accepted their invitations or not.
           </p>
         </div>
+        <WarningsContainer />
         <WidgetContainer />
       </div>
     );

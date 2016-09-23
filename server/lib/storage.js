@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 
-import logger from '../lib/logger';
+import logger from './logger';
+import validations from './validations';
 
 const defaultStorage = {
   templateConfig: {
@@ -60,4 +61,24 @@ export const writeTemplateConfig = (storageContext, templateConfig) => {
     return data;
   })
   .then(data => writeStorage(storageContext, data));
+}
+
+export const readConfigStatus = (storageContext) => {
+  return readStorage(storageContext).then(data => {
+
+    return new Promise((resolve, reject) => {
+      validations.validateTemplateConfigSchema(data.templateConfig, (err, result) => {
+        if (err) {
+          return reject();
+        }
+        return resolve();
+      });
+    });
+  })
+  .then(() => {
+    return { hasData: true };
+  })
+  .catch(() => {
+    return { hasData: false };
+  });
 }

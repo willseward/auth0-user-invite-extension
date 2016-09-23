@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import connectContainer from 'redux-static';
 
 import { connectionActions } from '../actions';
-
 import { InvitationsContainer } from './';
 
 export default connectContainer(class WidgetContainer extends Component {
@@ -12,11 +11,6 @@ export default connectContainer(class WidgetContainer extends Component {
 
     this.state = {
       currentTab: 'pending'
-    }
-  }
-
-  static stateToProps = (state) => {
-    return {
     }
   }
 
@@ -40,7 +34,6 @@ export default connectContainer(class WidgetContainer extends Component {
   }
 
   render() {
-
     return (
       <div>
         <div className="widget-title title-with-nav-bars">

@@ -25,7 +25,7 @@ const getSavePasswordSchema = Joi.object().keys({
   token: Joi.string().required()
 });
 
-const writeTemplateConfigSchema = Joi.object().keys({
+const templateConfigSchema = Joi.object().keys({
   from: Joi.string().email().required(),
   subject: Joi.string().required(),
   html: Joi.string().required()
@@ -95,7 +95,7 @@ function validateSavePassword(req, res, next) {
 
 function validateWriteTemplateConfig(req, res, next) {
 
-  Joi.validate(req.body, writeTemplateConfigSchema, (err, value) => {
+  Joi.validate(req.body, templateConfigSchema, (err, value) => {
     if (err) {
       return res.status(500).send({ error: 'Missing information (from, subject or message).' });
     }
@@ -103,6 +103,7 @@ function validateWriteTemplateConfig(req, res, next) {
     next();
   });
 }
+
 function validateWriteSMTPConfig(req, res, next) {
 
   Joi.validate(req.body, writeSMTPConfigSchema, (err, value) => {
@@ -114,11 +115,18 @@ function validateWriteSMTPConfig(req, res, next) {
   });
 }
 
+function validateTemplateConfigSchema(configData, callback) {
+  Joi.validate(configData, templateConfigSchema, (err, value) => {
+    callback(err, value);
+  });
+}
+
 module.exports = {
   validateInviteUser,
   validateInvitations,
   validateUserToken,
   validateSavePassword,
   validateWriteTemplateConfig,
-  validateWriteSMTPConfig
+  validateWriteSMTPConfig,
+  validateTemplateConfigSchema
 };
