@@ -178,8 +178,8 @@ export default connectContainer(class PreviewCSVModal extends Component {
                   { this.renderPreview(csvInvitations) }
                   </div>
                   <div className="col-xs-12 form-group">
-                    <label htmlFor="connection" className="control-label col-xs-3">Connection</label>
-                    <div className="col-xs-9">
+                    <label htmlFor="connection" className="control-label col-xs-2">Connection</label>
+                    <div className="col-xs-10">
 
                       <select className="form-control"
                         name="connection"

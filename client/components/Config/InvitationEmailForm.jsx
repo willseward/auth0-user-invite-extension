@@ -41,43 +41,37 @@ class InvitationEmailForm extends Component {
 
         <div className="form-group">
           <label className="control-label col-xs-2">From</label>
-          <div className="col-xs-7">
+          <div className="col-xs-10">
             <input className="form-control" type="email"
             placeholder="Your email"
             {...from}
             />
-          </div>
-          <div className="col-xs-3">
             {from.touched && from.error && <div>{from.error}</div>}
           </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Subject</label>
-          <div className="col-xs-7">
+          <div className="col-xs-10">
             <input className="form-control" type="text"
             placeholder="Subject"
             {...subject}
             />
-          </div>
-          <div className="col-xs-3">
             {subject.touched && subject.error && <div>{subject.error}</div>}
           </div>
         </div>
 
         <div className="form-group">
           <label className="control-label col-xs-2">Current Message</label>
-          <div className="col-xs-7">
+          <div className="col-xs-10">
             <Codemirror {...html}
             options={messageOptions} />
-          </div>
-          <div className="col-xs-3">
             {html.touched && html.error && <div>{html.error}</div>}
           </div>
         </div>
 
         <div className="form-group">
-          <div className="col-xs-offset-2 col-xs-9">
+          <div className="col-xs-offset-2 col-xs-10">
             <ButtonToolbar>
               <Button className="btn btn-primary" type="submit" disabled={submitting}>
                 Save

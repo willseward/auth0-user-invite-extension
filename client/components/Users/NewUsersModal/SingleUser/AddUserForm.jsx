@@ -77,10 +77,8 @@ class AddUserForm extends Component {
     return (
       <div className="form-group">
         <label className="control-label col-xs-2">Username</label>
-        <div className="col-xs-7">
+        <div className="col-xs-10">
           <input className="form-control" type="text" {...usernameField} />
-        </div>
-        <div className="col-xs-3">
           {usernameField.touched && usernameField.error && <div>{usernameField.error}</div>}
         </div>
       </div>
@@ -120,27 +118,24 @@ class AddUserForm extends Component {
 
             <div className="form-group">
               <label className="control-label col-xs-2">Email</label>
-              <div className="col-xs-7">
+              <div className="col-xs-10">
                 <input className="form-control" type="email"
                 {...email}
                 />
-              </div>
-              <div className="col-xs-3">
                 {email.touched && email.error && <div>{email.error}</div>}
               </div>
             </div>
 
             <div className="form-group">
               <label className="control-label col-xs-2">Connection</label>
-              <div className="col-xs-7">
+              <div className="col-xs-10">
                 <select className="form-control" {...selectedConnection}>
                   {connection ? connection.map(connectionOption => <option value={JSON.stringify(connectionOption)} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
                 </select>
-              </div>
-              <div className="col-xs-3">
+
                 {selectedConnection.touched && selectedConnection.error && <div>{selectedConnection.error}</div>}
+                <p className="help-block">This is a logical identifier of the connection.</p>
               </div>
-              <p className="help-block">This is a logical identifier of the connection.</p>
             </div>
 
           </div>
