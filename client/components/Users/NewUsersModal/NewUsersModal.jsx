@@ -95,8 +95,6 @@ export default connectContainer(class NewUsersModal extends Component {
   tryAgain() {
     if (this.state.path === 'CSV') {
       this.clearCSVImportedData();
-    } else {
-      this.props.clearImportUser();
     }
 
     this.setState({

@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import { Error, Info, Success } from '../../../Messages';
+import { Error } from '../../../Messages';
 
-export const fields = [ 'username', 'email', 'selectedConnection' ];
+export const fields = [ 'username', 'email', 'selectedConnection', 'connection' ];
 
 const validate = values => {
   const errors = {}
@@ -13,7 +13,7 @@ const validate = values => {
     errors.selectedConnection = 'Required';
   }
 
-  var connection = values.selectedConnection ? JSON.parse(values.selectedConnection) : null;
+  var connection = _.find(values.connection, (item) => item.name === values.selectedConnection);
 
   if (!connection || !connection.name) {
     errors.selectedConnection = 'Required';
@@ -33,12 +33,9 @@ const validate = values => {
 class AddUserForm extends Component {
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.shouldResetForm) {
-      this.props.resetForm(); //reset email and username properties
-      this.props.handleResetForm();
-    }
-    if (nextProps.formSubmitted && !nextProps.invitations.loading
+    if (nextProps.formSubmitted && !nextProps.invitations.loadingUser
       && !nextProps.invitations.error) {
+      this.props.resetForm(); //reset email and username properties
       this.props.nextView();
     }
   }
@@ -47,7 +44,7 @@ class AddUserForm extends Component {
     return (
       <Button
         type="button"
-        className="btn btn-primary" type="submit" disabled={this.props.submitting}>
+        className="btn btn-primary" type="submit">
           Create
       </Button>
     );
@@ -64,12 +61,12 @@ class AddUserForm extends Component {
     );
   }
 
-  renderUsername(connections, connectionField, usernameField) {
+  renderUsername(connection, connectionField, usernameField) {
     if (!connectionField || !connectionField.value) {
       return null;
     }
 
-    let selectedConnection = JSON.parse(connectionField.value);
+    let selectedConnection = _.find(connection, (item) => item.name === connectionField.value);
     if (!selectedConnection || !selectedConnection.requires_username) {
       return null;
     }
@@ -85,22 +82,23 @@ class AddUserForm extends Component {
     );
   }
 
+  clearAllFields() {
+    this.props.resetForm();
+    this.props.clearAllFields();
+  }
+
   render() {
     const {
       fields: { username, email, selectedConnection },
       handleSubmit,
-      handleResetForm,
-      submitting,
       connection,
-      formSubmitted,
-      shouldResetForm,
       invitations
     } = this.props;
 
     return (
       <div className="modal-content">
         <div className="modal-header has-border">
-          <Button type="button" data-dismiss="modal" className="close" onClick={this.clearAllFields}>
+          <Button type="button" data-dismiss="modal" className="close" onClick={this.clearAllFields.bind(this)}>
             <span aria-hidden="true">×</span><span className="sr-only">Close</span>
           </Button>
           <h4 id="myModalLabel" className="modal-title">Create User</h4>
@@ -111,8 +109,6 @@ class AddUserForm extends Component {
 
             <p className="text-center">Create an user with connection, email and username if needed.</p>
             <Error message={invitations.error ? invitations.error : ''}/>
-            <Success message={(formSubmitted && !invitations.loading
-            && !invitations.error) ? 'User Added.' : ''}/>
 
             { this.renderUsername(connection, selectedConnection, username) }
 
@@ -130,7 +126,7 @@ class AddUserForm extends Component {
               <label className="control-label col-xs-2">Connection</label>
               <div className="col-xs-10">
                 <select className="form-control" {...selectedConnection}>
-                  {connection ? connection.map(connectionOption => <option value={JSON.stringify(connectionOption)} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
+                  {connection ? connection.map(connectionOption => <option value={connectionOption.name} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
                 </select>
 
                 {selectedConnection.touched && selectedConnection.error && <div>{selectedConnection.error}</div>}
@@ -153,12 +149,10 @@ class AddUserForm extends Component {
 AddUserForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  handleResetForm: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
   formSubmitted: PropTypes.bool.isRequired,
-  shouldResetForm: PropTypes.bool.isRequired,
   nextView: PropTypes.func.isRequired,
-  goBackView: PropTypes.func.isRequired
+  goBackView: PropTypes.func.isRequired,
+  clearAllFields: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
@@ -167,7 +161,8 @@ function mapStateToProps(state) {
   return {
     connection: connection,
     initialValues: {
-      selectedConnection: JSON.stringify((connection && connection.length) ? connection[0] : '')
+      selectedConnection: (connection && connection.length) ? connection[0].name : '',
+      connection: connection // NOTE: we pass the connection here to be able to do the initial validation (see 'validate' function)
     }
   }
 }

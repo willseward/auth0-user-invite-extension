@@ -10,7 +10,6 @@ function getConnectionsHandler(req, res, next) {
     auth0: req.auth0
   };
   connections.getConnections(options, function onGetConnections(err, result) {
-    // TODO verify
     if (err) {
       return (err.error && err.error.statusCode) ? res.status(err.error.statusCode).send(err) : res.status(500).send(err);
     }

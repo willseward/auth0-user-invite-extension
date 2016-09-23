@@ -12,11 +12,8 @@ export default connectContainer(class AddUserModal extends Component {
     super();
 
     this.state = {
-      formSubmitted: false,
-      shouldResetForm: false
+      formSubmitted: false
     };
-
-    this.clearAllFields = this.clearAllFields.bind(this);
   }
 
   static stateToProps = (state) => {
@@ -36,16 +33,13 @@ export default connectContainer(class AddUserModal extends Component {
   }
 
   handleSubmit(data) {
-    let connection;
-    if (data.selectedConnection && typeof data.selectedConnection === 'string') {
-      connection = JSON.parse(data.selectedConnection);
-    }
+    let connection = _.find(data.connection, (item) => item.name === data.selectedConnection);
 
     let user = {
       email: data.email,
       connection: connection && connection.name ? connection.name : null
     }
-    
+
     if (connection && connection.requires_username) {
       user.username = data.username;
     }
@@ -58,17 +52,11 @@ export default connectContainer(class AddUserModal extends Component {
   }
 
   clearAllFields() {
-    // reset values
-    this.setState({
-      formSubmitted: false,
-      shouldResetForm: true
-    });
-  }
-
-  handleResetForm() {
-    this.setState({
-      shouldResetForm: false
-    });
+    if (this.state.formSubmitted) {
+      this.setState({
+        formSubmitted: false
+      });
+    }
   }
 
   render() {
@@ -80,13 +68,11 @@ export default connectContainer(class AddUserModal extends Component {
         <div className="modal-dialog">
           <AddUserForm
           onSubmit={this.handleSubmit.bind(this)}
-          submitting={true}
           formSubmitted={this.state.formSubmitted}
-          shouldResetForm={this.state.shouldResetForm}
-          handleResetForm={this.handleResetForm.bind(this)}
           invitations={invitations}
           goBackView={this.props.goBackView}
-          nextView={this.props.nextView} />
+          nextView={this.props.nextView}
+          clearAllFields={this.clearAllFields.bind(this)} />
         </div>
       </div>
     );

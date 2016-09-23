@@ -40,6 +40,7 @@ export default connectContainer(class NewUsers extends Component {
       <Button
         type="button"
         className="btn btn-primary"
+        disabled={this.props.path ? false : true}
         onClick={this.onSubmit.bind(this)}>
           Next
       </Button>

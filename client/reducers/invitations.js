@@ -5,6 +5,7 @@ import createReducer from '../utils/createReducer';
 
 const initialState = {
   loading: false,
+  loadingUser: false, // new user creation
   error: null,
   invitations: { }
 };
@@ -47,7 +48,7 @@ export const invitations = createReducer(fromJS(initialState), {
   },
   [constants.INVITE_USER_PENDING]: (state) =>
     state.merge({
-      loading: true,
+      loadingUser: true,
       error: null
     }),
   [constants.INVITE_USER_REJECTED]: (state, action) => {
@@ -60,13 +61,13 @@ export const invitations = createReducer(fromJS(initialState), {
     }
 
     return state.merge({
-      loading: false,
+      loadingUser: false,
       error: `An error occured while inviting an user: ${error}`
     });
   },
   [constants.INVITE_USER_FULFILLED]: (state) =>
     state.merge({
-      loading: false
+      loadingUser: false
     }),
   [constants.CLEAR_IMPORT_USER]: (state) =>
     state.merge({
