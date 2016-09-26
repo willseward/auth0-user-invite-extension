@@ -10,8 +10,7 @@ class Info extends Component {
 
     return (
       <Alert bsStyle="info">
-        <h4>Heads up!</h4>
-        <p>{this.props.message}</p>
+        <strong>Heads up!</strong> {this.props.message}
       </Alert>
    );
   }

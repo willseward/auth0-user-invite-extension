@@ -10,8 +10,7 @@ class Error extends Component {
 
     return (
       <Alert bsStyle="danger">
-        <h4>Oh snap! You got an error!</h4>
-        <p>{this.props.message}</p>
+        <strong>Oh snap!</strong> {this.props.message}
       </Alert>
    );
   }
