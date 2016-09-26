@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 
+import { LoadingPanel } from '../Dashboard';
 import { templateConfigurationActions } from '../../actions';
 import { InvitationEmailForm } from './';
 import { Error, Success } from '../Messages';
@@ -49,12 +50,14 @@ export default connectContainer(class InvitationEmail extends Component {
 
     return (
       <div>
-        <InvitationEmailForm
-          onSubmit={this.handleSubmit.bind(this)}
-          submitting={true}
-        />
-        {(this.state.formSubmitted && !loading && !error) ? <Success message={'Form Submitted.'} /> :
-          <Error message={error ? error : '' } />}
+        <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+          <InvitationEmailForm
+            onSubmit={this.handleSubmit.bind(this)}
+            submitting={true}
+          />
+          {(this.state.formSubmitted && !loading && !error) ? <Success message={'Form Submitted.'} /> :
+            <Error message={error ? error : '' } />}
+        </LoadingPanel>
       </div>
     )
   }
