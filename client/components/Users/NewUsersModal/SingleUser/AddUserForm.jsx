@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
+import { InputText } from '../../../Dashboard';
 import { Error } from '../../../Messages';
 
 export const fields = [ 'username', 'email', 'selectedConnection', 'connection' ];
@@ -10,21 +11,21 @@ const validate = values => {
   const errors = {}
 
   if (!values.selectedConnection) {
-    errors.selectedConnection = 'Required';
+    errors.selectedConnection = ['Required'];
   }
 
   var connection = _.find(values.connection, (item) => item.name === values.selectedConnection);
 
   if (!connection || !connection.name) {
-    errors.selectedConnection = 'Required';
+    errors.selectedConnection = ['Required'];
   }
 
   if (!values.username && connection && connection.requires_username) {
-    errors.username = 'Required'; //may be required or not, depending on the connection
+    errors.username = ['Required']; //may be required or not, depending on the connection
   }
 
   if (!values.email) {
-    errors.email = 'Required';
+    errors.email = ['Required'];
   }
 
   return errors;
@@ -72,13 +73,7 @@ class AddUserForm extends Component {
     }
 
     return (
-      <div className="form-group">
-        <label className="control-label col-xs-2">Username</label>
-        <div className="col-xs-10">
-          <input className="form-control" type="text" {...usernameField} />
-          {usernameField.touched && usernameField.error && <div>{usernameField.error}</div>}
-        </div>
-      </div>
+      <InputText field={usernameField} fieldName="username" label="Username" type="text" placeholder="This connection requires a username" validationErrors={usernameField.error} />
     );
   }
 
@@ -112,24 +107,16 @@ class AddUserForm extends Component {
 
             { this.renderUsername(connection, selectedConnection, username) }
 
-            <div className="form-group">
-              <label className="control-label col-xs-2">Email</label>
-              <div className="col-xs-10">
-                <input className="form-control" type="email"
-                {...email}
-                />
-                {email.touched && email.error && <div>{email.error}</div>}
-              </div>
-            </div>
+            <InputText field={email} fieldName="email" label="Email" type="email" placeholder="Email of the user you want to invite" validationErrors={email.error}/>
 
             <div className="form-group">
-              <label className="control-label col-xs-2">Connection</label>
-              <div className="col-xs-10">
+              <label className="control-label col-xs-3">Connection</label>
+              <div className="col-xs-9">
                 <select className="form-control" {...selectedConnection}>
                   {connection ? connection.map(connectionOption => <option value={connectionOption.name} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
                 </select>
 
-                {selectedConnection.touched && selectedConnection.error && <div>{selectedConnection.error}</div>}
+                {selectedConnection.touched && selectedConnection.error && <div>{selectedConnection.error[0]}</div>}
                 <p className="help-block">This is a logical identifier of the connection.</p>
               </div>
             </div>

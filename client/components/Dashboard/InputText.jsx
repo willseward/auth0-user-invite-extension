@@ -1,19 +1,26 @@
+// NOTE this InputText is not the original one
+
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
 class InputText extends Component {
+
   render() {
-    const { label, field, fieldName, validationErrors } = this.props;
+    const { field, fieldName, label, type, placeholder, validationErrors } = this.props;
     const classes = classNames({
       'form-group': true,
-      'has-error': validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length
+      'has-error': field.touched && validationErrors && validationErrors.length
     });
 
-    return <div className={classes}>
-      <label>{label}</label>
-      <input className="form-control"  type="text" {...field} />
-      { validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{ validationErrors[fieldName][0] }</div> }
-    </div>;
+    return (
+      <div className={classes}>
+        <label className="control-label col-xs-3">{label}</label>
+        <div className="col-xs-9">
+          <input className="form-control"  type={type} placeholder={placeholder} {...field} />
+          { field.touched && validationErrors && validationErrors.length && <div className="help-block">{ validationErrors[0] }</div> }
+        </div>
+      </div>
+    );
   }
 }
 
@@ -21,6 +28,8 @@ InputText.propTypes = {
   field: React.PropTypes.object.isRequired,
   fieldName: React.PropTypes.string.isRequired,
   label: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  placeholder: React.PropTypes.string,
   validationErrors: React.PropTypes.object
 };
 
