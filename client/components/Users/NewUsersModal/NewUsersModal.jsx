@@ -14,23 +14,17 @@ import ImportedCSVModal from './ImportCSV/ImportedCSVModal';
 
 export default connectContainer(class NewUsersModal extends Component {
 
-  constructor() {
-    super();
-  }
-
   static defaultProps = {
     statusList: {
-      CSV: ['INIT', 'IMPORT', 'PREVIEW', 'IMPORTED'],
-      SINGLE_USER: ['INIT', 'SINGLE_USER', 'USER_ADDED']
+      CSV: [ 'INIT', 'IMPORT', 'PREVIEW', 'IMPORTED' ],
+      SINGLE_USER: [ 'INIT', 'SINGLE_USER', 'USER_ADDED' ]
     }
   }
 
-  static stateToProps = (state) => {
-    return {
-      importReducer: state.importReducer,
-      csvInvitations: state.csvInvitations
-    }
-  }
+  static stateToProps = (state) => ({
+    importReducer: state.importReducer,
+    csvInvitations: state.csvInvitations
+  });
 
   static actionsToProps = {
     ...invitationsActions,
@@ -41,6 +35,7 @@ export default connectContainer(class NewUsersModal extends Component {
     clearImport: PropTypes.func.isRequired,
     clearCSVUsers: PropTypes.func.isRequired,
     clearImportUser: PropTypes.func.isRequired,
+    statusList: PropTypes.object.isRequired
   }
 
   componentWillMount() {
@@ -53,7 +48,7 @@ export default connectContainer(class NewUsersModal extends Component {
 
   selectPath(path) {
     this.setState({
-      path: path
+      path
     });
   }
 
@@ -64,7 +59,7 @@ export default connectContainer(class NewUsersModal extends Component {
       });
     }
 
-    var nIdx = this.state.idx + 1;
+    const nIdx = this.state.idx + 1;
 
     this.setState({
       idx: nIdx,
@@ -79,7 +74,7 @@ export default connectContainer(class NewUsersModal extends Component {
       });
     }
 
-    var nIdx = this.state.idx - 1;
+    const nIdx = this.state.idx - 1;
 
     this.setState({
       idx: nIdx,
@@ -102,48 +97,47 @@ export default connectContainer(class NewUsersModal extends Component {
       statusView: 'INIT',
       path: ''
     });
-
   }
 
   renderComponent() {
-    let view = this.state.statusView;
-    if(view === 'INIT') {
+    const view = this.state.statusView;
+    if (view === 'INIT') {
       return (
         <NewUsers
           path={this.state.path}
           nextView={this.nextView.bind(this)}
           tryAgain={this.tryAgain.bind(this)}
-          selectPath={this.selectPath.bind(this)} />
+          selectPath={this.selectPath.bind(this)}
+        />
       );
-    }
-    else if(view === 'SINGLE_USER') {
+    } else if (view === 'SINGLE_USER') {
       return (
         <AddUserModal
           nextView={this.nextView.bind(this)}
           goBackView={this.goBackView.bind(this)}
-          tryAgain={this.tryAgain.bind(this)} />
+          tryAgain={this.tryAgain.bind(this)}
+        />
       );
-    }
-    else if(view === 'USER_ADDED') {
+    } else if (view === 'USER_ADDED') {
       return (
         <UserAdded tryAgain={this.tryAgain.bind(this)} />
       );
-    }
-    else if(view === 'IMPORT') {
+    } else if (view === 'IMPORT') {
       return (
         <ImportCSVModal
           nextView={this.nextView.bind(this)}
           goBackView={this.goBackView.bind(this)}
-          tryAgain={this.tryAgain.bind(this)} />
+          tryAgain={this.tryAgain.bind(this)}
+        />
       );
-    }
-    else if (view === 'PREVIEW') {
+    } else if (view === 'PREVIEW') {
       return (
         <PreviewCSVModal
           nextView={this.nextView.bind(this)}
           goBackView={this.goBackView.bind(this)}
           tryAgain={this.tryAgain.bind(this)}
-          clearCSVImportedData={this.clearCSVImportedData.bind(this)}/>
+          clearCSVImportedData={this.clearCSVImportedData.bind(this)}
+        />
       );
     }
     else if (view === 'IMPORTED') {
@@ -151,9 +145,7 @@ export default connectContainer(class NewUsersModal extends Component {
         <ImportedCSVModal tryAgain={this.tryAgain.bind(this)} />
       );
     }
-    else {
-      return (<div>No status view...</div>)
-    }
+    return (<div>No status view...</div>);
   }
 
   renderModalOpenBtn() {

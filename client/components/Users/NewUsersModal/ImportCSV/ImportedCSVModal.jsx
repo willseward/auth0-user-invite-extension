@@ -1,21 +1,19 @@
-import '../Modal.css';
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button, ProgressBar } from 'react-bootstrap';
-
+import { Button, ProgressBar } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
+import '../Modal.css';
 import CSVInvitationsTable from './CSVInvitationsTable';
 
 export default connectContainer(class ImportedCSVModal extends Component {
-  
-  static stateToProps = (state) => {
-    return {
-      csvInvitations: state.csvInvitations
-    }
-  }
+
+  static stateToProps = (state) => ({
+    csvInvitations: state.csvInvitations
+  })
 
   static propTypes = {
     tryAgain: PropTypes.func.isRequired,
+    csvInvitations: PropTypes.object
   }
 
   renderAddMoreUsersBtn() {
@@ -23,8 +21,9 @@ export default connectContainer(class ImportedCSVModal extends Component {
       <Button
         type="button"
         className="btn btn-transparent"
-        onClick={this.props.tryAgain}>
-          Add More Users
+        onClick={this.props.tryAgain}
+      >
+        Add More Users
       </Button>
     );
   }
@@ -35,25 +34,25 @@ export default connectContainer(class ImportedCSVModal extends Component {
         type="button"
         className="btn btn-primary"
         data-dismiss="modal"
-        onClick={this.props.tryAgain}>
-          Done
+        onClick={this.props.tryAgain}
+      >
+        Done
       </Button>
     );
   }
 
   render() {
-
     const csvInvitations = this.props.csvInvitations.toJS();
 
     let percentage = 0;
     const invitationsLength = csvInvitations.invitations.length;
     if (invitationsLength) {
-     percentage = Math.round((csvInvitations.current / invitationsLength) * 100);
+      percentage = Math.round((csvInvitations.current / invitationsLength) * 100);
     }
 
     return (
       <div>
-        <div className="modal-backdrop"></div>
+        <div className="modal-backdrop" />
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header has-border">
@@ -72,15 +71,16 @@ export default connectContainer(class ImportedCSVModal extends Component {
                 <div className="row">
                   <div className="col-xs-12 form-group">
                     <ProgressBar
-                    active={percentage !== 100}
-                    now={percentage}
-                    label={`${csvInvitations.current} of ${invitationsLength}`} />
+                      active={percentage !== 100}
+                      now={percentage}
+                      label={`${csvInvitations.current} of ${invitationsLength}`}
+                    />
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
-                    <CSVInvitationsTable {...csvInvitations} fields={['email', 'status']} />
+                    <CSVInvitationsTable {...csvInvitations} fields={[ 'email', 'status' ]} />
                   </div>
                 </div>
 

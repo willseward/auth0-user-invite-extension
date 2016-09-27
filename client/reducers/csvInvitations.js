@@ -64,7 +64,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
     return state.merge({
       loading: false,
       invitations: updateInvitations(state, user),
-      current: state.get('current') + 1,
+      current: state.get('current') + 1
     });
   },
   [constants.FORM_VALIDATION_FAILED]: (state, action) =>
@@ -72,7 +72,7 @@ export const csvInvitations = createReducer(fromJS(initialState), {
       loading: false,
       validationErrors: action.payload.error
     }),
-  [constants.CLEAR_FORM_VALIDATION_ERROR]: (state, action) =>
+  [constants.CLEAR_FORM_VALIDATION_ERROR]: (state) =>
     state.merge({
       loading: false,
       validationErrors: ''

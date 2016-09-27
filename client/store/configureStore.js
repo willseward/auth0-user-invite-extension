@@ -28,6 +28,7 @@ export default function configureStore() {
   if (process.env.NODE_ENV !== 'production' && module.hot) {
     module.hot.accept('../reducers', () => {
       const nextRootReducer = require('../reducers');
+
       store.replaceReducer(nextRootReducer);
     });
   }

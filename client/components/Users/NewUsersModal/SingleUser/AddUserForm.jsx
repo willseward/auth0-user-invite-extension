@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import { InputText } from '../../../Dashboard';
 import { Error } from '../../../Messages';
@@ -8,45 +8,51 @@ import { Error } from '../../../Messages';
 export const fields = [ 'username', 'email', 'selectedConnection', 'connection' ];
 
 const validate = values => {
-  const errors = {}
+  const errors = {};
 
   if (!values.selectedConnection) {
-    errors.selectedConnection = ['Required'];
+    errors.selectedConnection = [ 'Required' ];
   }
 
-  var connection = _.find(values.connection, (item) => item.name === values.selectedConnection);
+  const connection = _.find(values.connection, (item) => item.name === values.selectedConnection);
 
   if (!connection || !connection.name) {
-    errors.selectedConnection = ['Required'];
+    errors.selectedConnection = [ 'Required' ];
   }
 
   if (!values.username && connection && connection.requires_username) {
-    errors.username = ['Required']; //may be required or not, depending on the connection
+    errors.username = [ 'Required' ]; // may be required or not, depending on the connection
   }
 
   if (!values.email) {
-    errors.email = ['Required'];
+    errors.email = [ 'Required' ];
   }
 
   return errors;
-}
+};
 
 class AddUserForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.formSubmitted && !nextProps.invitations.loadingUser
       && !nextProps.invitations.error) {
-      this.props.resetForm(); //reset email and username properties
+      this.props.resetForm(); // reset email and username properties
       this.props.nextView();
     }
+  }
+
+  clearAllFields() {
+    this.props.resetForm();
+    this.props.clearAllFields();
   }
 
   renderNextBtn() {
     return (
       <Button
         type="button"
-        className="btn btn-primary" type="submit">
-          Create
+        className="btn btn-primary" type="submit"
+      >
+        Create
       </Button>
     );
   }
@@ -56,8 +62,9 @@ class AddUserForm extends Component {
       <Button
         type="button"
         className="btn btn-transparent"
-        onClick={this.props.goBackView}>
-          Back
+        onClick={this.props.goBackView}
+      >
+        Back
       </Button>
     );
   }
@@ -67,7 +74,7 @@ class AddUserForm extends Component {
       return null;
     }
 
-    let selectedConnection = _.find(connection, (item) => item.name === connectionField.value);
+    const selectedConnection = _.find(connection, (item) => item.name === connectionField.value);
     if (!selectedConnection || !selectedConnection.requires_username) {
       return null;
     }
@@ -75,11 +82,6 @@ class AddUserForm extends Component {
     return (
       <InputText field={usernameField} fieldName="username" label="Username" type="text" placeholder="This connection requires a username" validationErrors={usernameField.error} />
     );
-  }
-
-  clearAllFields() {
-    this.props.resetForm();
-    this.props.clearAllFields();
   }
 
   render() {
@@ -103,16 +105,16 @@ class AddUserForm extends Component {
           <div className="modal-body">
 
             <p className="text-center">Create an user with connection, email and username if needed.</p>
-            <Error message={invitations.error ? invitations.error : ''}/>
+            <Error message={invitations.error ? invitations.error : ''} />
 
             { this.renderUsername(connection, selectedConnection, username) }
 
-            <InputText field={email} fieldName="email" label="Email" type="email" placeholder="Email of the user you want to invite" validationErrors={email.error}/>
+            <InputText field={email} fieldName="email" label="Email" type="email" placeholder="Email of the user you want to invite" validationErrors={email.error} />
 
             <div className="form-group">
-              <label className="control-label col-xs-3">Connection</label>
+              <label htmlFor="connection" className="control-label col-xs-3">Connection</label>
               <div className="col-xs-9">
-                <select className="form-control" {...selectedConnection}>
+                <select id="connection" className="form-control" {...selectedConnection}>
                   {connection ? connection.map(connectionOption => <option value={connectionOption.name} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
                 </select>
 
@@ -129,7 +131,7 @@ class AddUserForm extends Component {
         </form>
 
       </div>
-    )
+    );
   }
 }
 
@@ -139,23 +141,26 @@ AddUserForm.propTypes = {
   formSubmitted: PropTypes.bool.isRequired,
   nextView: PropTypes.func.isRequired,
   goBackView: PropTypes.func.isRequired,
-  clearAllFields: PropTypes.func.isRequired
-}
+  clearAllFields: PropTypes.func.isRequired,
+  resetForm: PropTypes.func.isRequired,
+  connection: PropTypes.object,
+  invitations: PropTypes.object
+};
 
 function mapStateToProps(state) {
-  var connection = state.connection.toJS().connection;
+  const connection = state.connection.toJS().connection;
 
   return {
-    connection: connection,
+    connection,
     initialValues: {
       selectedConnection: (connection && connection.length) ? connection[0].name : '',
-      connection: connection // NOTE: we pass the connection here to be able to do the initial validation (see 'validate' function)
+      connection // NOTE: we pass the connection here to be able to do the initial validation (see 'validate' function)
     }
-  }
+  };
 }
 
 export default reduxForm({
   form: 'add user',
   fields,
   validate
-}, mapStateToProps)(AddUserForm)
+}, mapStateToProps)(AddUserForm);

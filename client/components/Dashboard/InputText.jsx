@@ -30,7 +30,7 @@ InputText.propTypes = {
   label: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
   placeholder: React.PropTypes.string,
-  validationErrors: React.PropTypes.object
+  validationErrors: React.PropTypes.array
 };
 
 export default InputText;

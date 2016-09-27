@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
 
@@ -12,13 +12,14 @@ export default connectContainer(class NewUsers extends Component {
 
     this.state = {
       error: ''
-    }
+    };
   }
 
   static propTypes = {
     tryAgain: PropTypes.func.isRequired,
     nextView: PropTypes.func.isRequired,
-    selectPath: PropTypes.func.isRequired
+    selectPath: PropTypes.func.isRequired,
+    path: PropTypes.string
   }
 
   selectPath(path) {
@@ -41,8 +42,9 @@ export default connectContainer(class NewUsers extends Component {
         type="button"
         className="btn btn-primary"
         disabled={this.props.path ? false : true}
-        onClick={this.onSubmit.bind(this)}>
-          Next
+        onClick={this.onSubmit.bind(this)}
+      >
+        Next
       </Button>
     );
   }
@@ -53,8 +55,9 @@ export default connectContainer(class NewUsers extends Component {
         type="button"
         className="btn btn-transparent"
         onClick={this.props.tryAgain}
-        data-dismiss="modal">
-          Cancel
+        data-dismiss="modal"
+      >
+        Cancel
       </Button>
     );
   }
@@ -63,21 +66,24 @@ export default connectContainer(class NewUsers extends Component {
     if (this.props.path === path) {
       return {
         border: '1px solid #2cc0f3'
-      }
-    } else {
-      return {
-        border: '1px solid transparent'
-      }
+      };
     }
+
+    return {
+      border: '1px solid transparent'
+    };
   }
 
   renderPathCards(paths) {
-    return Object.keys(paths).map(function(path) {
-      var path = paths[path];
+    return Object.keys(paths).map(function (pathStr) {
+      const path = paths[pathStr];
       return (
         <div key={path.code} className="col-xs-12 col-md-6" onClick={this.props.selectPath.bind(this, path.code)}>
-          <article style={this.styleCardSelected(path.code)}
-            className="card-docs"><i className="card-docs-icon ${path.icon}"></i>
+          <article
+            style={this.styleCardSelected(path.code)}
+            className="card-docs"
+          >
+            <i className="card-docs-icon ${path.icon}" />
             <h2 className="card-docs-title">{path.title}</h2>
             <p className="card-docs-description">{path.description}</p>
           </article>
@@ -87,8 +93,7 @@ export default connectContainer(class NewUsers extends Component {
   }
 
   render() {
-
-    var paths = {
+    const paths = {
       csv: {
         code: 'CSV',
         icon: 'icon-budicon-686',
@@ -101,11 +106,11 @@ export default connectContainer(class NewUsers extends Component {
         title: 'Create User',
         description: 'Create Single User'
       }
-    }
+    };
 
     return (
       <div>
-        <div className="modal-backdrop"></div>
+        <div className="modal-backdrop" />
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header has-border">
@@ -116,7 +121,7 @@ export default connectContainer(class NewUsers extends Component {
             </div>
             <div className="modal-body">
               <p className="text-center">Select how do you want to add new users.</p>
-              <Error message={(this.state.error) ? this.state.error : '' } />
+              <Error message={(this.state.error) ? this.state.error : ''} />
               { this.renderPathCards(paths) }
             </div>
             <div className="modal-footer">

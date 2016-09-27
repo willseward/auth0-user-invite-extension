@@ -1,9 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import connectContainer from 'redux-static';
+
 import ImportDropFiles from './ImportDropFiles';
 import { Error } from '../../../Messages';
-
-import connectContainer from 'redux-static';
 import { invitationsActions, importActions } from '../../../../actions';
 
 export default connectContainer(class ImportCSVModal extends Component {
@@ -14,12 +14,10 @@ export default connectContainer(class ImportCSVModal extends Component {
     this.onDrop = this.onDrop.bind(this);
   }
 
-  static stateToProps = (state) => {
-    return {
-      importReducer: state.importReducer,
-      csvInvitations: state.csvInvitations
-    }
-  }
+  static stateToProps = (state) => ({
+    importReducer: state.importReducer,
+    csvInvitations: state.csvInvitations
+  })
 
   static actionsToProps = {
     ...invitationsActions,
@@ -30,13 +28,15 @@ export default connectContainer(class ImportCSVModal extends Component {
     inviteUsersPreview: PropTypes.func.isRequired,
     handleFileDrop: PropTypes.func.isRequired,
     nextView: PropTypes.func.isRequired,
+    goBackView: PropTypes.func.isRequired,
     tryAgain: PropTypes.func.isRequired,
+    importReducer: PropTypes.object
   }
 
   componentWillReceiveProps(nextProps) {
     // means that a file was uploaded
 
-    let { file, validationErrors } = nextProps.importReducer.toJS();
+    const { file, validationErrors } = nextProps.importReducer.toJS();
     if (file && !validationErrors.length) {
       this.props.inviteUsersPreview(file);
       this.props.nextView();
@@ -51,14 +51,15 @@ export default connectContainer(class ImportCSVModal extends Component {
     return (<ImportDropFiles onDrop={this.onDrop} />);
   }
 
-  renderCancelBtn(file) {
+  renderCancelBtn() {
     return (
       <Button
         type="button"
         className="btn btn-transparent"
         onClick={this.props.tryAgain}
-        data-dismiss="modal">
-          Cancel
+        data-dismiss="modal"
+      >
+        Cancel
       </Button>
     );
   }
@@ -68,7 +69,8 @@ export default connectContainer(class ImportCSVModal extends Component {
       <Button
         type="button"
         className="btn btn-primary"
-        disabled={validationErrors.length ? true : false} >
+        disabled={validationErrors.length ? true : false}
+      >
           Next
       </Button>
     );
@@ -79,19 +81,19 @@ export default connectContainer(class ImportCSVModal extends Component {
       <Button
         type="button"
         className="btn btn-transparent"
-        onClick={this.props.goBackView}>
+        onClick={this.props.goBackView}
+      >
           Back
       </Button>
     );
   }
 
   render() {
-
     const { file, validationErrors } = this.props.importReducer.toJS();
 
     return (
       <div>
-        <div className="modal-backdrop"></div>
+        <div className="modal-backdrop" />
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header has-border">
@@ -103,7 +105,7 @@ export default connectContainer(class ImportCSVModal extends Component {
             <div className="modal-body">
 
               <p className="text-center">Import a CSV file with all the data of your users.</p>
-              <Error message={validationErrors.length ? validationErrors : '' } />
+              <Error message={validationErrors.length ? validationErrors : ''} />
 
               <div className="row">
                 <div className="col-xs-12 form-group">
@@ -112,7 +114,7 @@ export default connectContainer(class ImportCSVModal extends Component {
               </div>
             </div>
             <div className="modal-footer">
-              { this.renderBackBtn() } { this.renderNextBtn(file,  validationErrors) }
+              { this.renderBackBtn() } { this.renderNextBtn(file, validationErrors) }
             </div>
           </div>
         </div>

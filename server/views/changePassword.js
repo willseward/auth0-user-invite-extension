@@ -1,11 +1,10 @@
-import ejs from "ejs";
-import { readFileSync } from "fs";
-import path from "path";
+import ejs from 'ejs';
+import { readFileSync } from 'fs';
+import path from 'path';
 
 import config from '../lib/config';
 
 export default () => {
-
   const formTemplate = readFileSync(path.join(__dirname, './formTemplate.html'), 'utf-8');
   const changePassword = readFileSync(path.join(__dirname, './changePassword.html'), 'utf-8');
 

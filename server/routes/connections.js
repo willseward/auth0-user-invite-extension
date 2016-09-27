@@ -1,12 +1,10 @@
-import _ from 'lodash';
-import { Router as router } from 'express';
 import connections from '../lib/connections';
 
 /*
  * List all connections.
  */
 function getConnectionsHandler(req, res, next) {
-  let options = {
+  const options = {
     auth0: req.auth0
   };
   connections.getConnections(options, function onGetConnections(err, result) {
@@ -18,5 +16,5 @@ function getConnectionsHandler(req, res, next) {
 }
 
 module.exports = {
-  getConnectionsHandler: getConnectionsHandler
+  getConnectionsHandler
 };

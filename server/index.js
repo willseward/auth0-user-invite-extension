@@ -3,7 +3,6 @@ import morgan from 'morgan';
 import Express from 'express';
 import bodyParser from 'body-parser';
 
-import config from './lib/config';
 import routes from './routes';
 import logger from './lib/logger';
 import * as middlewares from './lib/middlewares';

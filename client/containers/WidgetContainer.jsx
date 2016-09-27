@@ -11,7 +11,7 @@ export default connectContainer(class WidgetContainer extends Component {
 
     this.state = {
       currentTab: 'pending'
-    }
+    };
   }
 
   static actionsToProps = {
@@ -29,7 +29,7 @@ export default connectContainer(class WidgetContainer extends Component {
   changeCurrentTab() {
     const currentTab = 'pending' ? 'accepted' : 'pending';
     this.setState({
-      currentTab: currentTab
+      currentTab
     });
   }
 

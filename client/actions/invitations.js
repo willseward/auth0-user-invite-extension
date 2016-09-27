@@ -48,7 +48,7 @@ export function inviteUser(user) {
 export function clearImportUser() {
   return {
     type: constants.CLEAR_IMPORT_USER
-  }
+  };
 }
 
 /*
@@ -100,7 +100,6 @@ export function inviteUsersPreview(file) {
 
         usersData.data.map((user) => {
           if (user.email && user.email.length) {
-
             dispatch({
               type: constants.INVITE_USERS_PREVIEW,
               payload: {
@@ -169,7 +168,7 @@ export function clearCSVUsers() {
 export function validateCSVFields(invitations, connection, requiresUsername) {
   // confirm that all users have username field, else FORM_VALIDATION_FAILED
   if (requiresUsername) {
-    let propertyUsernameNotFound = _.find(invitations, item => {
+    const propertyUsernameNotFound = _.find(invitations, item => {
       return !item.hasOwnProperty('username') || item['username'] === '';
     });
     if (propertyUsernameNotFound) {
@@ -180,10 +179,9 @@ export function validateCSVFields(invitations, connection, requiresUsername) {
         }
       };
     }
-  } else {
-    // clear validationErrors
-    return {
-      type: constants.CLEAR_FORM_VALIDATION_ERROR
-    }
   }
+  // clear validationErrors
+  return {
+    type: constants.CLEAR_FORM_VALIDATION_ERROR
+  };
 }

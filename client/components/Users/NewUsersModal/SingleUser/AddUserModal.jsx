@@ -1,5 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
 import { invitationsActions } from '../../../../actions';
@@ -16,11 +15,9 @@ export default connectContainer(class AddUserModal extends Component {
     };
   }
 
-  static stateToProps = (state) => {
-    return {
-      invitations: state.invitations
-    }
-  }
+  static stateToProps = (state) => ({
+    invitations: state.invitations
+  })
 
   static actionsToProps = {
     ...invitationsActions
@@ -29,16 +26,18 @@ export default connectContainer(class AddUserModal extends Component {
   static propTypes = {
     inviteUser: PropTypes.func.isRequired,
     nextView: PropTypes.func.isRequired,
+    goBackView: PropTypes.func.isRequired,
     tryAgain: PropTypes.func.isRequired,
+    invitations: PropTypes.object
   }
 
   handleSubmit(data) {
-    let connection = _.find(data.connection, (item) => item.name === data.selectedConnection);
+    const connection = _.find(data.connection, (item) => item.name === data.selectedConnection);
 
-    let user = {
+    const user = {
       email: data.email,
       connection: connection && connection.name ? connection.name : null
-    }
+    };
 
     if (connection && connection.requires_username) {
       user.username = data.username;
@@ -64,15 +63,16 @@ export default connectContainer(class AddUserModal extends Component {
 
     return (
       <div>
-        <div className="modal-backdrop"></div>
+        <div className="modal-backdrop" />
         <div className="modal-dialog">
           <AddUserForm
-          onSubmit={this.handleSubmit.bind(this)}
-          formSubmitted={this.state.formSubmitted}
-          invitations={invitations}
-          goBackView={this.props.goBackView}
-          nextView={this.props.nextView}
-          clearAllFields={this.clearAllFields.bind(this)} />
+            onSubmit={this.handleSubmit.bind(this)}
+            formSubmitted={this.state.formSubmitted}
+            invitations={invitations}
+            goBackView={this.props.goBackView}
+            nextView={this.props.nextView}
+            clearAllFields={this.clearAllFields.bind(this)}
+          />
         </div>
       </div>
     );

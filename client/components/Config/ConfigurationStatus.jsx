@@ -1,19 +1,17 @@
-import './ConfigurationStatus.css';
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import connectContainer from 'redux-static';
 import classNames from 'classnames';
+import './ConfigurationStatus.css';
 
 export default connectContainer(class ConfigurationStatus extends Component {
   static propTypes = {
     configurationStatus: PropTypes.object.isRequired
   };
 
-  static stateToProps = (state) => {
-    return {
-      configurationStatus: state.configurationStatus
-    }
-  }
+  static stateToProps = (state) => ({
+    configurationStatus: state.configurationStatus
+  })
 
   render() {
     const { error, status } = this.props.configurationStatus.toJS();
@@ -45,7 +43,7 @@ export default connectContainer(class ConfigurationStatus extends Component {
             <div className="alert alert-warning">
               <strong>Warning</strong> The extension still needs to be configured before it can enforce your authorization logic.
               <div className=" pull-right">
-                <Link onClick={this.props.goToConfiguration} className={buttonClasses} to='/configuration'>
+                <Link className={buttonClasses} to="/configuration">
                   Go to Configuration
                 </Link>
               </div>

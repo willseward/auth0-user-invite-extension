@@ -47,13 +47,13 @@ export const templateConfiguration = createReducer(fromJS(initialState), {
       return state.merge({
         loading: false,
         error: null
-      })
+      });
     }
 
     return state.merge({
       loading: false,
       template: data,
       error: null
-    })
+    });
   }
 });

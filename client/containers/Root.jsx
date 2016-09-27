@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { logout } from '../actions/auth';
@@ -6,26 +6,22 @@ import { logout } from '../actions/auth';
 import RequireAuthentication from './RequireAuthentication';
 import Header from '../components/Header';
 
-class Root extends Component {
-  static propTypes = {
-    logout: PropTypes.func
-  };
-
-  render() {
-    return (
-      <div>
-        <Header tenant={window.config.AUTH0_DOMAIN} onLogout={this.props.logout}/>
-        <div className="container">
-          <div className="row">
-            <section className="content-page current">
-              {this.props.children}
-            </section>
-          </div>
-        </div>
+const Root = (props) => (
+  <div>
+    <Header tenant={window.config.AUTH0_DOMAIN} onLogout={props.logout} />
+    <div className="container">
+      <div className="row">
+        <section className="content-page current">
+          {props.children}
+        </section>
       </div>
-    );
-  }
-}
+    </div>
+  </div>
+);
+
+Root.propTypes = {
+  logout: PropTypes.func
+};
 
 function select(state) {
   return {

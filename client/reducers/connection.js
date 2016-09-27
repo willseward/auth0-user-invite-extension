@@ -21,13 +21,12 @@ export const connection = createReducer(fromJS(initialState), {
     return state.merge({
       loading: false,
       error: `An error occured while loading the connections: ${errorMessage}`
-    })
+    });
   },
-  [constants.FETCH_CONNECTIONS_FULFILLED]: (state, action) => {
-    return state.merge({
+  [constants.FETCH_CONNECTIONS_FULFILLED]: (state, action) =>
+    state.merge({
       loading: false,
       error: null,
       connection: fromJS(action.payload.data)
-    });
-  }
+    })
 });

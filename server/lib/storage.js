@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Promise from 'bluebird';
 
 import logger from './logger';
@@ -61,7 +60,7 @@ export const writeTemplateConfig = (storageContext, templateConfig) => {
     return data;
   })
   .then(data => writeStorage(storageContext, data));
-}
+};
 
 export const readConfigStatus = (storageContext) => {
   return readStorage(storageContext).then(data => {
@@ -75,10 +74,6 @@ export const readConfigStatus = (storageContext) => {
       });
     });
   })
-  .then(() => {
-    return { hasData: true };
-  })
-  .catch(() => {
-    return { hasData: false };
-  });
-}
+  .then(() => ({ hasData: true }))
+  .catch(() => ({ hasData: false }));
+};

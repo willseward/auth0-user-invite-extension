@@ -17,11 +17,9 @@ export default connectContainer(class InvitationsContainer extends Component {
     };
   }
 
-  static stateToProps = (state) => {
-    return {
-      invitations: state.invitations
-    };
-  }
+  static stateToProps = (state) => ({
+    invitations: state.invitations
+  })
 
   static actionsToProps = {
     ...invitationsActions
@@ -30,10 +28,11 @@ export default connectContainer(class InvitationsContainer extends Component {
   static propTypes = {
     filter: PropTypes.string.isRequired,
     invitations: PropTypes.object.isRequired,
-    fetchInvitations: PropTypes.func.isRequired
+    fetchInvitations: PropTypes.func.isRequired,
+    currentTab: PropTypes.string.isRequired
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.currentTab === this.props.filter) {
       this.props.fetchInvitations(this.props.filter);
       this.setState({

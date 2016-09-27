@@ -1,7 +1,7 @@
 import users from '../lib/users';
 
 function getUsersHandler(req, res, next) {
-  let options = {
+  const options = {
     auth0: req.auth0,
     filter: req.query.filter,
     perPage: req.query.per_page,
@@ -16,7 +16,7 @@ function getUsersHandler(req, res, next) {
 }
 
 function createUserHandler(req, res, next) {
-  let options = {
+  const options = {
     auth0: req.auth0,
     connection: req.body.user.connection,
     email: req.body.user.email,
@@ -32,7 +32,7 @@ function createUserHandler(req, res, next) {
 }
 
 function validateUserTokenHandler(req, res, next) {
-  let options = {
+  const options = {
     auth0: req.auth0,
     token: req.query.token
   };
@@ -45,7 +45,7 @@ function validateUserTokenHandler(req, res, next) {
 }
 
 function savePasswordHandler(req, res, next) {
-  let options = {
+  const options = {
     auth0: req.auth0,
     id: req.body.id,
     password: req.body.password,
@@ -60,8 +60,8 @@ function savePasswordHandler(req, res, next) {
 }
 
 module.exports = {
-  getUsersHandler: getUsersHandler,
-  createUserHandler: createUserHandler,
-  validateUserTokenHandler: validateUserTokenHandler,
-  savePasswordHandler: savePasswordHandler
+  getUsersHandler,
+  createUserHandler,
+  validateUserTokenHandler,
+  savePasswordHandler
 };

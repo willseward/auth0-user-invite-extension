@@ -12,15 +12,13 @@ export default connectContainer(class InvitationEmail extends Component {
     super(props);
 
     this.state = {
-      formSubmitted: false,
-    }
+      formSubmitted: false
+    };
   }
 
-  static stateToProps = (state) => {
-    return {
-      templateConfiguration: state.templateConfiguration
-    }
-  }
+  static stateToProps = (state) => ({
+    templateConfiguration: state.templateConfiguration
+  })
 
   static actionsToProps = {
     ...templateConfigurationActions
@@ -36,7 +34,6 @@ export default connectContainer(class InvitationEmail extends Component {
   }
 
   handleSubmit(data) {
-
     this.props.saveTemplateConfiguration(data);
 
     this.setState({
@@ -45,20 +42,16 @@ export default connectContainer(class InvitationEmail extends Component {
   }
 
   render() {
-
     const { error, loading } = this.props.templateConfiguration.toJS();
 
     return (
       <div>
         <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-          <InvitationEmailForm
-            onSubmit={this.handleSubmit.bind(this)}
-            submitting={true}
-          />
+          <InvitationEmailForm onSubmit={this.handleSubmit.bind(this)} />
           {(this.state.formSubmitted && !loading && !error) ? <Success message={'Form Submitted.'} /> :
-            <Error message={error ? error : '' } />}
+            <Error message={error ? error : ''} />}
         </LoadingPanel>
       </div>
-    )
+    );
   }
 });

@@ -1,13 +1,13 @@
-import '../Modal.css';
 import React, { PropTypes, Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-
+import { Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
+
+import '../Modal.css';
 
 export default connectContainer(class UserAdded extends Component {
 
   static propTypes = {
-    tryAgain: PropTypes.func.isRequired,
+    tryAgain: PropTypes.func.isRequired
   }
 
   renderAddMoreUsersBtn() {
@@ -15,8 +15,9 @@ export default connectContainer(class UserAdded extends Component {
       <Button
         type="button"
         className="btn btn-transparent"
-        onClick={this.props.tryAgain}>
-          Add More Users
+        onClick={this.props.tryAgain}
+      >
+        Add More Users
       </Button>
     );
   }
@@ -27,17 +28,17 @@ export default connectContainer(class UserAdded extends Component {
         type="button"
         className="btn btn-primary"
         data-dismiss="modal"
-        onClick={this.props.tryAgain}>
-          Done
+        onClick={this.props.tryAgain}
+      >
+        Done
       </Button>
     );
   }
 
   render() {
-    
     return (
       <div>
-        <div className="modal-backdrop"></div>
+        <div className="modal-backdrop" />
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header has-border">
@@ -53,7 +54,7 @@ export default connectContainer(class UserAdded extends Component {
 
               <div className="row">
                 <div className="col-xs-12 form-group UserAdded-iconSection">
-                  <i className="icon-budicon-470"></i>
+                  <i className="icon-budicon-470" />
                 </div>
               </div>
 

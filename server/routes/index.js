@@ -7,7 +7,6 @@ import hooks from './hooks';
 import meta from './meta';
 
 import config from '../lib/config';
-import logger from '../lib/logger';
 import users from '../lib/users';
 import validations from '../lib/validations';
 
@@ -21,11 +20,11 @@ const configureEmail = (smtpConfig, templateConfig) => {
   if (!smtpConfig || Object.keys(smtpConfig).length == 0 || !smtpConfig.host) {
     smtpConfig = stubTransport();
   }
-  users.configureEmail(smtpConfig, templateConfig)
+  users.configureEmail(smtpConfig, templateConfig);
 };
 
 export default (storageContext) => {
-  let smtpConfig = {
+  const smtpConfig = {
     host: config('SMTP_HOST'),
     port: config('SMTP_PORT'),
     secure: config('SMTP_SECURE'),
@@ -53,7 +52,7 @@ export default (storageContext) => {
 
   routes.get('/api/config/template', requireUser, (req, res) => {
     readStorage(storageContext)
-    .then(data => { res.json(data.templateConfig || {}) });
+    .then(data => { res.json(data.templateConfig || {}); });
   });
 
   routes.patch('/api/config/template',
@@ -72,7 +71,7 @@ export default (storageContext) => {
       readConfigStatus(storageContext).then((status) => {
         res.json(status);
       });
-  });
+    });
 
   routes.use('/api/connections',
     requireUser,

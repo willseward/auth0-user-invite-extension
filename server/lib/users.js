@@ -1,16 +1,11 @@
-const uuid = require('uuid');
-const csv = require('csv');
-const each = require('each-async');
-const Email = require('./email');
-const getChangePassURL = require('./get-change-password-url');
+import uuid from 'uuid';
 
-import _ from 'lodash';
-import { Router as router } from 'express';
-import { managementClient } from '../lib/middlewares';
 import config from './config';
 import logger from './logger';
+import Email from './email';
+import getChangePassURL from './get-change-password-url';
 
-var email = null;
+let email = null;
 
 /*
  * List all users.
@@ -36,7 +31,7 @@ function getUsers(options, callback) {
       filter: options.filter
     });
   });
-};
+}
 
 /*
  * Add a new user.
@@ -44,27 +39,27 @@ function getUsers(options, callback) {
 function createUser(options, callback) {
   const token = uuid.v4();
   const auth0Options = {
-    "connection": options.connection,
-    "email": options.email,
-    "password": uuid.v4(), // required field
-    "app_metadata": {
-      "invite": {
-        "status": "pending", // default status
-        "token": token
-      }
+    connection: options.connection,
+    email: options.email,
+    password: uuid.v4(), // required field
+    app_metadata: {
+      invite: {
+        status: 'pending', // default status
+        token
+      }
     }
   };
 
-  //optional value that depends on connection
+  // optional value that depends on connection
   if (options.username) {
     auth0Options.username = options.username;
   }
 
-  let changePasswordURL = getChangePassURL(config('NODE_ENV'), options.host, token);
-  let transportOptions = {
+  const changePasswordURL = getChangePassURL(config('NODE_ENV'), options.host, token);
+  const transportOptions = {
     to: auth0Options.email
   };
-  let templateData = {
+  const templateData = {
     name: 'Auth0 Customer',
     email: auth0Options.email,
     url: changePasswordURL
@@ -91,7 +86,7 @@ function createUser(options, callback) {
  * Updates user "email_verified" field.
  */
 const updateEmailVerified = (auth0, user, callback) => {
-  return auth0.users.update({ id: user.user_id }, { "email_verified": true },
+  return auth0.users.update({ id: user.user_id }, { email_verified: true },
     function (err, user) {
       if (err || !user) {
         logger.debug('There was a problem when updating the user email_verified field.', err);
@@ -124,7 +119,7 @@ const validateToken = (auth0, token, callback) => {
 function validateUserToken(options, callback) {
   validateToken(options.auth0, options.token, function (err, user) {
     if (err || !user) {
-      logger.debug('There was an error when validating the token.' );
+      logger.debug('There was an error when validating the token.');
       return callback(err);
     }
 
@@ -134,7 +129,7 @@ function validateUserToken(options, callback) {
 
     updateEmailVerified(options.auth0, user, function (err, result) {
       if (err) {
-        logger.debug('There was an error when updating field.'  );
+        logger.debug('There was an error when updating field.');
         return callback(err);
       }
       return callback(null, result);
@@ -155,11 +150,11 @@ function savePassword(options, callback) {
     return options.auth0.users.update(
       { id: options.id },
       {
-        "password": options.password,
-        "app_metadata": {
-          "invite": {
-            "status": "accepted"
-          }
+        password: options.password,
+        app_metadata: {
+          invite: {
+            status: 'accepted'
+          }
         }
       }, function onUpdateUser(err, user) {
         if (err || !user) {
@@ -176,9 +171,9 @@ const configureEmail = (smtpConfig, templates) => {
 };
 
 module.exports = {
-  getUsers: getUsers,
-  createUser: createUser,
-  validateUserToken: validateUserToken,
-  savePassword: savePassword,
+  getUsers,
+  createUser,
+  validateUserToken,
+  savePassword,
   configureEmail
 };
