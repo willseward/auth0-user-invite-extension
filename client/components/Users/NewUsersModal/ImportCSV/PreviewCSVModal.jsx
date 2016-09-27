@@ -129,6 +129,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
       <Button
         type="button"
         className="btn btn-primary"
+        disabled={(this.state.error !== '' || (csvInvitations.validationErrors && csvInvitations.validationErrors.length > 0))}
         onClick={this.onSubmit.bind(this, csvInvitations)}
       >
         Import

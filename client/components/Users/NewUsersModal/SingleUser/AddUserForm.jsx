@@ -47,11 +47,12 @@ class AddUserForm extends Component {
     this.props.tryAgain();
   }
 
-  renderNextBtn() {
+  renderNextBtn(fieldsList) {
     return (
       <Button
         type="button"
         className="btn btn-primary" type="submit"
+        disabled={_.some(fieldsList, item => item.error)}
       >
         Create
       </Button>
@@ -127,7 +128,7 @@ class AddUserForm extends Component {
           </div>
 
           <div className="modal-footer">
-            { this.renderBackBtn() } { this.renderNextBtn() }
+            { this.renderBackBtn() } { this.renderNextBtn(this.props.fields) }
           </div>
         </form>
 
@@ -145,7 +146,7 @@ AddUserForm.propTypes = {
   clearAllFields: PropTypes.func.isRequired,
   tryAgain: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
-  connection: PropTypes.object,
+  connection: PropTypes.array,
   invitations: PropTypes.object
 };
 
