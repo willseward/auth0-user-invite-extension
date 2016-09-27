@@ -41,6 +41,16 @@ export default connectContainer(class ImportedCSVModal extends Component {
     );
   }
 
+  renderCSVInvitationsTable(csvInvitations) {
+    let fields = [ 'email', 'status' ];
+    if (csvInvitations.selectedConnection.requiresUsername) {
+      fields.unshift('username');
+    }
+    return (
+      <CSVInvitationsTable {...csvInvitations} fields={fields} />
+    );
+  }
+
   render() {
     const csvInvitations = this.props.csvInvitations.toJS();
 
@@ -80,7 +90,7 @@ export default connectContainer(class ImportedCSVModal extends Component {
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
-                    <CSVInvitationsTable {...csvInvitations} fields={[ 'email', 'status' ]} />
+                    { this.renderCSVInvitationsTable(csvInvitations) }
                   </div>
                 </div>
 

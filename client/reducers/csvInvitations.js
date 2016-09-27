@@ -8,7 +8,8 @@ const initialState = {
   validationErrors: '',
   invitations: [ ],
   current: 0,
-  failed: 0
+  failed: 0,
+  selectedConnection: { }
 };
 
 /*
@@ -80,5 +81,9 @@ export const csvInvitations = createReducer(fromJS(initialState), {
   [constants.CLEAR_CSV_USERS]: (state) =>
     state.merge({
       ...initialState
+    }),
+  [constants.SET_SELECTED_CONNECTION]: (state, action) =>
+    state.merge({
+      selectedConnection: action.payload.selectedConnection
     })
 });

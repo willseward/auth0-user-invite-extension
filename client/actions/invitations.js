@@ -138,6 +138,16 @@ export function inviteUsers(invitations, connection, requiresUsername) {
 
   return (dispatch) => {
     if (invitations) {
+      dispatch({
+        type: constants.SET_SELECTED_CONNECTION,
+        payload: {
+          selectedConnection: {
+            connection,
+            requiresUsername
+          }
+        }
+      });
+
       invitations.map((user) => {
         if (user.email && user.email.length) {
           user.connection = connection;

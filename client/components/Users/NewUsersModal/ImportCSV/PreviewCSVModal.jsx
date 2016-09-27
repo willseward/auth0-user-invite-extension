@@ -101,7 +101,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
     this.props.goBackView();
   }
 
-  renderPreview(csvInvitations) {
+  renderCSVInvitationsTable(csvInvitations) {
     let fields = [ 'email', 'status' ];
     if (this.state.requiresUsername) {
       fields.unshift('username');
@@ -168,7 +168,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
-                  { this.renderPreview(csvInvitations) }
+                  { this.renderCSVInvitationsTable(csvInvitations) }
                   </div>
                   <div className="col-xs-12 form-group">
                     <label htmlFor="connection" className="control-label col-xs-2">Connection</label>
