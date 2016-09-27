@@ -44,6 +44,7 @@ class AddUserForm extends Component {
   clearAllFields() {
     this.props.resetForm();
     this.props.clearAllFields();
+    this.props.tryAgain();
   }
 
   renderNextBtn() {
@@ -142,6 +143,7 @@ AddUserForm.propTypes = {
   nextView: PropTypes.func.isRequired,
   goBackView: PropTypes.func.isRequired,
   clearAllFields: PropTypes.func.isRequired,
+  tryAgain: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
   connection: PropTypes.object,
   invitations: PropTypes.object

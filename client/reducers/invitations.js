@@ -69,8 +69,8 @@ export const invitations = createReducer(fromJS(initialState), {
     state.merge({
       loadingUser: false
     }),
-  [constants.CLEAR_IMPORT_USER]: (state) =>
+  [constants.CLEAR_IMPORT_USER_ERROR]: (state) =>
     state.merge({
-      ...initialState
+      error: null
     })
 });

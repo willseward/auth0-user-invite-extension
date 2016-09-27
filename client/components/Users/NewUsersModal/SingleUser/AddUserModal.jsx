@@ -72,6 +72,7 @@ export default connectContainer(class AddUserModal extends Component {
             goBackView={this.props.goBackView}
             nextView={this.props.nextView}
             clearAllFields={this.clearAllFields.bind(this)}
+            tryAgain={this.props.tryAgain}
           />
         </div>
       </div>

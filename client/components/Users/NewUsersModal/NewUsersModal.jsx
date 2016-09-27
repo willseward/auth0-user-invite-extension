@@ -34,7 +34,7 @@ export default connectContainer(class NewUsersModal extends Component {
   static propTypes = {
     clearImport: PropTypes.func.isRequired,
     clearCSVUsers: PropTypes.func.isRequired,
-    clearImportUser: PropTypes.func.isRequired,
+    clearImportUserError: PropTypes.func.isRequired,
     statusList: PropTypes.object.isRequired
   }
 
@@ -90,6 +90,8 @@ export default connectContainer(class NewUsersModal extends Component {
   tryAgain() {
     if (this.state.path === 'CSV') {
       this.clearCSVImportedData();
+    } else {
+      this.props.clearImportUserError();
     }
 
     this.setState({
