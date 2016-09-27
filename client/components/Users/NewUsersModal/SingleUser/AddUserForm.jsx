@@ -80,7 +80,7 @@ class AddUserForm extends Component {
     }
 
     return (
-      <InputText field={usernameField} fieldName="username" label="Username" type="text" placeholder="This connection requires a username" validationErrors={usernameField.error} />
+      <InputText field={usernameField} label="Username" type="text" validationErrors={usernameField.error} />
     );
   }
 
@@ -109,7 +109,7 @@ class AddUserForm extends Component {
 
             { this.renderUsername(connection, selectedConnection, username) }
 
-            <InputText field={email} fieldName="email" label="Email" type="email" placeholder="Email of the user you want to invite" validationErrors={email.error} />
+            <InputText field={email} label="Email" type="email" validationErrors={email.error} />
 
             <div className="form-group">
               <label htmlFor="connection" className="control-label col-xs-3">Connection</label>
