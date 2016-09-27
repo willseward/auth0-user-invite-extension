@@ -29,14 +29,10 @@ function updateInvitations(state, user) {
 
 export const csvInvitations = createReducer(fromJS(initialState), {
   [constants.INVITE_USERS_PREVIEW]: (state, action) => {
-    const { user } = action.payload.data;
-
+    const { usersData } = action.payload.data;
     return state.merge({
       loading: false,
-      invitations: [
-        ...state.get('invitations'),
-        user
-      ]
+      invitations: usersData
     });
   },
   [constants.INVITE_USERS_REJECTED]: (state, action) => {

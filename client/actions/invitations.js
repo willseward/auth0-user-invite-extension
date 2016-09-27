@@ -58,7 +58,8 @@ export function clearImportUserError() {
 function processCSVData(csvContent) {
   return Papa.parse(csvContent, {
     delimiter: ',',
-    header: true
+    header: true,
+    skipEmptyLines: true
   });
 }
 
@@ -88,7 +89,6 @@ export function inviteUsersPreview(file) {
       const fileReader = new FileReader();
       fileReader.addEventListener('load', (event) => {
         const usersData = processCSVData(event.currentTarget.result);
-
         if (usersData.errors.length) {
           return dispatch({
             type: constants.FORM_VALIDATION_FAILED,
@@ -98,14 +98,10 @@ export function inviteUsersPreview(file) {
           });
         }
 
-        usersData.data.map((user) => {
-          if (user.email && user.email.length) {
-            dispatch({
-              type: constants.INVITE_USERS_PREVIEW,
-              payload: {
-                data: { user }
-              }
-            });
+        dispatch({
+          type: constants.INVITE_USERS_PREVIEW,
+          payload: {
+            data: { usersData: usersData.data }
           }
         });
       });
@@ -175,13 +171,26 @@ export function clearCSVUsers() {
   };
 }
 
+function isPropertyNotFound(array, property) {
+  return _.find(array, item => (typeof item[property] === 'undefined' || item[property] === ''));
+}
+
 export function validateCSVFields(invitations, connection, requiresUsername) {
+  // confirm that every user has property email
+  const emailNotFound = isPropertyNotFound(invitations, 'email');
+  if (emailNotFound) {
+    return {
+      type: constants.FORM_VALIDATION_FAILED,
+      payload: {
+        error: 'There is an error in your CSV because every user requires email field.'
+      }
+    };
+  }
+
   // confirm that all users have username field, else FORM_VALIDATION_FAILED
   if (requiresUsername) {
-    const propertyUsernameNotFound = _.find(invitations, item => {
-      return !item.hasOwnProperty('username') || item['username'] === '';
-    });
-    if (propertyUsernameNotFound) {
+    const usernameNotFound = isPropertyNotFound(invitations, 'username');
+    if (usernameNotFound) {
       return {
         type: constants.FORM_VALIDATION_FAILED,
         payload: {
