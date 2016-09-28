@@ -69,10 +69,12 @@ function createUser(options, callback) {
       logger.debug('Error creating user', err);
       return callback(err);
     }
+
     email.sendEmail(transportOptions, templateData, function (err, emailResult) {
       if (err) {
         logger.debug('Error sending email', err);
-        return callback(err);
+        // TODO should remove the added user using user_id ?
+        return callback({ message: 'Error sending email. Please confirm that you have set your configurations.' });
       }
       return callback(null, result);
     });

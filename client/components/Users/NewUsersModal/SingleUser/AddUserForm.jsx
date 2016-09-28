@@ -35,7 +35,7 @@ class AddUserForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.formSubmitted && !nextProps.invitations.loadingUser
-      && !nextProps.invitations.error) {
+      && !nextProps.invitations.inviteUserError) {
       this.props.resetForm(); // reset email and username properties
       this.props.nextView();
     }
@@ -107,7 +107,7 @@ class AddUserForm extends Component {
           <div className="modal-body">
 
             <p className="text-center">Create an user with connection, email and username if needed.</p>
-            <Error message={invitations.error ? invitations.error : ''} />
+            <Error message={invitations.inviteUserError ? invitations.inviteUserError : ''} />
 
             { this.renderUsername(connection, selectedConnection, username) }
 

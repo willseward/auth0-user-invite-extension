@@ -47,7 +47,7 @@ export function inviteUser(user) {
 
 export function clearImportUserError() {
   return {
-    type: constants.CLEAR_IMPORT_USER_ERROR
+    type: constants.CLEAR_INVITE_USER_ERROR
   };
 }
 

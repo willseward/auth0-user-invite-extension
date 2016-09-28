@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   loadingUser: false, // new user creation
   error: null,
+  inviteUserError: null,
   invitations: { }
 };
 
@@ -48,19 +49,20 @@ export const invitations = createReducer(fromJS(initialState), {
   [constants.INVITE_USER_PENDING]: (state) =>
     state.merge({
       loadingUser: true,
-      error: null
+      inviteUserError: null
     }),
   [constants.INVITE_USER_REJECTED]: (state, action) =>
     state.merge({
       loadingUser: false,
-      error: `An error occured while inviting an user: ${action.errorMessage}`
+      inviteUserError: `An error occured while inviting an user: ${action.errorMessage}`
     }),
   [constants.INVITE_USER_FULFILLED]: (state) =>
     state.merge({
-      loadingUser: false
+      loadingUser: false,
+      inviteUserError: null
     }),
-  [constants.CLEAR_IMPORT_USER_ERROR]: (state) =>
+  [constants.CLEAR_INVITE_USER_ERROR]: (state) =>
     state.merge({
-      error: null
+      inviteUserError: null
     })
 });
