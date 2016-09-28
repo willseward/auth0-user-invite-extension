@@ -24,19 +24,18 @@ export const invitations = createReducer(fromJS(initialState), {
     });
   },
   [constants.FETCH_INVITATIONS_REJECTED]: (state, action) => {
-    const { data } = action.payload;
+    const { data } = action.payload.response;
     return state.mergeDeep({
       loading: {
-        [data.filter]: true
+        [data.filter]: false
       },
       error: {
-        [data.filter]: `An error occured while loading the user list: ${action.payload.data && action.payload.data.message || action.payload.statusText}`
+        [data.filter]: `An error occured while loading the user ${data.filter} list: ${action.errorMessage}`
       }
     });
   },
   [constants.FETCH_INVITATIONS_FULFILLED]: (state, action) => {
     const { data } = action.payload;
-
     return state.mergeDeep({
       loading: {
         [data.filter]: false
@@ -51,20 +50,11 @@ export const invitations = createReducer(fromJS(initialState), {
       loadingUser: true,
       error: null
     }),
-  [constants.INVITE_USER_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.response.data || action.errorMessage;
-    let error;
-    if (errorMessage.message || errorMessage.response) {
-      error = errorMessage.message || errorMessage.response;
-    } else {
-      error = errorMessage;
-    }
-
-    return state.merge({
+  [constants.INVITE_USER_REJECTED]: (state, action) =>
+    state.merge({
       loadingUser: false,
-      error: `An error occured while inviting an user: ${error}`
-    });
-  },
+      error: `An error occured while inviting an user: ${action.errorMessage}`
+    }),
   [constants.INVITE_USER_FULFILLED]: (state) =>
     state.merge({
       loadingUser: false

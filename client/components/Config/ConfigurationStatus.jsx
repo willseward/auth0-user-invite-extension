@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import connectContainer from 'redux-static';
 import classNames from 'classnames';
 import './ConfigurationStatus.css';
+import { Error } from '../Messages';
 
 export default connectContainer(class ConfigurationStatus extends Component {
   static propTypes = {
@@ -18,13 +19,7 @@ export default connectContainer(class ConfigurationStatus extends Component {
 
     if (error) {
       return (
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="alert alert-danger">
-              <strong>Error</strong> Unable to load configuration status - <i>{error}</i>
-            </div>
-          </div>
-        </div>
+        <Error message={error} />
       );
     }
 

@@ -41,15 +41,20 @@ export default connectContainer(class InvitationEmail extends Component {
     });
   }
 
+  renderForm(error) {
+    if (!error) {
+      return (<InvitationEmailForm onSubmit={this.handleSubmit.bind(this)} />);
+    }
+    return null;
+  }
+
   render() {
     const { error, loading } = this.props.templateConfiguration.toJS();
-
     return (
       <div>
         <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-          <InvitationEmailForm onSubmit={this.handleSubmit.bind(this)} />
-          {(this.state.formSubmitted && !loading && !error) ? <Success message={'Form Submitted.'} /> :
-            <Error message={error ? error : ''} />}
+          {(this.state.formSubmitted && !loading && !error) ? <Success message={'Form Submitted.'} /> : <Error message={error ? error : ''} />}
+          {this.renderForm(error)}
         </LoadingPanel>
       </div>
     );

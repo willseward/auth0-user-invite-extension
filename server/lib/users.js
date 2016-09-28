@@ -26,10 +26,7 @@ function getUsers(options, callback) {
       logger.debug('Error getting users:', err);
       return callback(err);
     }
-    return callback(null, {
-      result,
-      filter: options.filter
-    });
+    return callback(null, result);
   });
 }
 
@@ -104,10 +101,11 @@ const validateToken = (auth0, token, callback) => {
     fields: 'user_id,email,email_verified,app_metadata',
     search_engine: 'v2'
   };
+
   return auth0.users.get(options, function (err, users) {
     if (err || !users || !users.length || users.length !== 1) {
       logger.debug('Token is invalid or user was not found.');
-      return callback(err);
+      return callback({ message: err || 'Token is invalid or user was not found.' });
     }
     return callback(null, users[0]);
   });

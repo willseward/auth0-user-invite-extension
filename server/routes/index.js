@@ -50,27 +50,33 @@ export default (storageContext) => {
 
   routes.use(managementClient);
 
-  routes.get('/api/config/template', requireUser, (req, res) => {
-    readStorage(storageContext)
-    .then(data => { res.json(data.templateConfig || {}); });
-  });
+  routes.get('/api/config/template', requireUser,
+    (req, res, next) => {
+      readStorage(storageContext)
+        .then(data => { res.json({ result: data.templateConfig } || {}); })
+        .catch(next);
+    });
 
   routes.patch('/api/config/template',
     requireUser,
     validations.validateWriteTemplateConfig,
-    (req, res) => {
-      writeTemplateConfig(storageContext, req.body).then((data) => {
-        configureEmail(smtpConfig, data.templateConfig);
-        res.sendStatus(200);
-      });
+    (req, res, next) => {
+      writeTemplateConfig(storageContext, req.body)
+        .then((data) => {
+          configureEmail(smtpConfig, data.templateConfig);
+          res.sendStatus(200);
+        })
+        .catch(next);
     });
 
   routes.get('/api/config/status',
     requireUser,
-    (req, res) => {
-      readConfigStatus(storageContext).then((status) => {
-        res.json(status);
-      });
+    (req, res, next) => {
+      readConfigStatus(storageContext)
+        .then((status) => {
+          res.json({ result: status });
+        })
+        .catch(next);
     });
 
   routes.use('/api/connections',

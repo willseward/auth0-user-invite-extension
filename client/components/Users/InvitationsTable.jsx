@@ -2,7 +2,11 @@ import React, { PropTypes } from 'react';
 import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
 const InvitationsTable = (props) => {
-  const { invitations } = props;
+  const { invitations, error } = props;
+  if (error) {
+    return null;
+  }
+
   if (!invitations || !invitations.length) {
     return <div>There are no invitations available. Please add a new user or summit a CSV file.</div>;
   }
@@ -28,7 +32,8 @@ const InvitationsTable = (props) => {
 };
 
 InvitationsTable.propTypes = {
-  invitations: PropTypes.array
+  invitations: PropTypes.array,
+  error: PropTypes.string
 };
 
 export default InvitationsTable;

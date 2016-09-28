@@ -62,13 +62,17 @@ export default connectContainer(class InvitationsContainer extends Component {
   render() {
     const { error, invitations, loading } = this.props.invitations.toJS();
     return (
-      <div className="row">
-        <div className="col-xs-12">
-          <LoadingPanel show={loading[this.props.filter]} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-            <Button type="button" className="pull-right" onClick={this.refresh.bind(this)}>Refresh</Button>
-            <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : ''} />
-            <InvitationsTable invitations={invitations[this.props.filter]} />
-          </LoadingPanel>
+      <div>
+        <div className="row">
+          <div className="col-xs-12">
+            <Button type="button" className="btn btn-sm pull-right" onClick={this.refresh.bind(this)}>Refresh</Button>
+          </div>
+          <div className="col-xs-12">
+            <LoadingPanel show={loading[this.props.filter]} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+              <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : ''} />
+              <InvitationsTable invitations={invitations[this.props.filter]} error={error && error[this.props.filter]} />
+            </LoadingPanel>
+          </div>
         </div>
       </div>
     );

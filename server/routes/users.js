@@ -9,9 +9,13 @@ function getUsersHandler(req, res, next) {
   };
   users.getUsers(options, function onGetUsers(err, result) {
     if (err) {
-      return (err && err.statusCode) ? res.status(err.statusCode).send(err.message) : res.status(500).send(err);
+      return res.status(err.statusCode || 500).send({ ...err, filter: options.filter });
     }
-    return res.json(result);
+
+    return res.json({
+      result,
+      filter: options.filter
+    });
   });
 }
 
@@ -25,9 +29,10 @@ function createUserHandler(req, res, next) {
   };
   users.createUser(options, function onCreateUser(err, result) {
     if (err) {
-      return (err && err.statusCode) ? res.status(err.statusCode).send(err.message) : res.status(500).send(err);
+      return res.status(err.statusCode || 500).send(err);
     }
-    return res.json(result);
+
+    return res.sendStatus(201);
   });
 }
 
@@ -38,8 +43,9 @@ function validateUserTokenHandler(req, res, next) {
   };
   users.validateUserToken(options, function onValidateToken(err, result) {
     if (err) {
-      return (err && err.statusCode) ? res.status(err.statusCode).send(err.message) : res.status(500).send(err);
+      return res.status(err.statusCode || 500).send(err);
     }
+
     return res.json(result);
   });
 }
@@ -53,9 +59,10 @@ function savePasswordHandler(req, res, next) {
   };
   users.savePassword(options, function onSavePassword(err, result) {
     if (err) {
-      return (err && err.statusCode) ? res.status(err.statusCode).send(err.message) : res.status(500).send(err);
+      return res.status(err.statusCode || 500).send(err);
     }
-    return res.send(result);
+
+    return res.sendStatus(204);
   });
 }
 

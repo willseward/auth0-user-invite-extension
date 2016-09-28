@@ -23,6 +23,6 @@ export const configurationStatus = createReducer(fromJS(initialState), {
   [constants.FETCH_CONFIGURATION_STATUS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      status: fromJS(action.payload.data)
+      status: fromJS(action.payload.data.result)
     })
 });
