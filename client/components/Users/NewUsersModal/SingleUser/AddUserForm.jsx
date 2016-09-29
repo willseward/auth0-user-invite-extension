@@ -82,7 +82,7 @@ class AddUserForm extends Component {
     }
 
     return (
-      <InputText field={usernameField} label="Username" type="text" fieldName={usernameField.name} validationErrors={usernameField.error} />
+      <InputText field={usernameField} label="Username" type="text" fieldName={usernameField.name} touched={usernameField.touched} validationErrors={usernameField.error} />
     );
   }
 
@@ -111,7 +111,7 @@ class AddUserForm extends Component {
 
             { this.renderUsername(connection, selectedConnection, username) }
 
-            <InputText field={email} label="Email" type="email" fieldName={email.name} validationErrors={email.error} />
+            <InputText field={email} label="Email" type="email" fieldName={email.name} touched={email.touched} validationErrors={email.error} />
 
             <div className="form-group">
               <label htmlFor="connection" className="control-label col-xs-3">Connection</label>

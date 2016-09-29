@@ -38,8 +38,8 @@ const InvitationEmailForm = (props) => {
   return (
     <form className="form-horizontal" onSubmit={handleSubmit}>
 
-      <InputText field={from} label="From" type="email" fieldName={from.name} placeholder="Address from which you will send invitation emails" validationErrors={from.error} />
-      <InputText field={subject} label="Subject" type="text" fieldName={subject.name} placeholder="Subject" validationErrors={subject.error} />
+      <InputText field={from} label="From" type="email" fieldName={from.name} touched={from.touched} placeholder="Address from which you will send invitation emails" validationErrors={from.error} />
+      <InputText field={subject} label="Subject" type="text" fieldName={subject.name} touched={subject.touched} placeholder="Subject" validationErrors={subject.error} />
 
       <div className="form-group">
         <label className="control-label col-xs-3" htmlFor="html">Current Message</label>
