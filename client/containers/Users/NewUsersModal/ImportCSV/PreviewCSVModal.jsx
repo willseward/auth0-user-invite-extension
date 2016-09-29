@@ -5,7 +5,7 @@ import connectContainer from 'redux-static';
 import { invitationsActions, importActions } from '../../../../actions';
 
 import CSVInvitationsTable from './CSVInvitationsTable';
-import { Error } from '../../../Messages';
+import { Error } from '../../../../components/Messages';
 
 export default connectContainer(class PreviewCSVModal extends Component {
 

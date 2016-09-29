@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import '../Modal.css';
-import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../../../Dashboard';
+import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../../../../components/Dashboard';
 
 export default class CSVInvitationsTable extends Component {
 

@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import connectContainer from 'redux-static';
 
 import { configurationStatusActions } from '../actions';
-import { ConfigurationStatus } from '../components/Config';
+import { ConfigurationStatus } from './Config';
 
 export default connectContainer(class WarningsContainer extends Component {
 

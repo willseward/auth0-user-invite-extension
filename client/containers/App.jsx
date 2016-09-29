@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { WidgetContainer, WarningsContainer } from './';
-import { NewUsersModal } from '../components/Users';
+import { NewUsersModal } from './Users';
 
 const App = () => (
   <div className="col-xs-12">

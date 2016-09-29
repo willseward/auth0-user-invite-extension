@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Configuration } from '../components/Config';
+import { Configuration } from './Config';
 import { WarningsContainer } from './';
 
 const ConfigurationContainer = () => (

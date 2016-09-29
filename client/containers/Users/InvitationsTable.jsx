@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../../components/Dashboard';
 
 const InvitationsTable = (props) => {
   const { invitations, error } = props;

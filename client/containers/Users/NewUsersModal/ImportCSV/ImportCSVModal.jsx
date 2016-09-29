@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
 import ImportDropFiles from './ImportDropFiles';
-import { Error } from '../../../Messages';
+import { Error } from '../../../../components/Messages';
 import { invitationsActions, importActions } from '../../../../actions';
 
 export default connectContainer(class ImportCSVModal extends Component {

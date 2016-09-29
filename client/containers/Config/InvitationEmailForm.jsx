@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import Codemirror from '../Editor';
-import { InputText } from '../Dashboard';
+import Codemirror from '../../components/Editor';
+import { InputText } from '../../components/Dashboard';
 
 require('codemirror/mode/xml/xml');
 

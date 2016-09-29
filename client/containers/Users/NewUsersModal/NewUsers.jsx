@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
 
-import { Error } from '../../Messages';
+import { Error } from '../../../components/Messages';
 
 export default connectContainer(class NewUsers extends Component {
 

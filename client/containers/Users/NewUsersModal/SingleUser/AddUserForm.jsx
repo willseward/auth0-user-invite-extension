@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button } from 'react-bootstrap';
 
-import { InputText } from '../../../Dashboard';
-import { Error } from '../../../Messages';
+import { InputText } from '../../../../components/Dashboard';
+import { Error } from '../../../../components/Messages';
 
 export const fields = [ 'username', 'email', 'selectedConnection', 'connection' ];
 
