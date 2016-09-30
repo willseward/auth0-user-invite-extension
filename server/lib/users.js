@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import async from 'async';
 
 import config from './config';
 import logger from './logger';
@@ -33,6 +34,36 @@ function getUsers(options, callback) {
 /*
  * Add a new user.
  */
+
+function onCreateUser(options, auth0Options, callback) {
+  return options.auth0.users.create(auth0Options, (err, user) => {
+    if (err) {
+      logger.debug('Error creating user', err);
+      return callback(err);
+    }
+    return callback(null, user);
+  });
+}
+
+function onSendEmail(options, transportOptions, templateData, user, callback) {
+  return email.sendEmail(transportOptions, templateData, (err, emailResult) => {
+    if (err) {
+      logger.debug('Error sending email', err);
+      // delete last added user
+      return options.auth0.users.delete({ id: user.user_id }, (err) => {
+        if (err) {
+          logger.debug('Error creating and deleting user', err);
+          // NOTE: should we do something here too?
+          return callback(err);
+        }
+        return callback({ message: 'Error sending email. Please confirm that you have set your configurations.' });
+      });
+    }
+
+    return callback(null, emailResult);
+  });
+}
+
 function createUser(options, callback) {
   const token = uuid.v4();
   const auth0Options = {
@@ -62,22 +93,16 @@ function createUser(options, callback) {
     url: changePasswordURL
   };
 
-  let result = null;
-  return options.auth0.users.create(auth0Options, function onCreateUser(err, user) {
-    result = user;
+  async.waterfall([
+    async.apply(onCreateUser, options, auth0Options),
+    async.apply(onSendEmail, options, transportOptions, templateData)
+  ],
+  (err, results) => {
     if (err) {
       logger.debug('Error creating user', err);
       return callback(err);
     }
-
-    email.sendEmail(transportOptions, templateData, function (err, emailResult) {
-      if (err) {
-        logger.debug('Error sending email', err);
-        // TODO should remove the added user using user_id ?
-        return callback({ message: 'Error sending email. Please confirm that you have set your configurations.' });
-      }
-      return callback(null, result);
-    });
+    return callback(null, results);
   });
 }
 

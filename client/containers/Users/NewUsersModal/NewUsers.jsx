@@ -60,7 +60,7 @@ export default connectContainer(class NewUsers extends Component {
       <Button
         type="button"
         className="btn btn-primary"
-        disabled={(!this.props.path || this.state.warningAlert) ? true : false}
+        disabled={!this.props.path || this.state.warningAlert}
         onClick={this.onSubmit.bind(this)}
       >
         Next
