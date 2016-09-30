@@ -129,7 +129,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
       <Button
         type="button"
         className="btn btn-primary"
-        disabled={(this.state.error !== '' || (csvInvitations.validationErrors && csvInvitations.validationErrors.length > 0))}
+        disabled={(this.state.error !== '' || csvInvitations.validationErrors || csvInvitations.maxCSVRecordsError)}
         onClick={this.onSubmit.bind(this, csvInvitations)}
       >
         Import
@@ -165,7 +165,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
               <div className="modal-body">
 
                 <p className="text-center">Import a CSV file with all the data of your users.</p>
-                <Error message={(this.state.error || csvInvitations.validationErrors) ? (this.state.error || csvInvitations.validationErrors) : ''} />
+                <Error message={(this.state.error || csvInvitations.validationErrors || csvInvitations.maxCSVRecordsError) ? (this.state.error || csvInvitations.validationErrors || csvInvitations.maxCSVRecordsError) : ''} />
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
@@ -180,6 +180,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
                         name="connection"
                         value={this.state.selectedConnection.name}
                         onChange={this.changeConnection}
+                        disabled={csvInvitations.maxCSVRecordsError}
                       >
                         { connectionOptions }
                       </select>

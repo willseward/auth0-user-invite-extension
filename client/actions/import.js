@@ -15,12 +15,6 @@ export function handleFileDrop(newFile) {
     errors.push(`${file.name}: This must be a valid CSV file.`);
   }
 
-  if (file.size >= (10 * 1000 * 1000)) {
-    file.status = 'validation_failed';
-    errors.push(`${file.name}: Maximum supported file size is 10 MB`);
-  }
-
-
   if (errors.length > 0) {
     return {
       type: constants.IMPORT_USERS_VALIDATION_FAILED,

@@ -78,7 +78,8 @@ module.exports = {
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
       'process.env': {
         BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        MAX_CSV_RECORDS: 100
       },
       __CLIENT__: JSON.stringify(true),
       __SERVER__: JSON.stringify(false)

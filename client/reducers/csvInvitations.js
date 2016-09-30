@@ -6,6 +6,7 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   validationErrors: '',
+  maxCSVRecordsError: '',
   invitations: [ ],
   current: 0,
   failed: 0,
@@ -72,6 +73,11 @@ export const csvInvitations = createReducer(fromJS(initialState), {
     state.merge({
       loading: false,
       validationErrors: ''
+    }),
+  [constants.MAX_CSV_RECORDS_ERROR]: (state, action) =>
+    state.merge({
+      loading: false,
+      maxCSVRecordsError: action.payload.error
     }),
   [constants.CLEAR_CSV_USERS]: (state) =>
     state.merge({

@@ -98,6 +98,15 @@ export function inviteUsersPreview(file) {
           });
         }
 
+        if (usersData && usersData.data.length > process.env.MAX_CSV_RECORDS) {
+          return dispatch({
+            type: constants.MAX_CSV_RECORDS_ERROR,
+            payload: {
+              error: `The submitted file has more than ${process.env.MAX_CSV_RECORDS} records.`
+            }
+          });
+        }
+
         dispatch({
           type: constants.INVITE_USERS_PREVIEW,
           payload: {
@@ -129,7 +138,7 @@ export function inviteUsers(invitations, connection, requiresUsername) {
     invitations = invitations.map(item => {
       delete item.username;
       return item;
-    })
+    });
   }
 
   return (dispatch) => {

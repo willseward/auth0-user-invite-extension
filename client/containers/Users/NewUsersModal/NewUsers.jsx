@@ -83,7 +83,7 @@ export default connectContainer(class NewUsers extends Component {
             style={this.styleCardSelected(path.code)}
             className="card-docs"
           >
-            <i className="card-docs-icon ${path.icon}" />
+            <i className={`card-docs-icon ${path.icon}`} />
             <h2 className="card-docs-title">{path.title}</h2>
             <p className="card-docs-description">{path.description}</p>
           </article>
@@ -103,8 +103,7 @@ export default connectContainer(class NewUsers extends Component {
       singleUser: {
         code: 'SINGLE_USER',
         icon: 'icon-budicon-304',
-        title: 'Create User',
-        description: 'Create Single User'
+        title: 'Invite a single user'
       }
     };
 
@@ -120,7 +119,7 @@ export default connectContainer(class NewUsers extends Component {
               <h4 id="myModalLabel" className="modal-title">New Users</h4>
             </div>
             <div className="modal-body">
-              <p className="text-center">Select how do you want to add new users.</p>
+              <p className="text-center">Select how do you want to invite new users.</p>
               <Error message={(this.state.error) ? this.state.error : ''} />
               { this.renderPathCards(paths) }
             </div>

@@ -90,7 +90,6 @@ export default connectContainer(class ImportCSVModal extends Component {
 
   render() {
     const { file, validationErrors } = this.props.importReducer.toJS();
-
     return (
       <div>
         <div className="modal-backdrop" />
@@ -104,7 +103,7 @@ export default connectContainer(class ImportCSVModal extends Component {
             </div>
             <div className="modal-body">
 
-              <p className="text-center">Import a CSV file with all the data of your users.</p>
+              <p className="text-center">Import a CSV file with all the data of your users. Note that you can only add {process.env.MAX_CSV_RECORDS} records.</p>
               <Error message={validationErrors.length ? validationErrors : ''} />
 
               <div className="row">
