@@ -11,7 +11,8 @@ export default connectContainer(class WarningsContainer extends Component {
   }
 
   static propTypes = {
-    fetchConfigurationStatus: PropTypes.func.isRequired
+    fetchConfigurationStatus: PropTypes.func.isRequired,
+    onWarningAlert: PropTypes.func
   }
 
   componentDidMount() {

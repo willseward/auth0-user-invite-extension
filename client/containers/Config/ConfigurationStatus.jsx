@@ -37,7 +37,7 @@ export default connectContainer(class ConfigurationStatus extends Component {
           <div className="col-xs-12 wrapper">
             <div className="alert alert-warning">
               <strong>Warning</strong> The extension still needs to be configured before it can enforce your authorization logic.
-              <div className=" pull-right">
+              <div className="pull-right">
                 <Link className={buttonClasses} to="/configuration">
                   Go to Configuration
                 </Link>

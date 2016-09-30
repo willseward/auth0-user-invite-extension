@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 
 import connectContainer from 'redux-static';
 
+import ConfigurationStatus from '../../Config/ConfigurationStatus';
 import { Error } from '../../../components/Messages';
 
 export default connectContainer(class NewUsers extends Component {
@@ -11,7 +12,8 @@ export default connectContainer(class NewUsers extends Component {
     super();
 
     this.state = {
-      error: ''
+      error: '',
+      warningAlert: ''
     };
   }
 
@@ -19,8 +21,25 @@ export default connectContainer(class NewUsers extends Component {
     tryAgain: PropTypes.func.isRequired,
     nextView: PropTypes.func.isRequired,
     selectPath: PropTypes.func.isRequired,
-    path: PropTypes.string
+    path: PropTypes.string,
+    configurationStatus: PropTypes.object.isRequired
   }
+
+  componentWillReceiveProps(nextProps) {
+    const configurationStatus = nextProps.configurationStatus.toJS();
+
+    if (configurationStatus &&
+        configurationStatus.status &&
+        typeof configurationStatus.status.hasData === 'boolean') {
+      this.setState({
+        warningAlert: !configurationStatus.status.hasData
+      });
+    }
+  }
+
+  static stateToProps = (state) => ({
+    configurationStatus: state.configurationStatus
+  });
 
   selectPath(path) {
     this.props.selectPath(path);
@@ -41,7 +60,7 @@ export default connectContainer(class NewUsers extends Component {
       <Button
         type="button"
         className="btn btn-primary"
-        disabled={this.props.path ? false : true}
+        disabled={(!this.props.path || this.state.warningAlert) ? true : false}
         onClick={this.onSubmit.bind(this)}
       >
         Next
@@ -92,6 +111,10 @@ export default connectContainer(class NewUsers extends Component {
     }.bind(this));
   }
 
+  renderWarning() {
+    return (<ConfigurationStatus />);
+  }
+
   render() {
     const paths = {
       csv: {
@@ -120,6 +143,7 @@ export default connectContainer(class NewUsers extends Component {
             </div>
             <div className="modal-body">
               <p className="text-center">Select how do you want to invite new users.</p>
+              { this.renderWarning() }
               <Error message={(this.state.error) ? this.state.error : ''} />
               { this.renderPathCards(paths) }
             </div>
