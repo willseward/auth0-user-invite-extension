@@ -1,5 +1,6 @@
 import { Router as router } from 'express';
 import stubTransport from 'nodemailer-stub-transport';
+import { middlewares } from 'auth0-extension-express-tools';
 
 import changePassword from '../views/changePassword';
 import html from './html';
@@ -10,7 +11,8 @@ import config from '../lib/config';
 import users from '../lib/users';
 import validations from '../lib/validations';
 
-import { dashboardAdmins, requireUser, managementClient } from '../lib/middlewares';
+import { dashboardAdmins } from '../lib/middlewares';
+
 import { readStorage, writeTemplateConfig, readConfigStatus } from '../lib/storage';
 
 import connectionsHandlers from './connections';
@@ -48,9 +50,14 @@ export default (storageContext) => {
 
   routes.use('/meta', meta());
 
-  routes.use(managementClient);
+  const managementApiClient = middlewares.managementApiClient({
+    domain: config('AUTH0_DOMAIN'),
+    clientId: config('AUTH0_CLIENT_ID'),
+    clientSecret: config('AUTH0_CLIENT_SECRET')
+  });
+  routes.use(managementApiClient);
 
-  routes.get('/api/config/template', requireUser,
+  routes.get('/api/config/template', middlewares.requireUser,
     (req, res, next) => {
       readStorage(storageContext)
         .then(data => { res.json({ result: data.templateConfig } || {}); })
@@ -58,7 +65,7 @@ export default (storageContext) => {
     });
 
   routes.patch('/api/config/template',
-    requireUser,
+    middlewares.requireUser,
     validations.validateWriteTemplateConfig,
     (req, res, next) => {
       writeTemplateConfig(storageContext, req.body)
@@ -70,7 +77,7 @@ export default (storageContext) => {
     });
 
   routes.get('/api/config/status',
-    requireUser,
+    middlewares.requireUser,
     (req, res, next) => {
       readConfigStatus(storageContext)
         .then((status) => {
@@ -80,16 +87,16 @@ export default (storageContext) => {
     });
 
   routes.use('/api/connections',
-    requireUser,
+    middlewares.requireUser,
     connectionsHandlers.getConnectionsHandler);
 
   routes.post('/api/invitations/user',
-    requireUser,
+    middlewares.requireUser,
     validations.validateInviteUser,
     userHandlers.createUserHandler);
 
   routes.get('/api/invitations',
-    requireUser,
+    middlewares.requireUser,
     validations.validateInvitations,
     userHandlers.getUsersHandler);
 

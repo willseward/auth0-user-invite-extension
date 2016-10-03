@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 
 import routes from './routes';
 import logger from './lib/logger';
-import * as middlewares from './lib/middlewares';
+import { middlewares } from 'auth0-extension-express-tools';
 
 module.exports = (storageContext) => {
   const app = new Express();
@@ -27,6 +27,6 @@ module.exports = (storageContext) => {
 
 
   // Generic error handler.
-  app.use(middlewares.errorHandler);
+  app.use(middlewares.errorHandler(logger.error));
   return app;
 };
