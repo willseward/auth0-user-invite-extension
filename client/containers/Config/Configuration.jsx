@@ -2,8 +2,8 @@ import React from 'react';
 
 import { InvitationEmail } from './';
 
-const Configuration = () =>
-  (<div>
+function Configuration() {
+  return (<div>
     <div className="widget-title title-with-nav-bars">
       <ul className="nav nav-tabs">
         <li className="active">
@@ -21,5 +21,5 @@ const Configuration = () =>
       </div>
     </div>
   </div>);
-
+}
 export default Configuration;

@@ -25,7 +25,7 @@ const validate = values => {
   return errors;
 };
 
-const InvitationEmailForm = (props) => {
+function InvitationEmailForm(props) {
   const {
     fields: { from, subject, html },
     handleSubmit
@@ -64,7 +64,7 @@ const InvitationEmailForm = (props) => {
       </div>
     </form>
   );
-};
+}
 
 InvitationEmailForm.propTypes = {
   fields: PropTypes.object.isRequired,

@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../../components/Dashboard';
 
-const InvitationsTable = (props) => {
-  const { invitations, error } = props;
+function InvitationsTable({ invitations, error }) {
   if (error) {
     return null;
   }
@@ -29,7 +28,7 @@ const InvitationsTable = (props) => {
       </Table>
     </div>
   );
-};
+}
 
 InvitationsTable.propTypes = {
   invitations: PropTypes.array,

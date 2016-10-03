@@ -3,7 +3,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const InputText = (props) => {
+function InputText(props) {
   const { field, label, type, fieldName, touched, placeholder, validationErrors } = props;
   const classes = classNames({
     'form-group': true,
@@ -19,7 +19,7 @@ const InputText = (props) => {
       </div>
     </div>
   );
-};
+}
 
 
 InputText.propTypes = {
