@@ -13,57 +13,50 @@ const defaultStorage = {
 /*
  * Read from Webtask storage.
  */
-export const readStorage = (storageContext) => {
-  if (!storageContext) {
-    logger.debug('Unable to read storage. Context not available.');
-    return Promise.resolve(defaultStorage);
-  }
+export const readStorage = (storage) => {
 
   return new Promise((resolve, reject) => {
-    return storageContext.get((err, webtaskData) => {
-      if (err) {
+    return storage.read()
+      .then((data) => {
+        if (data && Object.keys(data).length === 0) {
+          return resolve(defaultStorage);
+        }
+        return resolve(data);
+      })
+      .catch((err) => {
         return reject(err);
-      }
-
-      const data = webtaskData || defaultStorage;
-      return resolve(data);
-    });
+      });
   });
 };
 
 /*
  * Write to Webtask storage.
  */
-export const writeStorage = (storageContext, data) => {
-  if (!storageContext) {
-    logger.debug('Unable to write storage. Context not available.');
-    return Promise.resolve(data);
-  }
-
+export const writeStorage = (storage, data) => {
   return new Promise((resolve, reject) => {
-    return storageContext.set(data, { force: 1 }, (err) => {
-      if (err) {
+    return storage.write(data)
+      .then(() => {
+        return resolve();
+      })
+      .catch((err) => {
         return reject(err);
-      }
-
-      return resolve(data);
-    });
+      });
   });
 };
 
 /*
  * Write template config to Webtask storage.
  */
-export const writeTemplateConfig = (storageContext, templateConfig) => {
-  return readStorage(storageContext).then(data => {
+export const writeTemplateConfig = (storage, templateConfig) => {
+  return readStorage(storage).then(data => {
     data.templateConfig = templateConfig || {};
     return data;
   })
-  .then(data => writeStorage(storageContext, data));
+  .then(data => writeStorage(storage, data));
 };
 
-export const readConfigStatus = (storageContext) => {
-  return readStorage(storageContext).then(data => {
+export const readConfigStatus = (storage) => {
+  return readStorage(storage).then(data => {
 
     return new Promise((resolve, reject) => {
       validations.validateTemplateConfigSchema(data.templateConfig, (err, result) => {

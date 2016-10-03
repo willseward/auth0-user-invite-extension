@@ -25,7 +25,8 @@ const configureEmail = (smtpConfig, templateConfig) => {
   users.configureEmail(smtpConfig, templateConfig);
 };
 
-export default (storageContext) => {
+export default (storage) => {
+
   const smtpConfig = {
     host: config('SMTP_HOST'),
     port: config('SMTP_PORT'),
@@ -35,7 +36,8 @@ export default (storageContext) => {
       pass: config('SMTP_AUTH_PASS')
     }
   };
-  readStorage(storageContext).then(data => {
+
+  readStorage(storage).then(data => {
     configureEmail(smtpConfig, data.templateConfig);
   });
 
@@ -59,7 +61,7 @@ export default (storageContext) => {
 
   routes.get('/api/config/template', middlewares.requireUser,
     (req, res, next) => {
-      readStorage(storageContext)
+      readStorage(storage)
         .then(data => { res.json({ result: data.templateConfig } || {}); })
         .catch(next);
     });
@@ -68,9 +70,9 @@ export default (storageContext) => {
     middlewares.requireUser,
     validations.validateWriteTemplateConfig,
     (req, res, next) => {
-      writeTemplateConfig(storageContext, req.body)
-        .then((data) => {
-          configureEmail(smtpConfig, data.templateConfig);
+      writeTemplateConfig(storage, req.body)
+        .then(() => {
+          configureEmail(smtpConfig, req.body);
           res.sendStatus(200);
         })
         .catch(next);
@@ -79,7 +81,7 @@ export default (storageContext) => {
   routes.get('/api/config/status',
     middlewares.requireUser,
     (req, res, next) => {
-      readConfigStatus(storageContext)
+      readConfigStatus(storage)
         .then((status) => {
           res.json({ result: status });
         })
