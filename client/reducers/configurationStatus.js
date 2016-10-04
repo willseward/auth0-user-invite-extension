@@ -6,7 +6,7 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  status: { }
+  status: { hasData: true }
 };
 
 export const configurationStatus = createReducer(fromJS(initialState), {
