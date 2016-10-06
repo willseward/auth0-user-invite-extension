@@ -25,12 +25,12 @@
       "required": true
     },
     "SMTP_PORT": {
-      "example": 465,
+      "example": "465",
       "description": "SMTP server port",
       "required": true
     },
     "SMTP_SECURE": {
-      "example": true,
+      "example": "true",
       "description": "Require TLS?",
       "required": true
     },
