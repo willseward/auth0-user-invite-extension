@@ -16,7 +16,8 @@ export default connectContainer(class AddUserModal extends Component {
   }
 
   static stateToProps = (state) => ({
-    invitations: state.invitations
+    invitations: state.invitations,
+    connection: state.connection
   })
 
   static actionsToProps = {
@@ -28,7 +29,8 @@ export default connectContainer(class AddUserModal extends Component {
     nextView: PropTypes.func.isRequired,
     goBackView: PropTypes.func.isRequired,
     tryAgain: PropTypes.func.isRequired,
-    invitations: PropTypes.object
+    invitations: PropTypes.object,
+    connection: PropTypes.object
   }
 
   handleSubmit(data) {
@@ -60,12 +62,19 @@ export default connectContainer(class AddUserModal extends Component {
 
   render() {
     const invitations = this.props.invitations.toJS();
+    const connection = this.props.connection.toJS().connection;
+    const initialValues = {
+      selectedConnection: (connection && connection.length) ? connection[0].name : '',
+      connection // NOTE: we pass the connection here to be able to do the initial validation (see 'validate' function in form)
+    }
 
     return (
       <div>
         <div className="modal-backdrop" />
         <div className="modal-dialog">
           <AddUserForm
+            initialValues={initialValues}
+            connection={connection}
             onSubmit={this.handleSubmit.bind(this)}
             formSubmitted={this.state.formSubmitted}
             invitations={invitations}

@@ -1,31 +1,30 @@
 import React, { Component, PropTypes } from 'react';
-import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux'
+import { reduxForm, Field, formValueSelector, isInvalid } from 'redux-form';
 import { Button } from 'react-bootstrap';
 
 import { InputText } from '../../../../components/Dashboard';
 import { Error } from '../../../../components/Messages';
 
-export const fields = [ 'username', 'email', 'selectedConnection', 'connection' ];
-
 const validate = values => {
   const errors = {};
 
   if (!values.selectedConnection) {
-    errors.selectedConnection = [ 'Required' ];
+    errors.selectedConnection = [ 'Connection is required' ];
   }
 
   const connection = _.find(values.connection, (item) => item.name === values.selectedConnection);
 
   if (!connection || !connection.name) {
-    errors.selectedConnection = [ 'Required' ];
+    errors.selectedConnection = [ 'Connection is required' ];
   }
 
   if (!values.username && connection && connection.requires_username) {
-    errors.username = [ 'Required' ]; // may be required or not, depending on the connection
+    errors.username = [ 'Username is required' ]; // may be required or not, depending on the connection
   }
 
   if (!values.email) {
-    errors.email = [ 'Required' ];
+    errors.email = [ 'Email is required' ];
   }
 
   return errors;
@@ -47,12 +46,12 @@ class AddUserForm extends Component {
     this.props.tryAgain();
   }
 
-  renderNextBtn(fieldsList) {
+  renderNextBtn(isInvalid) {
     return (
       <Button
         type="button"
         className="btn btn-primary" type="submit"
-        disabled={_.some(fieldsList, item => item.error)}
+        disabled={isInvalid}
       >
         Create
       </Button>
@@ -71,27 +70,44 @@ class AddUserForm extends Component {
     );
   }
 
-  renderUsername(connection, connectionField, usernameField) {
-    if (!connectionField || !connectionField.value) {
+  renderUsernameField(connection, connectionField) {
+    if (!connectionField) {
       return null;
     }
 
-    const selectedConnection = _.find(connection, (item) => item.name === connectionField.value);
+    const selectedConnection = _.find(connection, (item) => item.name === connectionField);
     if (!selectedConnection || !selectedConnection.requires_username) {
       return null;
     }
 
     return (
-      <InputText field={usernameField} label="Username" type="text" fieldName={usernameField.name} touched={usernameField.touched} validationErrors={usernameField.error} />
+      <Field name="username" component={InputText} label="Username" type="text" />
+    );
+  }
+
+  renderConnectionField(field) {
+    const connection = field.connection;
+    return (
+      <div className="form-group">
+        <label className="control-label col-xs-3" htmlFor={field.name}>{field.label}</label>
+        <div className="col-xs-9">
+          <select id="connection" className="form-control" {...field.input}>
+            {connection ? connection.map(connectionOption => <option value={connectionOption.name} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
+          </select>
+          {field.meta.touched && field.meta.error && <div>{field.meta.error}</div>}
+          <p className="help-block">This is a logical identifier of the connection.</p>
+        </div>
+      </div>
     );
   }
 
   render() {
     const {
-      fields: { username, email, selectedConnection },
       handleSubmit,
       connection,
-      invitations
+      invitations,
+      hasSelectedConnection,
+      isInvalid
     } = this.props;
 
     return (
@@ -109,36 +125,27 @@ class AddUserForm extends Component {
             <p className="text-center">Create an user with connection, email and username if needed.</p>
             <Error message={invitations.inviteUserError ? invitations.inviteUserError : ''} />
 
-            <div className="form-group">
-              <label htmlFor="connection" className="control-label col-xs-3">Connection</label>
-              <div className="col-xs-9">
-                <select id="connection" className="form-control" {...selectedConnection}>
-                  {connection ? connection.map(connectionOption => <option value={connectionOption.name} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
-                </select>
+            <Field name="selectedConnection" component={this.renderConnectionField} connection={connection} label="Connection" />
 
-                {selectedConnection.touched && selectedConnection.error && <div>{selectedConnection.error[0]}</div>}
-                <p className="help-block">This is a logical identifier of the connection.</p>
-              </div>
-            </div>
+            <Field name="email" component={InputText} label="Email" type="email" />
 
-            { this.renderUsername(connection, selectedConnection, username) }
-
-            <InputText field={email} label="Email" type="email" fieldName={email.name} touched={email.touched} validationErrors={email.error} />
+            { this.renderUsernameField(connection, hasSelectedConnection) }
 
           </div>
 
           <div className="modal-footer">
-            { this.renderBackBtn() } { this.renderNextBtn(this.props.fields) }
+            { this.renderBackBtn() } { this.renderNextBtn(isInvalid) }
           </div>
         </form>
 
       </div>
     );
   }
+
+
 }
 
 AddUserForm.propTypes = {
-  fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   formSubmitted: PropTypes.bool.isRequired,
   nextView: PropTypes.func.isRequired,
@@ -147,23 +154,26 @@ AddUserForm.propTypes = {
   tryAgain: PropTypes.func.isRequired,
   resetForm: PropTypes.func.isRequired,
   connection: PropTypes.array,
-  invitations: PropTypes.object
+  invitations: PropTypes.object,
+  hasSelectedConnection: PropTypes.string,
+  isInvalid: PropTypes.bool
 };
 
-function mapStateToProps(state) {
-  const connection = state.connection.toJS().connection;
+
+const reduxFormDecorator = reduxForm({
+  form: 'addUser',
+  validate
+});
+
+// Decorate with connect to read form values
+const selector = formValueSelector('addUser');
+const connectDecorator = connect(state => {
+  const hasSelectedConnection = selector(state, 'selectedConnection');
 
   return {
-    connection,
-    initialValues: {
-      selectedConnection: (connection && connection.length) ? connection[0].name : '',
-      connection // NOTE: we pass the connection here to be able to do the initial validation (see 'validate' function)
-    }
+    hasSelectedConnection,
+    isInvalid: isInvalid('addUser')(state) // form has sync, async, or submission errors
   };
-}
+});
 
-export default reduxForm({
-  form: 'add user',
-  fields,
-  validate
-}, mapStateToProps)(AddUserForm);
+export default connectDecorator(reduxFormDecorator(AddUserForm));

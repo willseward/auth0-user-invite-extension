@@ -26,7 +26,8 @@ export default connectContainer(class InvitationEmail extends Component {
 
   static propTypes = {
     fetchTemplateConfiguration: PropTypes.func.isRequired,
-    saveTemplateConfiguration: PropTypes.func.isRequired
+    saveTemplateConfiguration: PropTypes.func.isRequired,
+    templateConfiguration: PropTypes.object
   }
 
   componentDidMount() {
@@ -41,21 +42,26 @@ export default connectContainer(class InvitationEmail extends Component {
     });
   }
 
-  renderForm(error) {
+  renderForm(error, template) {
+    const initialValues = {
+      from: template.from,
+      subject: template.subject,
+      html: template.html
+    };
     if (!error) {
-      return (<InvitationEmailForm onSubmit={this.handleSubmit.bind(this)} />);
+      return (<InvitationEmailForm initialValues={initialValues} onSubmit={this.handleSubmit.bind(this)} />);
     }
     return null;
   }
 
   render() {
-    const { error, loading } = this.props.templateConfiguration.toJS();
+    const { error, loading, template } = this.props.templateConfiguration.toJS();
     return (
       <div>
         <p className="help-block">This email will be sent whenever a user is invited.</p>
         <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           {(this.state.formSubmitted && !loading && !error) ? <Success message={'Form Submitted.'} /> : <Error message={error ? error : ''} />}
-          {this.renderForm(error)}
+          {this.renderForm(error, template)}
         </LoadingPanel>
       </div>
     );
