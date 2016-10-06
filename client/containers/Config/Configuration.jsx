@@ -9,7 +9,7 @@ function Configuration() {
         <li className="active">
           <a data-toggle="tab" href="#invitation-email" aria-expanded="true">
             <span className="tab-title">
-              Invitation Email Template
+              Email Template
             </span>
           </a>
         </li>

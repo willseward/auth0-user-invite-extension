@@ -45,7 +45,7 @@ export default connectContainer(class UserAdded extends Component {
               <Button type="button" data-dismiss="modal" className="close" onClick={this.props.tryAgain}>
                 <span aria-hidden="true">×</span><span className="sr-only">Close</span>
               </Button>
-              <h4 className="modal-title">User created!</h4>
+              <h4 className="modal-title">Create User</h4>
             </div>
             <div className="modal-body">
               <div className="row col-xs-12">

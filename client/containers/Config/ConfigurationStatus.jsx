@@ -25,10 +25,6 @@ export default connectContainer(class ConfigurationStatus extends Component {
 
     if (status && !status.hasData) {
       const buttonClasses = classNames({
-        btn: true,
-        'btn-sm': true,
-        'btn-warning': true,
-        'ConfigurationStatus-link': true,
         hidden: location.pathname === '/configuration'
       });
 
@@ -36,12 +32,7 @@ export default connectContainer(class ConfigurationStatus extends Component {
         <div className="row">
           <div className="col-xs-12 wrapper">
             <div className="alert alert-warning">
-              <strong>Warning</strong> The extension still needs to be configured before it can enforce your authorization logic.
-              <div className="pull-right">
-                <Link className={buttonClasses} to="/configuration">
-                  Go to Configuration
-                </Link>
-              </div>
+              <strong>Warning</strong> The extension still needs to be configured before it can enforce your authorization logic. <Link className={buttonClasses} to="/configuration">Go to Configuration</Link>
             </div>
           </div>
         </div>

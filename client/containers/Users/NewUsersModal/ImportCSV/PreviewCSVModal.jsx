@@ -159,18 +159,15 @@ export default connectContainer(class PreviewCSVModal extends Component {
               <Button type="button" data-dismiss="modal" className="close" onClick={this.props.tryAgain}>
                 <span aria-hidden="true">×</span><span className="sr-only">Close</span>
               </Button>
-              <h4 id="previewCSVModalLabel" className="modal-title">Preview CSV</h4>
+              <h4 id="previewCSVModalLabel" className="modal-title">Import CSV</h4>
             </div>
             <form id="preview-csv-form">
               <div className="modal-body">
 
-                <p className="text-center">Import a CSV file with all the data of your users.</p>
+                <p className="text-center">Preview your list of users.</p>
                 <Error message={(this.state.error || csvInvitations.validationErrors || csvInvitations.maxCSVRecordsError) ? (this.state.error || csvInvitations.validationErrors || csvInvitations.maxCSVRecordsError) : ''} />
 
                 <div className="row">
-                  <div className="col-xs-12 form-group">
-                  { this.renderCSVInvitationsTable(csvInvitations) }
-                  </div>
                   <div className="col-xs-12 form-group">
                     <label htmlFor="connection" className="control-label col-xs-2">Connection</label>
                     <div className="col-xs-10">
@@ -186,6 +183,9 @@ export default connectContainer(class PreviewCSVModal extends Component {
                       </select>
                       <p className="help-block">This is a logical identifier of the connection.</p>
                     </div>
+                  </div>
+                  <div className="col-xs-12 form-group">
+                    { this.renderCSVInvitationsTable(csvInvitations) }
                   </div>
                 </div>
               </div>

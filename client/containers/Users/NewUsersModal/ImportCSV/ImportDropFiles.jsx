@@ -5,7 +5,7 @@ class ImportDropFiles extends Component {
   dropzoneStyle = {
     width: '100%',
     height: '150px',
-    padding: '50px 20px 20px 20px',
+    padding: '35px 20px 20px 20px',
     marginBottom: '20px',
     border: '2px dashed rgb(211, 211, 211)',
     borderRadius: '5px',
@@ -22,7 +22,7 @@ class ImportDropFiles extends Component {
         disablePreview
         style={this.dropzoneStyle}
       >
-        <div>Drop your file here, or click to select.</div>
+        <h3>Drop your file here, or click to select.</h3>
       </Dropzone>
     );
   }

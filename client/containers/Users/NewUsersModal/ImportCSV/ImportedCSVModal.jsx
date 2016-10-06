@@ -69,12 +69,12 @@ export default connectContainer(class ImportedCSVModal extends Component {
               <Button type="button" data-dismiss="modal" className="close" onClick={this.props.tryAgain}>
                 <span aria-hidden="true">×</span><span className="sr-only">Close</span>
               </Button>
-              <h4 id="importedCSVModalLabel" className="modal-title">CSV Imported!</h4>
+              <h4 id="importedCSVModalLabel" className="modal-title">Import CSV</h4>
             </div>
             <form id="imported-csv-form">
               <div className="modal-body">
                 <div className="row col-xs-12">
-                  <p className="text-center">CSV file imported. Successfully invited users will receive an email with a link to join.</p>
+                  <p className="text-center">Uploading your CSV file. Successfully invited users will receive an email with a link to join.</p>
                   <p className="text-center">{csvInvitations.current === invitationsLength ? `There were ${csvInvitations.current - csvInvitations.failed} successfully imported users and ${csvInvitations.failed} that failed.` : '' }</p>
                 </div>
 

@@ -109,10 +109,6 @@ class AddUserForm extends Component {
             <p className="text-center">Create an user with connection, email and username if needed.</p>
             <Error message={invitations.inviteUserError ? invitations.inviteUserError : ''} />
 
-            { this.renderUsername(connection, selectedConnection, username) }
-
-            <InputText field={email} label="Email" type="email" fieldName={email.name} touched={email.touched} validationErrors={email.error} />
-
             <div className="form-group">
               <label htmlFor="connection" className="control-label col-xs-3">Connection</label>
               <div className="col-xs-9">
@@ -124,6 +120,10 @@ class AddUserForm extends Component {
                 <p className="help-block">This is a logical identifier of the connection.</p>
               </div>
             </div>
+
+            { this.renderUsername(connection, selectedConnection, username) }
+
+            <InputText field={email} label="Email" type="email" fieldName={email.name} touched={email.touched} validationErrors={email.error} />
 
           </div>
 

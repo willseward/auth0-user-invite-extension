@@ -52,6 +52,7 @@ export default connectContainer(class InvitationEmail extends Component {
     const { error, loading } = this.props.templateConfiguration.toJS();
     return (
       <div>
+        <p className="help-block">This email will be sent whenever a user is invited.</p>
         <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           {(this.state.formSubmitted && !loading && !error) ? <Success message={'Form Submitted.'} /> : <Error message={error ? error : ''} />}
           {this.renderForm(error)}
