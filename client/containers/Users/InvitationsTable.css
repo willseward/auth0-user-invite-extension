@@ -1,0 +1,4 @@
+div.invitationstable-header {
+  max-height: 190px;
+  overflow-y: scroll;
+}

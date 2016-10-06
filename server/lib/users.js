@@ -1,5 +1,6 @@
 import uuid from 'uuid';
 import async from 'async';
+import moment from 'moment';
 
 import config from './config';
 import logger from './logger';
@@ -18,7 +19,7 @@ function getUsers(options, callback) {
     per_page: options.perPage || 100,
     page: options.page || 0,
     include_totals: true,
-    fields: 'user_id,name,email,app_metadata',
+    fields: 'user_id,name,email,identities.connection,app_metadata.invite.date_of_invitation',
     search_engine: 'v2'
   };
 
@@ -27,7 +28,16 @@ function getUsers(options, callback) {
       logger.debug('Error getting users:', err);
       return callback(err);
     }
-    return callback(null, result);
+    const formattedUsers = result.users.map(item => {
+      const date = item.app_metadata && item.app_metadata.invite.date_of_invitation;
+      return {
+        name: item.name,
+        email: item.email,
+        connection: item.identities && item.identities.length > 0 && item.identities[0].connection, // pick first one
+        date_of_invitation: date ? moment(date).format('L') : ''
+      };
+    });
+    return callback(null, { users: formattedUsers });
   });
 }
 
@@ -73,7 +83,8 @@ function createUser(options, callback) {
     app_metadata: {
       invite: {
         status: 'pending', // default status
-        token
+        token,
+        date_of_invitation: moment().format()
       }
     }
   };

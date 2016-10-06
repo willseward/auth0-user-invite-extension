@@ -3,7 +3,7 @@ import { Button, ProgressBar } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
 import '../Modal.css';
-import CSVInvitationsTable from './CSVInvitationsTable';
+import InvitationsTable from './../../InvitationsTable';
 
 export default connectContainer(class ImportedCSVModal extends Component {
 
@@ -41,13 +41,22 @@ export default connectContainer(class ImportedCSVModal extends Component {
     );
   }
 
-  renderCSVInvitationsTable(csvInvitations) {
-    let fields = [ 'email', 'status' ];
+  renderInvitationsTable(csvInvitations) {
+    let fields = [
+      {
+        header: 'Email',
+        body: 'email'
+      },
+      {
+        header: 'Status',
+        body: 'status'
+      }
+    ];
     if (csvInvitations.selectedConnection.requiresUsername) {
-      fields.unshift('username');
+      fields.unshift({ header: 'Username', body: 'username' });
     }
     return (
-      <CSVInvitationsTable {...csvInvitations} fields={fields} />
+      <InvitationsTable {...csvInvitations} fields={fields} />
     );
   }
 
@@ -90,7 +99,7 @@ export default connectContainer(class ImportedCSVModal extends Component {
 
                 <div className="row">
                   <div className="col-xs-12 form-group">
-                    { this.renderCSVInvitationsTable(csvInvitations) }
+                    { this.renderInvitationsTable(csvInvitations) }
                   </div>
                 </div>
 

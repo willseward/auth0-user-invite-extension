@@ -25,11 +25,6 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="row">
-        <p className="col-xs-6 help-block">
-          Here you will find all the users whether they accepted their invitations or not.
-        </p>
-      </div>
       <WarningsContainer />
       <WidgetContainer />
     </div>

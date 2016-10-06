@@ -20,8 +20,3 @@ div.ImportedCSVModal-iconSection > i {
   color: white;
   font-size: 60px;
 }
-
-div.invitationstable-header {
-  max-height: 190px;
-  overflow-y: scroll;
-}

@@ -1,38 +1,47 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+
+import './InvitationsTable.css';
 import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../../components/Dashboard';
 
-function InvitationsTable({ invitations, error }) {
-  if (error) {
-    return null;
+export default class InvitationsTable extends Component {
+
+  static propTypes = {
+    invitations: PropTypes.array,
+    fields: PropTypes.array.isRequired
+  };
+
+  renderHeader() {
+    return this.props.fields.map(field => (
+      <TableColumn key={field.header} width="{1 / this.props.fields.length}%">{field.header}</TableColumn>
+    ));
   }
 
-  if (!invitations || !invitations.length) {
-    return <div>There are no invitations available. Please add a new user or summit a CSV file.</div>;
+  renderBody(invitations) {
+    return invitations.map((invitation, index) => (
+      <TableRow key={index}>
+        { this.props.fields.map(field => <TableTextCell key={field.body + index}>{invitation[field.body]}</TableTextCell>) }
+      </TableRow>
+    ));
   }
 
-  return (
-    <div>
-      <Table>
-        <TableHeader>
-          <TableColumn width="50%">Email</TableColumn>
-          <TableColumn width="50%">Status</TableColumn>
-        </TableHeader>
-        <TableBody>
-          { invitations.map((invitation, index) => (
-            <TableRow key={index}>
-              <TableTextCell>{invitation.email}</TableTextCell>
-              <TableTextCell>{invitation.app_metadata.invite.status}</TableTextCell>
-            </TableRow>
-          )) }
-        </TableBody>
-      </Table>
-    </div>
-  );
+  render() {
+    const { invitations } = this.props;
+
+    if (!invitations || !invitations.length) {
+      return null;
+    }
+
+    return (
+      <div className="invitationstable-header">
+        <Table>
+          <TableHeader>
+            { this.renderHeader() }
+          </TableHeader>
+          <TableBody>
+            { this.renderBody(invitations) }
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
 }
-
-InvitationsTable.propTypes = {
-  invitations: PropTypes.array,
-  error: PropTypes.string
-};
-
-export default InvitationsTable;

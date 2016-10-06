@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 import { invitationsActions, importActions } from '../../../../actions';
 
-import CSVInvitationsTable from './CSVInvitationsTable';
+import InvitationsTable from '../../InvitationsTable';
 import { Error } from '../../../../components/Messages';
 
 export default connectContainer(class PreviewCSVModal extends Component {
@@ -101,13 +101,22 @@ export default connectContainer(class PreviewCSVModal extends Component {
     this.props.goBackView();
   }
 
-  renderCSVInvitationsTable(csvInvitations) {
-    let fields = [ 'email', 'status' ];
+  renderInvitationsTable(csvInvitations) {
+    let fields = [
+      {
+        header: 'Email',
+        body: 'email'
+      },
+      {
+        header: 'Status',
+        body: 'status'
+      }
+    ];
     if (this.state.requiresUsername) {
-      fields.unshift('username');
+      fields.unshift({ header: 'Username', body: 'username' });
     }
     return (
-      <CSVInvitationsTable {...csvInvitations} fields={fields} />
+      <InvitationsTable {...csvInvitations} fields={fields} />
     );
   }
 
@@ -185,7 +194,7 @@ export default connectContainer(class PreviewCSVModal extends Component {
                     </div>
                   </div>
                   <div className="col-xs-12 form-group">
-                    { this.renderCSVInvitationsTable(csvInvitations) }
+                    { this.renderInvitationsTable(csvInvitations) }
                   </div>
                 </div>
               </div>

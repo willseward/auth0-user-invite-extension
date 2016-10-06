@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import { invitationsActions } from '../actions';
 
 import { LoadingPanel } from '../components/Dashboard';
-import { InvitationsTable } from './Users';
+import InvitationsTable from './Users/InvitationsTable';
 import { Error } from '../components/Messages';
 
 export default connectContainer(class InvitationsContainer extends Component {
@@ -29,7 +29,9 @@ export default connectContainer(class InvitationsContainer extends Component {
     filter: PropTypes.string.isRequired,
     invitations: PropTypes.object.isRequired,
     fetchInvitations: PropTypes.func.isRequired,
-    currentTab: PropTypes.string.isRequired
+    currentTab: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    fields: PropTypes.array
   }
 
   componentWillMount() {
@@ -66,11 +68,12 @@ export default connectContainer(class InvitationsContainer extends Component {
         <div className="row">
           <div className="col-xs-12">
             <Button type="button" className="btn btn-sm pull-right" onClick={this.refresh.bind(this)}>Refresh</Button>
+            <p className="help-block">{this.props.description}</p>
           </div>
           <div className="col-xs-12">
             <LoadingPanel show={loading[this.props.filter]} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
               <Error message={(error && error[this.props.filter]) ? error[this.props.filter] : ''} />
-              <InvitationsTable invitations={invitations[this.props.filter]} error={error && error[this.props.filter]} />
+              <InvitationsTable invitations={invitations[this.props.filter]} fields={this.props.fields} />
             </LoadingPanel>
           </div>
         </div>

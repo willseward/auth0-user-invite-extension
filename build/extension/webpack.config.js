@@ -40,6 +40,7 @@ module.exports = externalModules.then((externals) => {
   externals.compatible['uuid'] = true; // Local: 2.0.2 - Webtask: 2.0.1
   externals.compatible['nodemailer'] = true; // Local: 2.5.0 - Webtask: 2.5.0
   externals.compatible['joi'] = true; // Local: 9.0.4 - Webtask: 9.0.4
+  externals.compatible['moment'] = true; // Local: 2.11.2 - Webtask: 2.11.2
 
   // Additional dependencies that are available in webtask.
   externals.compatible['auth0'] = true;

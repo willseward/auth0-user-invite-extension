@@ -33,7 +33,53 @@ export default connectContainer(class WidgetContainer extends Component {
     });
   }
 
+  renderTabs(content) {
+    return content.map(item => {
+      return (<div id={item.filter} key={item.filter} className={item.classes}>
+        <InvitationsContainer
+          filter={item.filter}
+          currentTab={this.state.currentTab}
+          description={item.description}
+          fields={item.fields}
+        />
+      </div>);
+    });
+  }
+
   render() {
+    const tabs = [
+      {
+        filter: 'pending',
+        classes: 'tab-pane active',
+        description: 'Here you will find all the users you invited but have not accepted the invitation yet.',
+        fields: [
+          {
+            header: 'Email',
+            body: 'email'
+          },
+          {
+            header: 'Date of invitation',
+            body: 'date_of_invitation'
+          }
+        ]
+      },
+      {
+        filter: 'accepted',
+        classes: 'tab-pane',
+        description: 'Here you will find all the users that already accepted your invitation.',
+        fields: [
+          {
+            header: 'Email',
+            body: 'email'
+          },
+          {
+            header: 'Connection',
+            body: 'connection'
+          }
+        ]
+      }
+    ];
+
     return (
       <div>
         <div className="widget-title title-with-nav-bars">
@@ -55,12 +101,7 @@ export default connectContainer(class WidgetContainer extends Component {
           </ul>
         </div>
         <div id="content-area" className="tab-content">
-          <div id="pending" className="tab-pane active">
-            <InvitationsContainer filter="pending" currentTab={this.state.currentTab} />
-          </div>
-          <div id="accepted" className="tab-pane">
-            <InvitationsContainer filter="accepted" currentTab={this.state.currentTab} />
-          </div>
+          { this.renderTabs(tabs) }
         </div>
       </div>
     );
