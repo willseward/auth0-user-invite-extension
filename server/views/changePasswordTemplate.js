@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+module.exports = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Auth0 - User Invitations - Change Password</title>
@@ -97,7 +97,7 @@
     // return true;
   }
 
-  var formTemplate = '<div><%- formTemplate %></h2>';
+  var formTemplate = '<div><%- formTemplate %></div>';
 
 
   $( document ).ready(function() {
@@ -125,4 +125,4 @@
 
   });
 </script>
-</html>
+</html>`;

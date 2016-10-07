@@ -1,4 +1,4 @@
-<form class="form-horizontal" id="change-password-form" onSubmit="return handleSubmit();">
+module.exports = `<form class="form-horizontal" id="change-password-form" onSubmit="return handleSubmit();">
 
   <div class="form-group">
     <label class="control-label col-xs-2">Password</label>
@@ -25,4 +25,4 @@
       </div>
     </div>
   </div>
-</form>
+</form>`;
