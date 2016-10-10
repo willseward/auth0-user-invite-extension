@@ -14,7 +14,7 @@ axios.defaults.baseURL = window.config.BASE_URL;
 
 // Make history aware of the base path.
 const history = useRouterHistory(createHistory)({
-  basename: window.config.BASE_PATH || ''
+  basename: window.config.BASE_URL.endsWith('/') ? window.config.BASE_PATH : window.config.BASE_PATH.substring(0, window.config.BASE_PATH.length - 1)
 });
 
 const store = configureStore();
