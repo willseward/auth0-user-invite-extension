@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import connectContainer from 'redux-static';
 import classNames from 'classnames';
-import './ConfigurationStatus.css';
 import { Error } from '../../components/Messages';
 
 export default connectContainer(class ConfigurationStatus extends Component {
