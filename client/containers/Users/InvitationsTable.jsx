@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import './InvitationsTable.css';
-import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../../components/Dashboard';
+import { Table, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
 
 export default class InvitationsTable extends Component {
 

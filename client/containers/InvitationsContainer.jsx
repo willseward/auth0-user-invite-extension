@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 
 import { invitationsActions } from '../actions';
 
-import { LoadingPanel } from '../components/Dashboard';
+import { LoadingPanel } from 'auth0-extension-ui';
 import InvitationsTable from './Users/InvitationsTable';
 import { Error } from '../components/Messages';
 

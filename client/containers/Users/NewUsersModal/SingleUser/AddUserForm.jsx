@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { reduxForm, Field, formValueSelector, isInvalid } from 'redux-form';
 import { Button } from 'react-bootstrap';
 
-import { InputText } from '../../../../components/Dashboard';
+import { InputText } from 'auth0-extension-ui';
 import { Error } from '../../../../components/Messages';
 
 const validate = values => {
