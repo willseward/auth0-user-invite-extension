@@ -1,9 +1,10 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux'
 import { reduxForm, Field, formValueSelector, isInvalid } from 'redux-form';
 import { Button } from 'react-bootstrap';
 
-import { InputText } from 'auth0-extension-ui';
+import { InputText, InputCombo } from 'auth0-extension-ui';
 import { Error } from '../../../../components/Messages';
 
 const validate = values => {
@@ -35,13 +36,11 @@ class AddUserForm extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.formSubmitted && !nextProps.invitations.loadingUser
       && !nextProps.invitations.inviteUserError) {
-      this.props.resetForm(); // reset email and username properties
       this.props.nextView();
     }
   }
 
   clearAllFields() {
-    this.props.resetForm();
     this.props.clearAllFields();
     this.props.tryAgain();
   }
@@ -85,20 +84,13 @@ class AddUserForm extends Component {
     );
   }
 
-  renderConnectionField(field) {
-    const connection = field.connection;
-    return (
-      <div className="form-group">
-        <label className="control-label col-xs-3" htmlFor={field.name}>{field.label}</label>
-        <div className="col-xs-9">
-          <select id="connection" className="form-control" {...field.input}>
-            {connection ? connection.map(connectionOption => <option value={connectionOption.name} key={connectionOption.name}>{connectionOption.name}</option>) : ''}
-          </select>
-          {field.meta.touched && field.meta.error && <div>{field.meta.error}</div>}
-          <p className="help-block">This is a logical identifier of the connection.</p>
-        </div>
-      </div>
-    );
+  getConnection(connection) {
+    return _.map(connection, conn => {
+      return {
+        text: conn.name,
+        value: conn.name
+      }
+    });
   }
 
   render() {
@@ -125,7 +117,7 @@ class AddUserForm extends Component {
             <p className="text-center">Create an user with connection, email and username if needed.</p>
             <Error message={invitations.inviteUserError ? invitations.inviteUserError : ''} />
 
-            <Field name="selectedConnection" component={this.renderConnectionField} connection={connection} label="Connection" />
+            <Field name="selectedConnection" component={InputCombo} options={this.getConnection(connection)} label="Connection" />
 
             <Field name="email" component={InputText} label="Email" type="email" />
 
@@ -152,7 +144,6 @@ AddUserForm.propTypes = {
   goBackView: PropTypes.func.isRequired,
   clearAllFields: PropTypes.func.isRequired,
   tryAgain: PropTypes.func.isRequired,
-  resetForm: PropTypes.func.isRequired,
   connection: PropTypes.array,
   invitations: PropTypes.object,
   hasSelectedConnection: PropTypes.string,
