@@ -1,11 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { Button } from 'react-bootstrap';
-
 import connectContainer from 'redux-static';
+import { Error } from 'auth0-extension-ui';
+
 import { invitationsActions, importActions } from '../../../../actions';
 
 import InvitationsTable from '../../InvitationsTable';
-import { Error } from '../../../../components/Messages';
 
 export default connectContainer(class PreviewCSVModal extends Component {
 

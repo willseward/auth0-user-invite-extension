@@ -2,8 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
-import { DragAndDrop } from 'auth0-extension-ui';
-import { Error } from '../../../../components/Messages';
+import { DragAndDrop, Error } from 'auth0-extension-ui';
 import { invitationsActions, importActions } from '../../../../actions';
 
 export default connectContainer(class ImportCSVModal extends Component {

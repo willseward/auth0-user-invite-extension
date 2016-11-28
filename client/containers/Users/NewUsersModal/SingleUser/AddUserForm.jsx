@@ -4,8 +4,7 @@ import { connect } from 'react-redux'
 import { reduxForm, Field, formValueSelector, isInvalid } from 'redux-form';
 import { Button } from 'react-bootstrap';
 
-import { InputText, InputCombo } from 'auth0-extension-ui';
-import { Error } from '../../../../components/Messages';
+import { InputText, InputCombo, Error } from 'auth0-extension-ui';
 
 const validate = values => {
   const errors = {};
