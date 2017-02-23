@@ -1,10 +1,9 @@
 import React, { PropTypes, Component } from 'react';
 import { Button } from 'react-bootstrap';
-
 import connectContainer from 'redux-static';
+import { Error } from 'auth0-extension-ui';
 
 import ConfigurationStatus from '../../Config/ConfigurationStatus';
-import { Error } from '../../../components/Messages';
 
 export default connectContainer(class NewUsers extends Component {
 

@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 
-import { LoadingPanel } from '../../components/Dashboard';
+import { LoadingPanel, Error, Success } from 'auth0-extension-ui';
 import { templateConfigurationActions } from '../../actions';
 import { InvitationEmailForm } from './';
-import { Error, Success } from '../../components/Messages';
 
 export default connectContainer(class InvitationEmail extends Component {
 

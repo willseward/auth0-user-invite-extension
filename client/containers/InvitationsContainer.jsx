@@ -4,9 +4,8 @@ import { Button } from 'react-bootstrap';
 
 import { invitationsActions } from '../actions';
 
-import { LoadingPanel } from '../components/Dashboard';
+import { LoadingPanel, Error } from 'auth0-extension-ui';
 import InvitationsTable from './Users/InvitationsTable';
-import { Error } from '../components/Messages';
 
 export default connectContainer(class InvitationsContainer extends Component {
 

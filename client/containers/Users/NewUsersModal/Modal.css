@@ -20,3 +20,7 @@ div.ImportedCSVModal-iconSection > i {
   color: white;
   font-size: 60px;
 }
+
+.table > tbody > tr > td {
+  white-space: normal;
+}

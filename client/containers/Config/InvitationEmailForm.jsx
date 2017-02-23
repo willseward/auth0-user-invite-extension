@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import Codemirror from '../../components/Editor';
-import { InputText } from '../../components/Dashboard';
+import { InputText, CodeEditor } from 'auth0-extension-ui';
 
 require('codemirror/mode/xml/xml');
 
@@ -34,7 +33,7 @@ class InvitationEmailForm extends Component {
       <div className="form-group">
         <label className="control-label col-xs-3" htmlFor={field.name}>{field.label}</label>
         <div className="col-xs-9">
-          <Codemirror
+          <CodeEditor
             {...field.input}
             options={messageOptions}
             id={field.name}

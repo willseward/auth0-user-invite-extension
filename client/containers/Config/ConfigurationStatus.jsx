@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import connectContainer from 'redux-static';
 import classNames from 'classnames';
-import { Error } from '../../components/Messages';
+import { Error } from 'auth0-extension-ui';
 
 export default connectContainer(class ConfigurationStatus extends Component {
   static propTypes = {

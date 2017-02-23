@@ -2,8 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 
-import ImportDropFiles from './ImportDropFiles';
-import { Error } from '../../../../components/Messages';
+import { DragAndDrop, Error } from 'auth0-extension-ui';
 import { invitationsActions, importActions } from '../../../../actions';
 
 export default connectContainer(class ImportCSVModal extends Component {
@@ -48,7 +47,7 @@ export default connectContainer(class ImportCSVModal extends Component {
   }
 
   renderDropFilesArea() {
-    return (<ImportDropFiles onDrop={this.onDrop} />);
+    return (<DragAndDrop onDrop={this.onDrop} />);
   }
 
   renderCancelBtn() {
